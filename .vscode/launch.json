@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "FITSHelper",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/fits-helper",
+      "args": ["-f", "images/datasets/fits/*"],
+      "cwd": "${workspaceFolder}",
+      "targetArchitecture": "x64",
+      "stopAtEntry": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "preLaunchTask": "CMake: build",
+      "setupCommands": [
+        {
+          "text": "-enable-pretty-printing",
+          "description": "Enable pretty-printing for gdb",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}
