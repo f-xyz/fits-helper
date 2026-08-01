@@ -9,7 +9,6 @@ set(CMAKE_BUILD_TYPE Debug)
 find_package(OpenCV REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(CFITSIO REQUIRED cfitsio)
-pkg_check_modules(INDI REQUIRED IMPORTED_TARGET libindi)
 
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
@@ -22,14 +21,13 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 add_executable(fits-helper ${SOURCES})
 
 target_include_directories(fits-helper PRIVATE
-  lib
+  include
   ${OpenCV_INCLUDE_DIRS}
   ${CFITSIO_INCLUDE_DIRS}
 )
 
 target_link_libraries(fits-helper PRIVATE
+  stdc++exp
   ${OpenCV_LIBS}
   ${CFITSIO_LIBRARIES}
-  PkgConfig::INDI
-  stdc++exp
 )

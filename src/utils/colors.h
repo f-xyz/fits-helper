@@ -51,6 +51,6 @@ constexpr inline std::string rgb(const std::string &s, unsigned int color) {
   return rgb(s, r, g, b);
 }
 
-inline std::string bold(const std::string &s) {
+constexpr inline std::string bold(const std::string &s) {
   return BOLD + s + RESET;
 }

@@ -6,15 +6,22 @@
 #include <algorithm>
 #include <filesystem>
 #include <functional>
+#include <opencv2/core.hpp>
 #include <opencv2/core/hal/interface.h>
+#include <opencv2/core/mat.hpp>
+#include <opencv2/core/matx.hpp>
+#include <opencv2/core/types.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
+#include <opencv2/photo.hpp>
 #include <opencv2/highgui.hpp>
+#include <opencv2/videoio.hpp>
 #include <print>
 #include <ranges>
 #include <stacktrace>
 #include <csignal>
 #include <string>
+#include <vector>
 
 void onSegfault(int signal) {
   std::println("Segmentation fault:");
@@ -52,8 +59,8 @@ int main(const int argc, const char **argv) {
   }
 
   //////////////////////////////////////
-  
-  struct Image {
+
+  struct Item {
     std::string file;
     std::string name;
     cv::Mat image {};
@@ -62,14 +69,21 @@ int main(const int argc, const char **argv) {
 
   // Estimation
   SharpnessEstimatorGaussian estimator;
-  std::vector<Image> results;
+  std::vector<Item> results;
 
   for (int i = 0; i < config.files.size(); ++i) {
     auto file = std::filesystem::path(config.files[i]);
     auto name = file.filename().string();
-
     auto image = App::readImage(file);
-    auto sharpness = estimator.getSharpness(image);
+
+    auto roi = image({
+      image.cols / 4,
+      image.rows / 4,
+      image.cols / 2,
+      image.rows / 2
+    });
+
+    auto sharpness = estimator.getSharpness(roi);
     results.push_back({file, name, image, sharpness});
 
     std::println("#{}/{}", i + 1, config.files.size());
@@ -80,36 +94,76 @@ int main(const int argc, const char **argv) {
 
   // Spark
   auto values = results
-    | std::views::transform(&Image::sharpness)
+    | std::views::transform(&Item::sharpness)
     | std::ranges::to<std::vector<double>>();
-  std::println("{}", spark(values));
+  std::println("{}\n", spark(values));
 
   // Sorted table
   std::println("-----------------------");
-  std::ranges::sort(results, std::ranges::greater {}, &Image::sharpness);
+  std::ranges::sort(results, std::ranges::greater {}, &Item::sharpness);
 
-  for (auto &x : results) {
-    std::println("{}: {}", x.name, x.sharpness);
+  auto range = std::ranges::minmax(results, {}, &Item::sharpness);
+  auto min = range.min.sharpness;
+  auto max = range.max.sharpness;
+
+  auto n = results.size();
+  for (int i = 0; i < n; ++i) {
+    auto item = results[i];
+    auto dotPos = std::max<int>(0, item.name.find_last_of('.') - 4);
+    auto name = item.name.substr(dotPos);
+
+    auto scaledSharpness = (item.sharpness - min) / (max - min);
+    auto percentile = n > 1 ? 1 - static_cast<double>(i) / (n - 1) : 0.5;
+
+    struct Functor {
+      int operator^(const double percentile) const {
+        if (percentile >= 0.9) {
+          return 0x00FF00;
+        } else if (percentile <= 0.1) {
+          return 0xFF0000;
+        } else {
+          return 0xAAAAAA;
+        }
+      }
+    } f;
+
+    auto color = f ^ percentile;
+
+    std::println("{:<10}: {:.2f} ({:.2f}%)",
+      rgb(name, color),
+      item.sharpness,
+      percentile);
   }
 
-  // Previewing
+  //////////////////////////////////////
+  // Previewing ////////////////////////
+  //////////////////////////////////////
+
   auto best = results.front();
+  auto preview = resize(best.image, 640, 480);
 
-  cv::Mat preview;
-  cv::resize(best.image, preview, cv::Size(640, 480));
-  
-  // cv::Mat processed = grayscale(preview);
-  // processed = clahe(processed);
+  if (preview.depth() != CV_8U) {
+    preview.convertTo(preview, CV_8U, 1.0 / 256);
+  }
 
-  auto processed = lightness(normalize(preview));
-  processed = stretchAsinh(processed);
+  //////////////////////////////////////
 
-  cv::imshow("Image", preview);
-  cv::waitKey(0);
+  auto clahe = magic(preview.clone(), {
+    .type = MagicOptions::CLAHE,
+    .claheClipLimit = 20,
+    .claheTileSize = 8,
+    .asinhFactor = 20,
+    .denoiseH = 5
+  });
+
+  //////////////////////////////////////
+
+  cv::imshow("Original", preview);
+  cv::waitKey();
   cv::destroyAllWindows();
 
-  cv::imshow("CLAHE", processed);
-  cv::waitKey(0);
+  cv::imshow("Result", clahe);
+  cv::waitKey();
   cv::destroyAllWindows();
 
   return 0;
