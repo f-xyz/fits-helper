@@ -12,6 +12,10 @@ bool Config::parse(const int argc, const char **argv) {
     ->required(false)
     ->capture_default_str();
 
+  app.add_option("-t,--type", type)
+    ->required(false)
+    ->capture_default_str();
+
   try {
     app.parse(argc, argv);
   } catch (const CLI::ParseError &e) {
