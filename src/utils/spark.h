@@ -6,7 +6,7 @@
 
 template <typename T>
 inline std::string spark(const std::vector<T> &seq) {
-  std::vector<std::string> chars = {
+  const std::vector<std::string> chars = {
     "▁",
     "▂",
     "▃",

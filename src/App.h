@@ -5,6 +5,8 @@
 #include "utils/spark.h"
 #include "fits/FitsReader.h"
 #include "math/SharpnessEstimator.h"
+#include <opencv2/core/base.hpp>
+#include <opencv2/core/hal/interface.h>
 #include <opencv2/imgcodecs.hpp>
 #include <ranges>
 #include <print>
@@ -82,10 +84,13 @@ public:
     std::println("{}\n", spark(values));
   }
 
-private:
-  Image readImage(const std::string &file) {
+  static Image readImage(const std::string &file) {
     auto ext = std::filesystem::path(file).extension().string();
     auto isFits = ext == ".fit" || ext == ".fits";
-    return Image(isFits ? FitsReader().read(file) : cv::imread(file));
+    
+    Image image(isFits ? FitsReader().read(file) : cv::imread(file));
+    image.normalize(cv::NORM_MINMAX, 0, 255, CV_8U);
+
+    return image;
   }
 };

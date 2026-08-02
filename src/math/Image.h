@@ -17,11 +17,35 @@ public:
   Image() = default;
   Image(const cv::Mat &image) : cv::Mat(image) {}
 
-  static Image merge(const std::vector<Image> &channels) {
-    Image result;
-    cv::merge(toMatVectors(channels), result);
+  static std::vector<Image> toImageVectors(const std::vector<cv::Mat> &channels) {
+    std::vector<Image> result;
+    result.reserve(channels.size());
+
+    for (const auto &channel : channels) {
+      result.push_back(std::move(channel));
+    }
+
     return result;
   }
+
+  static std::vector<cv::Mat> toOpenCvMatVectors(const std::vector<Image> &channels) {
+    std::vector<cv::Mat> result;
+    result.reserve(channels.size());
+
+    for (const auto &channel : channels) {
+      result.push_back(std::move(channel));
+    }
+
+    return result;
+  }
+
+  static Image merge(const std::vector<Image> &channels) {
+    Image result;
+    cv::merge(toOpenCvMatVectors(channels), result);
+    return result;
+  }
+
+  //////////////////////////////////////
 
   std::vector<Image> split() {
     std::vector<cv::Mat> channels;
@@ -32,6 +56,8 @@ public:
   Image clone() {
     return Image(cv::Mat::clone());
   }
+
+  //////////////////////////////////////
 
   std::string getInfo() {
     auto info = cv::typeToString(type());
@@ -46,6 +72,8 @@ public:
       return SharpnessEstimatorLaplacian().getSharpness(*this);
     }
   }
+
+  //////////////////////////////////////
 
   Image& convertTo(int type = CV_8U, double alpha = 1, double beta = 0) {
     cv::Mat::convertTo(*this, type, alpha, beta);
@@ -69,6 +97,8 @@ public:
     return *this;
   }
 
+  //////////////////////////////////////
+
   Image& preview(const std::string &title) {
     cv::imshow(title, *this);
     cv::waitKey();
@@ -76,32 +106,11 @@ public:
     return *this;
   }
 
+  //////////////////////////////////////
+
   Image& stretch(const ImageStretcherOptions &options = {}) {
     ImageStretcher stretcher(*this);
     stretcher.stretch(options);
     return *this;
-  }
-
-private:
-  static std::vector<Image> toImageVectors(const std::vector<cv::Mat> &channels) {
-    std::vector<Image> result(channels.size());
-    // result.reserve(channels.size());
-
-    for (const auto &channel : channels) {
-      result.push_back(std::move(channel));
-    }
-
-    return result;
-  }
-
-  static std::vector<cv::Mat> toMatVectors(const std::vector<Image> &channels) {
-    std::vector<cv::Mat> result(channels.size());
-    // result.reserve(channels.size());
-
-    for (const auto &channel : channels) {
-      result.push_back(std::move(channel));
-    }
-
-    return result;
   }
 };
