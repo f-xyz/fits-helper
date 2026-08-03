@@ -3,8 +3,8 @@
 #include <chrono>
 #include <filesystem>
 #include <functional>
+#include <future>
 #include <string>
-#include <string_view>
 #include <thread>
 #include <vector>
 #include <opencv2/imgcodecs.hpp>
@@ -14,18 +14,22 @@ namespace utils {
 
   class str {
   public:
-    static constexpr std::string_view ltrim(std::string_view str) {
+    static constexpr std::string ltrim(const std::string &str) {
       const auto pos = str.find_first_not_of(" \t\r\n");
       return str.substr(std::min(pos, str.size()));
     }
 
-    static constexpr std::string_view rtrim(std::string_view str) {
+    static constexpr std::string rtrim(const std::string &str) {
       const auto pos = str.find_last_not_of(" \t\r\n");
       return str.substr(0, pos + 1);
     }
 
-    static constexpr std::string_view trim(std::string_view str) {
+    static constexpr std::string trim(const std::string &str) {
       return ltrim(rtrim(str));
+    }
+
+    static constexpr std::string trimAndRemoveColors(const std::string &str) {
+      return trim(removeColors(str));
     }
 
     static constexpr std::string formatNumber(double x) {
@@ -61,11 +65,18 @@ namespace utils {
   };
 
   class async {
-    static void setTimeout(const std::function<void()>& callback, std::chrono::milliseconds delay) {
-      std::thread([delay, callback]() {
+  public:
+    static std::future<void> setTimeout(const std::function<void()>& callback, std::chrono::milliseconds delay) {
+      std::promise<void> promise;
+      std::future<void> future = promise.get_future();
+
+      std::thread([delay, callback, promise = std::move(promise)]() mutable {
         std::this_thread::sleep_for(delay);
         callback();
+        promise.set_value();
       }).detach();
+
+      return future;
     }
   };
 

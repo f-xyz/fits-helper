@@ -7,7 +7,7 @@
 #include <vector>
 
 struct ImageStretcherOptions {
-  enum Type { CLAHE, Asinh };
+  enum class Type { CLAHE, Asinh };
 
   Type type = Type::CLAHE;
   double claheClipLimit = 10;
@@ -28,7 +28,7 @@ public:
     auto channels = split(image);
     auto lightness = getLightness(channels[0]);
 
-    if (options.type == ImageStretcherOptions::CLAHE) {
+    if (options.type == ImageStretcherOptions::Type::CLAHE) {
       stretchClahe( channels[0],
         options.claheClipLimit,
         options.claheTileSize);

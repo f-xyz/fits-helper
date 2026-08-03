@@ -5,16 +5,26 @@
 #include <string>
 #include <vector>
 
-enum Type {
-  Best,
-  Worst
-};
-
 class Config {
 public:
-  std::vector<std::string> files;
+
+  enum class Select {
+    Better,
+    Worse
+  };
+
+  enum class Operation {
+    View,
+    Move
+  };
+
+  std::string logFilePath = "culler.log";
+  Select select = Select::Better;
   double percentile = 0.1;
-  Type type = Type::Best;
+  int roi = 2;
+  Operation operation = Operation::Move;
+  std::string destination = "_bad";
+  std::vector<std::string> files;
 
   explicit Config(const int argc, const char **argv) {
     if (!parse(argc, argv)) {

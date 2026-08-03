@@ -31,3 +31,7 @@ target_link_libraries(fits-helper PRIVATE
   ${OpenCV_LIBS}
   ${CFITSIO_LIBRARIES}
 )
+
+target_compile_definitions(fits-helper PRIVATE
+  VERSION="${PROJECT_VERSION}"
+)

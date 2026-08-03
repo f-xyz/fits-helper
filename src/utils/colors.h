@@ -1,5 +1,6 @@
 #pragma once
 
+#include <regex>
 #include <string>
 
 /*
@@ -53,4 +54,9 @@ constexpr inline std::string rgb(const std::string &s, unsigned int color) {
 
 constexpr inline std::string bold(const std::string &s) {
   return BOLD + s + RESET;
+}
+
+inline std::string removeColors(const std::string& s) {
+  const std::regex regex("\\x1B\\[[0-9;]*[a-zA-Z]");
+  return std::regex_replace(s, regex, "");
 }

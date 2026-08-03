@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../utils/colors.h"
-#include "../utils/utils.h"
+#include "utils.h"
+#include "colors.h"
 #include <chrono>
 #include <filesystem>
 #include <format>
@@ -53,19 +53,20 @@ public:
   }
 
 protected:
-  static void printLine(const std::string_view &line) {
+  static void printLine(const std::string &line) {
     std::println("{}", line); 
   }
 
-  static void printLine(const std::string_view &line, uint r, uint g, uint b) {
+  static void printLine(const std::string &line, uint r, uint g, uint b) {
     std::println("{}", rgb(line.data(), r, g, b));
   }
 
-  void writeLine(const std::string_view &message, const std::string_view &severity = "INFO") {
+  void writeLine(const std::string &message, const std::string &severity = "INFO") {
     auto now = std::chrono::system_clock::now();
     auto time = std::format("{:%Y-%m-%d %H:%M:%S}", now);
-    auto line = std::format("[{}] {} {}", time, severity, trim(message));
+    auto clean = utils::str::trimAndRemoveColors(message);
+    auto line = std::format("[{}] {} {}", time, severity, clean);
 
-    file << line << "\n";
+    file.write((line + "\n").c_str(), line.size() + 1);
   }
 };
