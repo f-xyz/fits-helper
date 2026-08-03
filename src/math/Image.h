@@ -108,9 +108,9 @@ public:
 
   //////////////////////////////////////
 
-  Image& stretch(const ImageStretcherOptions &options = {}) {
+  Image stretch(const ImageStretcherOptions &options = {}) {
     ImageStretcher stretcher(*this);
-    stretcher.stretch(options);
-    return *this;
+    auto q = stretcher.stretch(options);
+    return Image(q);
   }
 };

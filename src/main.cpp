@@ -1,6 +1,5 @@
 #include "Config.h"
 #include "App.h"
-#include "math/ImageBackgroundExtractor.h"
 #include "math/ImageStretcher.h"
 #include "math/SharpnessEstimator.h"
 #include <opencv2/core/base.hpp>
@@ -32,22 +31,18 @@ int main(const int argc, const char **argv) {
   // app.percentiles();
 
   auto file = config.files.front();
-  auto image = App::readImage(file).resize(640, 480);
+  auto image = App::readImage(file).resize(1280, 960);
 
   auto clahe = image.clone().stretch({
     .type = ImageStretcherOptions::CLAHE,
-    .claheClipLimit = 20,
+    .claheClipLimit = 10,
+    .claheTileSize = 8,
+    .asinhFactor = 10,
     .denoiseH = 5
   });
 
-  auto results = ImageBackgroundExtractor(image).extract({});
-  auto corrected = Image(results.corrected);
-  auto background = Image(results.background);
-
   image.preview("Original");
   clahe.preview("CLAHE");
-  background.preview("Background");
-  corrected.preview("Corrected");
 
   return 0;
 }
