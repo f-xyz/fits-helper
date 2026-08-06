@@ -17,14 +17,37 @@ int main(const int argc, const char **argv) {
   setenv("QT_QPA_PLATFORM", "xcb", 1); // Fixes QT windows on Wayland
   std::signal(SIGSEGV, onSegfault);
 
-  Config config(argc, argv);
-  Logger logger(config.logFilePath);
-  SharpnessEstimatorGaussian estimator;
-  App app(config, logger, estimator);
+  Config config;
+  config.parse(argc, argv, [&config](Config::Subcommand subcommand) {
+    switch (subcommand) {
+      case Config::Subcommand::Analyze: {
+        Logger logger(config.logFilePath);
+        SharpnessEstimatorGaussian estimator;
+        App app(config, logger, estimator);
 
-  app.readFilesAndComputeSharpnesses();
-  app.printSpark();
-  app.computePercentiles();
+        app.readFilesAndComputeSharpnesses();
+        app.printSpark();
+        app.computePercentiles(false);
+        break;
+      }
+
+      case Config::Subcommand::Move: {
+        Logger logger(config.logFilePath);
+        SharpnessEstimatorGaussian estimator;
+        App app(config, logger, estimator);
+
+        app.readFilesAndComputeSharpnesses();
+        app.printSpark();
+        app.computePercentiles(true);
+        break;
+      }
+
+      case Config::Subcommand::Clahe: {
+        std::println("CLAHE");
+        break;
+      }
+    }
+  });
 
   return 0;
 }

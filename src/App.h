@@ -20,11 +20,11 @@ public:
   explicit App(Config &config, Logger &logger, SharpnessEstimator &estimator)
     : config(config), logger(logger), estimator(estimator) {}
 
+  static cv::Mat readImage(const std::string &file);
+
   void readFilesAndComputeSharpnesses();
-  void computePercentiles();
+  void computePercentiles(bool shouldMoveFiles);
 
   void printSpark();
   void printReportLine(const Item &item, bool isClipped, double percentile);
-
-  static cv::Mat readImage(const std::string &file);
 };

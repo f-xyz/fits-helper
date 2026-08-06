@@ -2,8 +2,14 @@
 #include "fits/FitsReader.h"
 #include <ranges>
 
+cv::Mat App::readImage(const std::string &file) {
+  auto ext = std::filesystem::path(file).extension().string();
+  auto isFits = ext == ".fit" || ext == ".fits";
+  return isFits ? FitsReader().read(file) : cv::imread(file);
+}
+
 void App::readFilesAndComputeSharpnesses() {
-  logger.header("\nReading files...");
+  logger.header("Reading files...");
 
   for (int i = 0; i < config.files.size(); ++i) {
     auto file = config.files[i];
@@ -23,10 +29,10 @@ void App::readFilesAndComputeSharpnesses() {
   }
 }
 
-void App::computePercentiles() {
-  logger.header("\nCalculating percentiles...");
+void App::computePercentiles(bool shouldMoveFiles) {
+  logger.header("Computing percentiles...");
 
-  if (config.operation == Config::Operation::Move) {
+  if (shouldMoveFiles) {
     std::filesystem::create_directory(config.destination);
   }
 
@@ -47,7 +53,7 @@ void App::computePercentiles() {
 
     printReportLine(item, isClipped, percentile);
 
-    if (config.operation == Config::Operation::Move && isClipped) {
+    if (shouldMoveFiles && isClipped) {
       std::filesystem::path path(item.file);
       auto name = path.filename().string();
       std::filesystem::rename(item.file, config.destination + "/" + name);
@@ -72,12 +78,5 @@ void App::printSpark() {
   auto values = results
     | std::views::transform(&Item::sharpness)
     | std::ranges::to<std::vector<double>>();
-
   logger.info("{}\n", spark(values));
-}
-
-cv::Mat App::readImage(const std::string &file) {
-  auto ext = std::filesystem::path(file).extension().string();
-  auto isFits = ext == ".fit" || ext == ".fits";
-  return isFits ? FitsReader().read(file) : cv::imread(file);
 }
