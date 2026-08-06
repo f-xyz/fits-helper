@@ -24,7 +24,8 @@ public:
 
   void readFilesAndComputeSharpnesses();
   void computePercentiles(bool shouldMoveFiles);
-
   void printSpark();
+
+private:
   void printReportLine(const Item &item, bool isClipped, double percentile);
 };
