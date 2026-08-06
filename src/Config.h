@@ -1,9 +1,5 @@
 #pragma once
 
-#include <CLI11.hpp>
-#include <string>
-#include <vector>
-
 class Config {
 public:
   enum class Subcommand { Analyze, Move, Clahe };

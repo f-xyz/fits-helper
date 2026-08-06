@@ -33,5 +33,8 @@ target_link_libraries(fits-helper PRIVATE
 )
 
 target_compile_definitions(fits-helper PRIVATE
+  NAME="${PROJECT_NAME}"
   VERSION="${PROJECT_VERSION}"
 )
+
+target_precompile_headers(fits-helper PRIVATE src/pch.h)

@@ -1,13 +1,8 @@
-#include "Config.h"
 #include "App.h"
+#include "Config.h"
 #include "math/ImageStretcher.h"
-#include "utils/Logger.h"
 #include "math/SharpnessEstimator.h"
-#include <opencv2/imgproc.hpp>
-#include <opencv2/highgui.hpp>
-#include <print>
-#include <stacktrace>
-#include <csignal>
+#include "utils/Logger.h"
 
 void onSegfault(int signal) {
   std::println("Segmentation fault {}:", signal);
@@ -19,6 +14,7 @@ void onSegfault(int signal) {
 int main(const int argc, const char **argv) {
   setenv("QT_QPA_PLATFORM", "xcb", 1); // Fixes QT windows on Wayland
   std::signal(SIGSEGV, onSegfault);
+  std::println("{} v{}\n", NAME, VERSION);
 
   Config config;
   config.parse(argc, argv, [&config](Config::Subcommand subcommand) {

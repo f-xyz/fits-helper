@@ -1,6 +1,5 @@
 #include "App.h"
 #include "fits/FitsReader.h"
-#include <ranges>
 
 cv::Mat App::readImage(const std::string &file) {
   auto ext = std::filesystem::path(file).extension().string();
@@ -9,16 +8,19 @@ cv::Mat App::readImage(const std::string &file) {
 }
 
 void App::readFilesAndComputeSharpnesses() {
-  logger.header("Reading files...");
+  logger.header("Reading files...\n");
 
   for (int i = 0; i < config.files.size(); ++i) {
     auto file = config.files[i];
     auto path = std::filesystem::path(file);
     auto image = readImage(path);
 
-    cv::Rect roi{image.cols / 2 - image.cols / (config.roi * 2),
-                 image.rows / 2 - image.rows / (config.roi * 2),
-                 image.cols / config.roi, image.rows / config.roi};
+    cv::Rect roi {
+      image.cols / 2 - image.cols / (config.roi * 2),
+      image.rows / 2 - image.rows / (config.roi * 2),
+      image.cols / config.roi,
+      image.rows / config.roi
+    };
 
     auto sharpness = estimator.getSharpness(image(roi));
     results.push_back({path, sharpness});
@@ -30,7 +32,7 @@ void App::readFilesAndComputeSharpnesses() {
 }
 
 void App::computePercentiles(bool shouldMoveFiles) {
-  logger.header("Computing percentiles...");
+  logger.header("Computing percentiles...\n");
 
   if (shouldMoveFiles) {
     std::filesystem::create_directory(config.destination);
@@ -78,5 +80,6 @@ void App::printSpark() {
   auto values = results
     | std::views::transform(&Item::sharpness)
     | std::ranges::to<std::vector<double>>();
+  
   logger.info("{}\n", spark(values));
 }
