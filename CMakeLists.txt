@@ -28,6 +28,7 @@ target_include_directories(fits-helper PRIVATE
 
 target_link_libraries(fits-helper PRIVATE
   stdc++exp
+  tbb
   ${OpenCV_LIBS}
   ${CFITSIO_LIBRARIES}
 )

@@ -14,6 +14,28 @@ namespace utils {
 
   class str {
   public:
+    static constexpr std::string uppercase(const std::string &str) {
+      std::locale locale("C.UTF-8");
+      std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+      std::wstring ws = converter.from_bytes(str);
+
+      const auto &facet = std::use_facet<std::ctype<wchar_t>>(locale);
+      facet.toupper(&ws[0], &ws[0] + ws.size());
+
+      return converter.to_bytes(ws);
+    }
+
+    static constexpr std::string lowercase(const std::string &str) {
+      std::locale locale("C.UTF-8");
+      std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+      std::wstring ws = converter.from_bytes(str);
+
+      const auto &facet = std::use_facet<std::ctype<wchar_t>>(locale);
+      facet.tolower(&ws[0], &ws[0] + ws.size());
+
+      return converter.to_bytes(ws);
+    }
+
     static constexpr std::string ltrim(const std::string &str) {
       const auto pos = str.find_first_not_of(" \t\r\n");
       return str.substr(std::min(pos, str.size()));
@@ -45,12 +67,12 @@ namespace utils {
   };
 
   class fs {
-  public: 
+  public:
     static constexpr std::vector<std::string> readDir(const std::filesystem::path &dir) {
       if (!std::filesystem::exists(dir)) {
         return {};
       }
-      
+
       std::vector<std::string> result;
       std::filesystem::directory_iterator iterator(dir);
       for (const auto &file : iterator) {

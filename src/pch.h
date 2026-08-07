@@ -3,6 +3,7 @@
 
 // Core STL
 #include <algorithm>
+#include <cctype>
 #include <chrono>
 #include <cmath>
 #include <csignal>
@@ -10,11 +11,11 @@
 #include <functional>
 #include <future>
 #include <iostream>
-#include <stacktrace>
 #include <map>
 #include <memory>
 #include <print>
 #include <ranges>
+#include <stacktrace>
 #include <string>
 #include <thread>
 #include <vector>

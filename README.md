@@ -1,20 +1,23 @@
-# FITS Culler
+# FITS Helper
 
 ## Usage
 ```sh
-./culler.sh \
-  -s worse \ # Select images worse than
-  -p 0.05 \ # 5% percentile
-  -o move \ # and move
-  -d _bad \ # into "_bad" destination directory
-  -f /home/andr/ASILive/Data/2026/3.Summer2/M101/*
-  
-./culler.sh \
+./fits-helper.sh analyze \
   -s better \ # Select images better than
   -p 0.95 \ # 95% percentile
-  -o view \ # and just report, don't move
-  -d _best \ # destination directory name is mandatory anyway
   -f /home/andr/ASILive/Data/2026/3.Summer2/M101/*
+
+./fits-helper.sh move \
+  -s worse \ # Select images worse than
+  -p 0.05 \ # 5% percentile
+  -f /home/andr/ASILive/Data/2026/3.Summer2/M101/*
+  -d _bad \ # into "_bad" destination directory
+
+./fits-helper.sh move \
+  -s worse \ # Select images worse than
+  -p 0.05 \ # 5% percentile
+  -f /home/andr/ASILive/Data/2026/3.Summer2/M101/*
+  -d _bad \ # into "_bad" destination directory
 ```
 
 ## Prerequisites
