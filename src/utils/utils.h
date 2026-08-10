@@ -11,9 +11,7 @@
 #include "colors.h"
 
 namespace utils {
-
-  class str {
-  public:
+  namespace string {
     static constexpr std::string uppercase(const std::string &str) {
       std::locale locale("C.UTF-8");
       std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
@@ -66,8 +64,7 @@ namespace utils {
     }
   };
 
-  class fs {
-  public:
+  namespace fs {
     static constexpr std::vector<std::string> readDir(const std::filesystem::path &dir) {
       if (!std::filesystem::exists(dir)) {
         return {};
@@ -86,20 +83,18 @@ namespace utils {
     }
   };
 
-  class async {
-  public:
-    static std::future<void> setTimeout(const std::function<void()>& callback, std::chrono::milliseconds delay) {
-      std::promise<void> promise;
-      std::future<void> future = promise.get_future();
+  namespace async {
+    template <typename T = void>
+    static std::future<T> setTimeout(const std::function<T()>& callback, std::chrono::milliseconds delay) {
+      std::promise<T> promise;
+      std::future<T> future = promise.get_future();
 
       std::thread([delay, callback, promise = std::move(promise)]() mutable {
         std::this_thread::sleep_for(delay);
-        callback();
-        promise.set_value();
+        promise.set_value(callback());
       }).detach();
 
       return future;
     }
   };
-
 };

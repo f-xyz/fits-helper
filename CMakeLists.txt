@@ -16,9 +16,18 @@ if(CCACHE_PROGRAM)
   set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
 endif()
 
-file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
+include(FetchContent)
+FetchContent_Declare(cpp-dump
+    GIT_REPOSITORY https://github.com/philip82148/cpp-dump
+    GIT_TAG main
+) 
+FetchContent_MakeAvailable(cpp-dump)
 
+########################################
+
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 add_executable(fits-helper ${SOURCES})
+target_precompile_headers(fits-helper PRIVATE src/pch.h)
 
 target_include_directories(fits-helper PRIVATE
   include
@@ -31,11 +40,10 @@ target_link_libraries(fits-helper PRIVATE
   tbb
   ${OpenCV_LIBS}
   ${CFITSIO_LIBRARIES}
+  cpp-dump
 )
 
 target_compile_definitions(fits-helper PRIVATE
   NAME="${PROJECT_NAME}"
   VERSION="${PROJECT_VERSION}"
 )
-
-target_precompile_headers(fits-helper PRIVATE src/pch.h)
