@@ -37,11 +37,11 @@ int main(const int argc, const char **argv) {
         cv::resize(image, image, size);
 
         cv::Mat stretched = ImageStretcher(image).stretch({
-          .type = ImageStretcherOptions::Type::CLAHE,
-          .claheClipLimit = 10,
-          .claheTileSize = 8,
-          .asinhFactor = 0.2,
-          .denoiseH = 0
+          .type = config.clahe.stretchType,
+          .claheClipLimit = config.clahe.claheClipLimit,
+          .claheTileSize = config.clahe.claheTileSize,
+          .asinhFactor = config.clahe.asinhFactor,
+          .denoiseH = config.clahe.denoise
         });
         
         cv::imshow("CLAHE", stretched);
