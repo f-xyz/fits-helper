@@ -1,4 +1,4 @@
-#include "App.h"
+#include "Sorter.h"
 #include "Config.h"
 #include "math/ImageStretcher.h"
 #include "math/SharpnessEstimator.h"
@@ -21,9 +21,9 @@ int main(const int argc, const char **argv) {
     switch (subcommand) {
       case Config::Subcommand::Analyze:
       case Config::Subcommand::Move: {
-        Logger logger(config.logFilePath);
+        Logger logger(config.common.logFilePath);
         SharpnessEstimatorGaussian estimator;
-        App app(config, logger, estimator);
+        Sorter app(config, logger, estimator);
 
         app.readFilesAndComputeSharpnesses();
         app.printSpark();
@@ -31,19 +31,20 @@ int main(const int argc, const char **argv) {
         break;
       }
 
-      case Config::Subcommand::Clahe: {
-        cv::Mat image = App::readImage(config.files.front());
+      case Config::Subcommand::Stretch: {
+        std::string file = config.common.files.front();
+        cv::Mat image = Sorter::readImage(file);
         cv::Size size(1280, 960);
         cv::resize(image, image, size);
 
         cv::Mat stretched = ImageStretcher(image).stretch({
-          .type = config.clahe.stretchType,
-          .claheClipLimit = config.clahe.claheClipLimit,
-          .claheTileSize = config.clahe.claheTileSize,
-          .asinhFactor = config.clahe.asinhFactor,
-          .denoiseH = config.clahe.denoise
+          .type = config.stretcher.stretchType,
+          .claheClipLimit = config.stretcher.claheClipLimit,
+          .claheTileSize = config.stretcher.claheTileSize,
+          .asinhFactor = config.stretcher.asinhFactor,
+          .denoiseH = config.stretcher.denoise
         });
-        
+
         cv::imshow("CLAHE", stretched);
         cv::waitKey(0);
         cv::destroyAllWindows();
