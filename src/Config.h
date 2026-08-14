@@ -77,7 +77,9 @@ public:
 private:
   const std::map<std::string, Select> selectMap = {
     {"better", Select::Better},
-    {"worse", Select::Worse}
+    {"best", Select::Better},
+    {"worse", Select::Worse},
+    {"worst", Select::Worse}
   };
 
   const std::map<std::string, ImageStretcherOptions::Type> stretchTypeMap = {

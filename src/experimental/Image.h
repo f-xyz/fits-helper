@@ -1,8 +1,7 @@
 #pragma once
 
-
-#include "ImageStretcher.h"
-#include "SharpnessEstimator.h"
+#include "../math/ImageStretcher.h"
+#include "../math/SharpnessEstimator.h"
 #include <opencv2/core/mat.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
@@ -59,9 +58,14 @@ public:
 
   //////////////////////////////////////
 
-  std::string getInfo() {
-    auto info = cv::typeToString(type());
-    return std::format("{} {}x{}", info, cols, rows);
+  std::string getInfo(const cv::Mat &image) {
+    std::string type = cv::typeToString(image.type());
+
+    double minVal, maxVal;
+    cv::minMaxLoc(image, &minVal, &maxVal);
+
+    return std::format("{} {}x{} [{}-{}]",
+      type, image.cols, image.rows, minVal, maxVal);
   }
 
   double getSharpness(ImageSharpnessMethod method) {
@@ -110,7 +114,6 @@ public:
 
   Image stretch(const ImageStretcherOptions &options = {}) {
     ImageStretcher stretcher(*this);
-    auto q = stretcher.stretch(options);
-    return Image(q);
+    return Image(stretcher.stretch(options));
   }
 };
