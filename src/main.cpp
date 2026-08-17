@@ -2,9 +2,9 @@
 #include "Config.h"
 #include "math/ImageStretcher.h"
 #include "math/SharpnessEstimator.h"
-#include "utils/Logger.h"
+#include "utils/Logger.hpp"
 
-void onSegfault(int signal) {
+static void onSegfault(int signal) {
   std::println("Segmentation fault {}:", signal);
   std::println("{}", std::stacktrace::current());
   std::signal(signal, SIG_DFL);
@@ -25,7 +25,7 @@ int main(const int argc, const char **argv) {
         SharpnessEstimatorGaussian estimator;
         Sorter app(config, logger, estimator);
 
-        app.readFilesAndComputeSharpnesses();
+        app.processFiles();
         app.printSpark();
         app.computePercentiles(subcommand == Config::Subcommand::Move);
         break;

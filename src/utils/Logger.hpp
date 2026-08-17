@@ -1,14 +1,7 @@
 #pragma once
 
-#include "utils.h"
-#include "colors.h"
-#include <chrono>
-#include <filesystem>
-#include <format>
-#include <fstream>
-#include <print>
-#include <string_view>
-#include <utility>
+#include "utils.hpp"
+#include "colors.hpp"
 
 class Logger {
   std::ofstream file;
@@ -58,7 +51,7 @@ protected:
   }
 
   static void printLine(const std::string &line, uint r, uint g, uint b) {
-    std::println("{}", rgb(line.data(), r, g, b));
+    std::println("{}", rgb(line, r, g, b));
   }
 
   void writeLine(const std::string &message, const std::string &severity = "INFO") {

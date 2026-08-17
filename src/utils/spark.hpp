@@ -1,6 +1,6 @@
 #pragma once
 
-#include "colors.h"
+#include "colors.hpp"
 #include <algorithm>
 #include <cmath>
 #include <string>

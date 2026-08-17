@@ -36,15 +36,15 @@ Advanced Colors (256-Color & True Color RGB)
 #define BOLD_CYAN    "\033[1m\033[36m"
 #define BOLD_WHITE   "\033[1m\033[37m"
 
-constexpr inline std::string rgb(const std::string &s, unsigned char r, unsigned g, unsigned b) {
-  auto red = std::to_string(r);
-  auto green = std::to_string(g);
-  auto blue = std::to_string(b);
+constexpr std::string rgb(const std::string &s, unsigned char r, unsigned g, unsigned b) {
+  const auto red = std::to_string(r);
+  const auto green = std::to_string(g);
+  const auto blue = std::to_string(b);
   
   return "\033[38;2;" + red + ";" + green + ";" + blue + "m" + s + RESET;
 }
 
-constexpr inline std::string rgb(const std::string &s, unsigned int color) {
+constexpr std::string rgb(const std::string &s, const unsigned int color) {
   unsigned char r = (color >> 16) & 0xFF;
   unsigned char g = (color >> 8) & 0xFF;
   unsigned char b = (color) & 0xFF;
@@ -52,11 +52,11 @@ constexpr inline std::string rgb(const std::string &s, unsigned int color) {
   return rgb(s, r, g, b);
 }
 
-constexpr inline std::string bold(const std::string &s) {
+constexpr std::string bold(const std::string &s) {
   return BOLD + s + RESET;
 }
 
-inline std::string removeColors(const std::string& s) {
+constexpr std::string removeColors(const std::string& s) {
   const std::regex regex("\\x1B\\[[0-9;]*[a-zA-Z]");
   return std::regex_replace(s, regex, "");
 }

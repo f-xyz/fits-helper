@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Config.h"
-#include "utils/Logger.h"
+#include "utils/Logger.hpp"
 #include "math/SharpnessEstimator.h"
 #include <sys/select.h>
 
@@ -27,7 +27,7 @@ public:
 
   static cv::Mat readImage(const std::string &file);
 
-  void readFilesAndComputeSharpnesses();
+  void processFiles();
   void computePercentiles(bool shouldMoveFiles);
   void printSpark();
 

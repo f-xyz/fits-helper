@@ -1,6 +1,6 @@
 #include "Sorter.h"
 #include "fits/FitsReader.h"
-#include "utils/spark.h"
+#include "utils/spark.hpp"
 
 cv::Mat Sorter::readImage(const std::string &file) {
   auto ext = std::filesystem::path(file).extension().string();
@@ -8,8 +8,8 @@ cv::Mat Sorter::readImage(const std::string &file) {
   return isFits ? FitsReader().read(file) : cv::imread(file);
 }
 
-void Sorter::readFilesAndComputeSharpnesses() {
-  logger.header("Reading files...\n");
+void Sorter::processFiles() {
+  logger.header("Processing files...\n");
 
   for (int i = 0; i < files.size(); ++i) {
     auto file = files[i];
