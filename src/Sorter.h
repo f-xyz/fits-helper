@@ -2,7 +2,6 @@
 
 #include "Config.h"
 #include "utils/Logger.h"
-#include "utils/spark.h"
 #include "math/SharpnessEstimator.h"
 #include <sys/select.h>
 

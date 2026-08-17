@@ -13,7 +13,7 @@ struct ImageStretcherOptions {
   double claheClipLimit = 10;
   int claheTileSize = 8;
   float asinhFactor = 10;
-  int denoiseH = 5;
+  int denoiseH = 0;
 };
 
 class ImageStretcher {

@@ -1,5 +1,6 @@
 #include "Sorter.h"
 #include "fits/FitsReader.h"
+#include "utils/spark.h"
 
 cv::Mat Sorter::readImage(const std::string &file) {
   auto ext = std::filesystem::path(file).extension().string();

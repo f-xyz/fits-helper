@@ -6,7 +6,12 @@
 #include <filesystem>
 #include <functional>
 #include <future>
+#include <opencv2/core/base.hpp>
+#include <opencv2/core/hal/interface.h>
+#include <opencv2/core/matx.hpp>
+#include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
+#include <opencv2/imgproc.hpp>
 #include <string>
 #include <thread>
 #include <type_traits>
@@ -123,7 +128,7 @@ namespace utils {
         : cv::imread(file);
     }
 
-    inline std::pair<double, double> getImageMinMax(const cv::Mat &image) {
+    inline std::pair<double, double> getImageRange(const cv::Mat &image) {
       double min, max;
       cv::minMaxLoc(image, &min, &max);
       return {min, max};
@@ -131,21 +136,22 @@ namespace utils {
 
     inline std::string getImageInfo(const cv::Mat &image) {
       auto type = cv::typeToString(image.type());
-      auto minmax = getImageMinMax(image);
+      auto minmax = getImageRange(image);
 
       return std::format("{} {}x{} [{}-{}]",
         type, image.cols, image.rows, minmax.first, minmax.second);
     }
 
-    inline std::vector<float> getImageHistogram(const cv::Mat &image, int histSize = 16) {
+    inline std::vector<int> getHistogram(const cv::Mat &image, int histSize = 16) {
+      cv::Mat normalized;
+      cv::normalize(image, normalized, 0, 255,
+        cv::NORM_MINMAX, CV_8U);
+
       cv::Mat lab;
-      cv::cvtColor(image, lab, cv::COLOR_BGR2Lab);
+      cv::cvtColor(normalized, lab, cv::COLOR_BGR2Lab);
 
       const int channels[] = {0};
-      const auto minmax = getImageMinMax(image);
-      const float min = static_cast<float>(minmax.first);
-      const float max = static_cast<float>(minmax.second + 1e-6);
-      const float range[] = {min, max};
+      const float range[] = {0, 256};
       const float *ranges[] = {range};
 
       cv::Mat hist;

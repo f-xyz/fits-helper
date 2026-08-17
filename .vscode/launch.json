@@ -6,7 +6,7 @@
       "type": "cppdbg",
       "request": "launch",
       "program": "${workspaceFolder}/build/fits-helper",
-      "args": ["-f", "images/datasets/fits/*"],
+      "args": ["images/1.fit"],
       "cwd": "${workspaceFolder}",
       "targetArchitecture": "x64",
       "stopAtEntry": false,
