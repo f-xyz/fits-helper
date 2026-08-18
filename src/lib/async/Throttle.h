@@ -1,8 +1,10 @@
-#pragma once
+)#pragma once
 
 #include <functional>
 #include <mutex>
 #include <thread>
+
+namespace utils::async {
 
 class Throttle final {
   bool isWaiting = false;
@@ -11,11 +13,9 @@ class Throttle final {
   std::mutex mutex;
 
 public:
-  explicit Throttle(
-    const std::chrono::milliseconds delay,
-    const std::function<void()> &callback) :
-     delay(delay),
-     callback(callback) {}
+  explicit Throttle(const std::chrono::milliseconds delay,
+                    const std::function<void()> &callback)
+      : delay(delay), callback(callback) {}
 
   void call() {
     {
@@ -38,3 +38,5 @@ public:
     }).detach();
   }
 };
+
+}; // namespace utils::async

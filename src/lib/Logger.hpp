@@ -57,7 +57,7 @@ protected:
   void writeLine(const std::string &message, const std::string &severity = "INFO") {
     auto now = std::chrono::system_clock::now();
     auto time = std::format("{:%Y-%m-%d %H:%M:%S}", now);
-    auto clean = utils::string::trimAndRemoveColors(message);
+    auto clean = utils::string::trim(removeColors(message));
     auto line = std::format("[{}] {} {}", time, severity, clean);
 
     file.write((line + "\n").c_str(), line.size() + 1);

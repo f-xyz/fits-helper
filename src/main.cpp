@@ -3,7 +3,7 @@
 #include "lib/Logger.hpp"
 #include "lib/image/ImageStretcher.hpp"
 #include "lib/image/SharpnessEstimator.hpp"
-#include "lib/image/images.hpp"
+#include "lib/image/image.hpp"
 
 static void onSegfault(int signal) {
   std::println("Segmentation fault {}:", signal);
@@ -34,7 +34,7 @@ int main(const int argc, const char **argv) {
 
       case Config::Subcommand::Stretch: {
         std::string file = config.common.files.front();
-        cv::Mat image = utils::images::readImage(file);
+        cv::Mat image = utils::images::read(file);
         cv::Size size(1280, 960);
         cv::resize(image, image, size);
 

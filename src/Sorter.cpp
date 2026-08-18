@@ -1,5 +1,5 @@
 #include "Sorter.h"
-#include "lib/image/images.hpp"
+#include "lib/image/image.hpp"
 #include "lib/cli/spark.hpp"
 
 void Sorter::processFiles() {
@@ -8,7 +8,7 @@ void Sorter::processFiles() {
   for (int i = 0; i < files.size(); ++i) {
     auto file = files[i];
     auto path = std::filesystem::path(file);
-    auto image = utils::images::readImage(path);
+    auto image = utils::images::read(path);
 
     cv::Rect roi {
       image.cols / 2 - image.cols / (SorterConfig::roi * 2),
