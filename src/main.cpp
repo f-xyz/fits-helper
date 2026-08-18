@@ -1,8 +1,9 @@
-#include "Sorter.h"
 #include "Config.h"
-#include "math/ImageStretcher.h"
-#include "math/SharpnessEstimator.h"
-#include "utils/Logger.hpp"
+#include "Sorter.h"
+#include "lib/Logger.hpp"
+#include "lib/image/ImageStretcher.hpp"
+#include "lib/image/SharpnessEstimator.hpp"
+#include "lib/image/images.hpp"
 
 static void onSegfault(int signal) {
   std::println("Segmentation fault {}:", signal);
@@ -33,7 +34,7 @@ int main(const int argc, const char **argv) {
 
       case Config::Subcommand::Stretch: {
         std::string file = config.common.files.front();
-        cv::Mat image = Sorter::readImage(file);
+        cv::Mat image = utils::images::readImage(file);
         cv::Size size(1280, 960);
         cv::resize(image, image, size);
 

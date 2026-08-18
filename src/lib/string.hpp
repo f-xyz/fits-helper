@@ -1,7 +1,6 @@
 #pragma once
 
-#include "colors.hpp"
-#include <filesystem>
+#include "cli/colors.hpp"
 #include <string>
 
 namespace utils::string {

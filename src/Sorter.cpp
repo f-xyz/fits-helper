@@ -1,12 +1,6 @@
 #include "Sorter.h"
-#include "fits/FitsReader.h"
-#include "utils/spark.hpp"
-
-cv::Mat Sorter::readImage(const std::string &file) {
-  auto ext = std::filesystem::path(file).extension().string();
-  auto isFits = ext == ".fit" || ext == ".fits";
-  return isFits ? FitsReader().read(file) : cv::imread(file);
-}
+#include "lib/image/images.hpp"
+#include "lib/cli/spark.hpp"
 
 void Sorter::processFiles() {
   logger.header("Processing files...\n");
@@ -14,7 +8,7 @@ void Sorter::processFiles() {
   for (int i = 0; i < files.size(); ++i) {
     auto file = files[i];
     auto path = std::filesystem::path(file);
-    auto image = readImage(path);
+    auto image = utils::images::readImage(path);
 
     cv::Rect roi {
       image.cols / 2 - image.cols / (SorterConfig::roi * 2),

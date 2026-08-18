@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Config.h"
-#include "utils/Logger.hpp"
-#include "math/SharpnessEstimator.h"
-#include <sys/select.h>
+#include "lib/Logger.hpp"
+#include "lib/image/SharpnessEstimator.hpp"
 
 class Sorter : Config::CommonConfig, Config::SorterConfig {
   struct Item {

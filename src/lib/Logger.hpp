@@ -1,7 +1,7 @@
 #pragma once
 
-#include "utils.hpp"
-#include "colors.hpp"
+#include "cli/colors.hpp"
+#include "string.hpp"
 
 class Logger {
   std::ofstream file;

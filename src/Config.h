@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/ImageStretcher.h"
+#include "lib/image/ImageStretcher.hpp"
 
 class Config {
 public:
