@@ -4,6 +4,7 @@ project(FITSHelper VERSION 0.0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=always")
 set(CMAKE_BUILD_TYPE Debug)
 
 ########################################
@@ -20,8 +21,8 @@ endif()
 
 include(FetchContent)
 FetchContent_Declare(cpp-dump
-    GIT_REPOSITORY https://github.com/philip82148/cpp-dump
-    GIT_TAG main
+  GIT_REPOSITORY https://github.com/philip82148/cpp-dump
+  GIT_TAG main
 ) 
 FetchContent_MakeAvailable(cpp-dump)
 
@@ -50,11 +51,4 @@ target_compile_definitions(fits-helper PRIVATE
   VERSION="${PROJECT_VERSION}"
 )
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-  target_compile_options(fits-helper PRIVATE
-    $<$<CONFIG:Debug>:-fsanitize=address,undefined -fno-omit-frame-pointer -g>
-  )
-  target_link_options(fits-helper PRIVATE
-    $<$<CONFIG:Debug>:-fsanitize=address,undefined>
-  )
-endif()
+# include(cmake_modules/sanitizers.cmake)

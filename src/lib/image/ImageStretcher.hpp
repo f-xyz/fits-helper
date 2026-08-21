@@ -1,18 +1,22 @@
 #pragma once
 
+#include "image.hpp"
 #include <opencv2/core.hpp>
+#include <opencv2/core/base.hpp>
+#include <opencv2/core/hal/interface.h>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/photo.hpp>
 #include <cmath>
 #include <vector>
 
 struct ImageStretcherOptions {
-  enum class Type { CLAHE, Asinh };
+  enum class Type { CLAHE, Asinh, Histogram };
 
   Type type = Type::CLAHE;
   double claheClipLimit = 10;
   int claheTileSize = 8;
   float asinhFactor = 10;
+  int histogramTopBins = 10;
   int denoiseH = 0;
 };
 
@@ -23,18 +27,26 @@ public:
   ImageStretcher(const cv::Mat &image) : image(image) {}
 
   cv::Mat stretch(const ImageStretcherOptions &options = {}) {
+    cv::normalize(image, image, 0, 255, cv::NORM_MINMAX, CV_8U);
     cv::cvtColor(image, image, cv::COLOR_BGR2Lab);
 
-    auto channels = split(image);
+    auto channels = utils::image::split(image);
     auto lightness = getLightness(channels[0]);
 
     if (options.type == ImageStretcherOptions::Type::CLAHE) {
       stretchClahe( channels[0],
         options.claheClipLimit,
         options.claheTileSize);
-    } else {
+    } else if (options.type == ImageStretcherOptions::Type::Asinh) {
       stretchAsinh(channels[0],
         options.asinhFactor);
+    } else {
+      using namespace utils::image;
+      auto norm = normalize(image);
+      auto gray = lightness(norm);
+      auto [min, max] = soft_range(gray, options.histogramTopBins);
+      auto clamped = clamp(gray, min, max);
+      auto stretched = clahe(clamped, options.claheClipLimit, options.claheTileSize);
     }
 
     scaleChroma(channels, lightness);

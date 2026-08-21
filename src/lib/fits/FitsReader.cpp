@@ -10,6 +10,10 @@
 cv::Mat FitsReader::read(const std::string &file) {
   const auto fptr = openFile(file);
 
+  if (fptr == nullptr) {
+    return {};
+  }
+
   if (!findFirstImageHdu(fptr)) {
     return {};
   }

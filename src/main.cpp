@@ -34,7 +34,7 @@ int main(const int argc, const char **argv) {
 
       case Config::Subcommand::Stretch: {
         std::string file = config.common.files.front();
-        cv::Mat image = utils::images::read(file);
+        cv::Mat image = utils::image::read(file);
         cv::Size size(1280, 960);
         cv::resize(image, image, size);
 

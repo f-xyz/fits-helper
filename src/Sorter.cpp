@@ -8,7 +8,7 @@ void Sorter::processFiles() {
   for (int i = 0; i < files.size(); ++i) {
     auto file = files[i];
     auto path = std::filesystem::path(file);
-    auto image = utils::images::read(path);
+    auto image = utils::image::read(path);
 
     cv::Rect roi {
       image.cols / 2 - image.cols / (SorterConfig::roi * 2),
@@ -71,7 +71,7 @@ void Sorter::printReportLine(const Item &item, bool isClipped, double percentile
   auto line = std::format("{:<8}: {:.2f} ({:.2f}%) -> {}",
     name, item.sharpness, percentile, isClipped ? "move" : "skip");
 
-  logger.info("{}", rgb(line, color));
+  logger.info("{}", utils::cli::rgb(line, color));
 }
 
 void Sorter::printSpark() {
@@ -79,5 +79,5 @@ void Sorter::printSpark() {
     | std::views::transform(&Item::sharpness)
     | std::ranges::to<std::vector<double>>();
 
-  logger.info("{}\n", spark(values));
+  logger.info("{}\n", utils::cli::spark(values));
 }

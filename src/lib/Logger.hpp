@@ -14,7 +14,7 @@ public:
   template <typename... Args>
   void header(const std::format_string<Args...> &fmt, Args &&...args) {
     auto message = std::format(fmt, std::forward<Args>(args)...);
-    printLine(bold(message));
+    printLine(utils::cli::bold(message));
     writeLine(message, "INFO");
   }
 
@@ -51,13 +51,13 @@ protected:
   }
 
   static void printLine(const std::string &line, uint r, uint g, uint b) {
-    std::println("{}", rgb(line, r, g, b));
+    std::println("{}", utils::cli::rgb(line, r, g, b));
   }
 
   void writeLine(const std::string &message, const std::string &severity = "INFO") {
     auto now = std::chrono::system_clock::now();
     auto time = std::format("{:%Y-%m-%d %H:%M:%S}", now);
-    auto clean = utils::string::trim(removeColors(message));
+    auto clean = utils::string::trim(utils::cli::removeColors(message));
     auto line = std::format("[{}] {} {}", time, severity, clean);
 
     file.write((line + "\n").c_str(), line.size() + 1);
