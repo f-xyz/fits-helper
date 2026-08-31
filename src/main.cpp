@@ -1,9 +1,7 @@
 #include "Config.h"
 #include "Sorter.h"
-#include "lib/Logger.hpp"
-#include "lib/image/ImageStretcher.hpp"
-#include "lib/image/SharpnessEstimator.hpp"
-#include "lib/image/image.hpp"
+#include "Logger.hpp"
+#include "image/image.hpp"
 
 static void onSegfault(int signal) {
   std::println("Segmentation fault {}:", signal);

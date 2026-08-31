@@ -1,8 +1,10 @@
 #pragma once
 
 #include "Config.h"
-#include "lib/Logger.hpp"
-#include "lib/image/SharpnessEstimator.hpp"
+#include "Logger.hpp"
+#include "image/SharpnessEstimator.hpp"
+
+using namespace utils::logging;
 
 class Sorter : Config::CommonConfig, Config::SorterConfig {
   struct Item {

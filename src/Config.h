@@ -1,6 +1,8 @@
 #pragma once
 
-#include "lib/image/ImageStretcher.hpp"
+#include "image/ImageStretcher.hpp"
+
+using namespace utils::image;
 
 class Config {
 public:
@@ -20,7 +22,8 @@ public:
   };
 
   struct StretcherConfig {
-    ImageStretcherOptions::Type stretchType = ImageStretcherOptions::Type::CLAHE;
+    using Type = ImageStretcherOptions::Type;
+    Type stretchType = Type::CLAHE;
     double claheClipLimit = 10;
     int claheTileSize = 8;
     float asinhFactor = 0.2;
