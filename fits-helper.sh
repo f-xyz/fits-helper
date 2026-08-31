@@ -10,4 +10,4 @@ cmake --build build --parallel
 
 echo "--------------------------------"
 
-./build/fits-helper $*
+./build/fits-helper "$@"

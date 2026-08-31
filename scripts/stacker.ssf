@@ -1,0 +1,31 @@
+# Usage: siril -s {path_to_this_file}
+
+requires 1.2.0
+
+# 1. The working directory containing your raw light frames
+cd "/home/andr/projects/fits-helper/images/ngc3675"
+
+# 2. Convert raw images into a Siril FITS sequence named 'light'
+convert light -out=../tmp
+
+# 3. Navigate into your processing folder 
+cd "../tmp"
+
+# 4. Calibrate and Debayer
+# -dark="dark.fit"
+# -flat="flat.fit"
+# -bias="bias.fit"
+calibrate light -debayer
+
+# 5. Register the pre-processed color images 
+register pp_light
+
+# 6. Stack the registered sequence
+# Algorithms: sum | min | max | median | mean | rej RejectionType
+# RejectionType: percentile | sigmaclip | ksigma | winsorized | linear
+# Norm: nonorm | add | mul | addscale | mulscale
+# Weight: noise | wfwhm | nbstars | nbstack
+# 32b: generate a floating-point image
+# stack r_pp_light rej winsorized 3.0 3.0 -32b -weight=noise -norm=addscale -out=integration
+stack r_pp_light rej winsorized 3.0 3.0 -32b -filter-fwhm=80% -weight=wfwhm -norm=addscale -out=integration
+# stack r_pp_light rej winsorized 3.0 3.0 -32b -drizzle -filter-fwhm=80% -weight=wfwhm -norm=addscale -out=integration
