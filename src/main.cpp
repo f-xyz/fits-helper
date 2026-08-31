@@ -18,11 +18,12 @@ int main(const int argc, const char **argv) {
   std::println("{} v{}\n", utils::cli::bold(NAME), utils::cli::bold(VERSION));
 
   Config config;
-  config.parse(argc, argv, [&config](Config::Subcommand subcommand) {
+  Logger logger(config.common.logFilePath);
+
+  config.parse(argc, argv, [&config, &logger](Config::Subcommand subcommand) {
     switch (subcommand) {
       case Config::Subcommand::Analyze:
       case Config::Subcommand::Move: {
-        Logger logger(config.common.logFilePath);
         SharpnessEstimatorGaussian estimator;
         Sorter app(config, logger, estimator);
 
@@ -35,20 +36,23 @@ int main(const int argc, const char **argv) {
       case Config::Subcommand::Stretch: {
         std::string file = config.common.files.front();
         cv::Mat image = utils::image::read(file);
+        std::string info = utils::image::info(image);
+        std::println("image: {}", info);
+
         cv::Size size(1280, 960);
         cv::resize(image, image, size);
+        // utils::image::show(image);
 
-        cv::Mat stretched = ImageStretcher(image).stretch({
-          .type = config.stretcher.stretchType,
+        cv::Mat stretched = ImageStretcher({
+          .types = {config.stretcher.stretchType},
           .claheClipLimit = config.stretcher.claheClipLimit,
           .claheTileSize = config.stretcher.claheTileSize,
           .asinhFactor = config.stretcher.asinhFactor,
+          .histogramTopBins = 100,
           .denoiseH = config.stretcher.denoise
-        });
+        }).stretch(image.clone());
 
-        cv::imshow("CLAHE", stretched);
-        cv::waitKey(0);
-        cv::destroyAllWindows();
+        utils::image::show(stretched);
         break;
       }
 

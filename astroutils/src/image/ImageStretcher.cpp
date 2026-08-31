@@ -5,43 +5,48 @@
 
 namespace utils::image {
 
-cv::Mat ImageStretcher::stretch(const ImageStretcherOptions &options) {
-  cv::normalize(image, image, 0, 255, cv::NORM_MINMAX, CV_8U);
-  cv::cvtColor(image, image, cv::COLOR_BGR2Lab);
+cv::Mat ImageStretcher::stretch(const cv::Mat &image) {
+  cv::Mat norm = getNormalizedLab(image);
+  std::vector<cv::Mat> channels = utils::image::split(norm);
+  cv::Mat lightness = getLightness(channels[0]);
 
-  auto channels = utils::image::split(image);
-  auto lightness = getLightness(channels[0]);
-
-  if (options.type == ImageStretcherOptions::Type::CLAHE) {
-    stretchClahe(channels[0], options.claheClipLimit, options.claheTileSize);
-  } else if (options.type == ImageStretcherOptions::Type::Asinh) {
-    stretchAsinh(channels[0], options.asinhFactor);
-  } else {
-    using namespace utils::image;
-    auto norm = normalize(image);
-    auto gray = lightness(norm);
-    auto [min, max] = soft_range(gray, options.histogramTopBins);
-    auto clamped = clamp(gray, min, max);
-    auto stretched =
-        clahe(clamped, options.claheClipLimit, options.claheTileSize);
+  for (const auto &type : options.types) {
+    switch (type) {
+    case ImageStretcherOptions::Type::CLAHE:
+      stretchClahe(channels[0], options.claheClipLimit, options.claheTileSize);
+      break;
+    case ImageStretcherOptions::Type::Asinh:
+      stretchAsinh(channels[0], options.asinhFactor);
+      break;
+    case ImageStretcherOptions::Type::Histogram:
+      using namespace utils::image;
+      cv::Mat norm = normalize(channels[0]);
+      auto [min, max] = soft_range(norm, options.histogramTopBins);
+      channels[0] = clamp(norm, min, max);
+      break;
+    }
   }
 
-  scaleChroma(channels, lightness);
+  if (options.scaleChroma) {
+    scaleChroma(channels, lightness);
+  }
 
   if (options.denoiseH > 0) {
     cv::fastNlMeansDenoising(channels[0], channels[0], options.denoiseH, 7, 21);
   }
 
-  cv::merge(channels, image);
-  cv::cvtColor(image, image, cv::COLOR_Lab2BGR);
+  cv::Mat result;
+  cv::merge(channels, result);
+  cv::cvtColor(result, result, cv::COLOR_Lab2BGR);
 
-  return image;
+  return result;
 }
 
-std::vector<cv::Mat> ImageStretcher::split(const cv::Mat &image) {
-  std::vector<cv::Mat> channels;
-  cv::split(image, channels);
-  return channels;
+cv::Mat ImageStretcher::getNormalizedLab(const cv::Mat &image) {
+  cv::Mat result;
+  cv::normalize(image, result, 0, 255, cv::NORM_MINMAX, CV_8U);
+  cv::cvtColor(result, result, cv::COLOR_BGR2Lab);
+  return result;
 }
 
 cv::Mat ImageStretcher::getLightness(const cv::Mat &lightness) {
