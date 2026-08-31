@@ -28,6 +28,11 @@ FetchContent_MakeAvailable(cpp-dump)
 
 ########################################
 
+set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+add_subdirectory(astroutils)
+
+########################################
+
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 add_executable(fits-helper ${SOURCES})
 target_precompile_headers(fits-helper PRIVATE src/pch.h)
@@ -39,6 +44,7 @@ target_include_directories(fits-helper PRIVATE
 )
 
 target_link_libraries(fits-helper PRIVATE
+  astroutils
   stdc++exp
   tbb
   ${OpenCV_LIBS}
