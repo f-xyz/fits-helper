@@ -98,7 +98,7 @@ void Config::addSorterOptionDestination(CLI::App *app, bool isRequired) {
 //////////////////////////////////////
 
 void Config::addStretcherOptionStretchType(CLI::App *app, bool isRequired) {
-  app->add_option("-t,--type", stretcher.stretchType)
+  app->add_option("-t,--type", stretcher.stretchTypes)
      ->transform(CLI::CheckedTransformer(stretchTypeMap, CLI::ignore_case))
      ->description("Stretch type: CLAHE, Asinh. Default: CLAHE.")
      ->required(isRequired)

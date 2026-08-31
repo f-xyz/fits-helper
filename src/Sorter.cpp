@@ -75,9 +75,6 @@ void Sorter::printReportLine(const Item &item, bool isClipped, double percentile
 }
 
 void Sorter::printSpark() {
-  auto values = results
-    | std::views::transform(&Item::sharpness)
-    | std::ranges::to<std::vector<double>>();
-
+  auto values = results | std::views::transform(&Item::sharpness);
   logger.info("{}\n", utils::cli::spark(values));
 }

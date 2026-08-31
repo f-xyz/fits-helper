@@ -23,7 +23,7 @@ public:
 
   struct StretcherConfig {
     using Type = ImageStretcherOptions::Type;
-    Type stretchType = Type::CLAHE;
+    std::vector<Type> stretchTypes = {Type::CLAHE};
     double claheClipLimit = 10;
     int claheTileSize = 8;
     float asinhFactor = 0.2;

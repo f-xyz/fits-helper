@@ -1,6 +1,6 @@
 #include "Config.h"
 #include "Sorter.h"
-#include "Logger.hpp"
+#include <Logger.hpp>
 #include "cli/colors.hpp"
 #include "image/image.hpp"
 #include <ranges>
@@ -44,11 +44,11 @@ int main(const int argc, const char **argv) {
         // utils::image::show(image);
 
         cv::Mat stretched = ImageStretcher({
-          .types = {config.stretcher.stretchType},
+          .types = {config.stretcher.stretchTypes},
           .claheClipLimit = config.stretcher.claheClipLimit,
           .claheTileSize = config.stretcher.claheTileSize,
           .asinhFactor = config.stretcher.asinhFactor,
-          .histogramTopBins = 100,
+          .histogramTopBins = 10,
           .denoiseH = config.stretcher.denoise
         }).stretch(image.clone());
 
@@ -57,12 +57,8 @@ int main(const int argc, const char **argv) {
       }
 
       case Config::Subcommand::Chop: {
-        std::println("{}", "CHOOOOP");
-        std::println("size: {}", config.chopper.size);
-
         auto chunks = config.common.files
-          | std::views::chunk(config.chopper.size)
-          | std::ranges::to<std::vector<std::vector<std::string>>>();
+          | std::views::chunk(config.chopper.size);
 
         for (auto chunk : chunks) {
           std::println("------------");
