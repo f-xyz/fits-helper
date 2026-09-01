@@ -32,7 +32,6 @@ FetchContent_Declare(googletest
   URL https://github.com/google/googletest/archive/refs/tags/v1.18.0.zip
   DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
 FetchContent_MakeAvailable(googletest)
-enable_testing()
 
 ########################################
 
@@ -51,31 +50,23 @@ target_link_libraries(astroutils PUBLIC
 
 ########################################
 
-file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS "tests/*.cpp")
-add_executable(tests ${TEST_SOURCES})
-target_precompile_headers(tests PRIVATE tests/pch.h)
-target_include_directories(tests PRIVATE
-  cpp_dump
-  gmock_main)
-target_link_libraries(tests PRIVATE
-  astroutils
-  gmock_main
-  cpp-dump)
+if (PROJECT_IS_TOP_LEVEL)
+  file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS "tests/*.cpp")
+  add_executable(tests ${TEST_SOURCES})
+  target_precompile_headers(tests PRIVATE tests/pch.h)
+  target_include_directories(tests PRIVATE
+    cpp_dump
+    gmock_main)
+  target_link_libraries(tests PRIVATE
+    astroutils
+    gmock_main
+    cpp-dump)
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  target_compile_options(tests PRIVATE -fcondition-coverage)
-endif()
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(tests PRIVATE -fcondition-coverage)
+  endif()
 
-include(GoogleTest)
-gtest_discover_tests(tests)
-
-########################################
-
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-  target_compile_options(astroutils PUBLIC
-    $<$<CONFIG:Debug>:-fsanitize=address,undefined -fno-omit-frame-pointer -g>
-  )
-  target_link_options(astroutils PUBLIC
-    $<$<CONFIG:Debug>:-fsanitize=address,undefined>
-  )
+  include(GoogleTest)
+  enable_testing()
+  gtest_discover_tests(tests)
 endif()
