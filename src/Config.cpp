@@ -2,7 +2,7 @@
 
 int Config::parse(const int argc, const char **argv, const std::function<void(Subcommand)> &callback) {
   CLI::App app;
-  app.require_subcommand(1);
+  app.require_subcommand(true);
 
   auto analyze = app.add_subcommand("analyze");
   addSorterOptionSelect(analyze, true);

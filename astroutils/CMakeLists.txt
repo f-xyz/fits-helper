@@ -38,6 +38,7 @@ enable_testing()
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 add_library(astroutils SHARED ${SOURCES})
+target_precompile_headers(astroutils INTERFACE src/pch.h)
 target_include_directories(astroutils PUBLIC
   include
   ${OpenCV_INCLUDE_DIRS}
@@ -52,7 +53,10 @@ target_link_libraries(astroutils PUBLIC
 
 file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS "tests/*.cpp")
 add_executable(tests ${TEST_SOURCES})
-target_include_directories(tests PRIVATE cpp_dump)
+target_precompile_headers(tests PRIVATE tests/pch.h)
+target_include_directories(tests PRIVATE
+  cpp_dump
+  gmock_main)
 target_link_libraries(tests PRIVATE
   astroutils
   gmock_main
@@ -68,10 +72,10 @@ gtest_discover_tests(tests)
 ########################################
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-  target_compile_options(tests PRIVATE
+  target_compile_options(astroutils PUBLIC
     $<$<CONFIG:Debug>:-fsanitize=address,undefined -fno-omit-frame-pointer -g>
   )
-  target_link_options(tests PRIVATE
+  target_link_options(astroutils PUBLIC
     $<$<CONFIG:Debug>:-fsanitize=address,undefined>
   )
 endif()
