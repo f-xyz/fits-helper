@@ -6,6 +6,7 @@
 #include "process.hpp"
 #include "string.hpp"
 
+using namespace utils;
 using namespace utils::logging;
 
 class Chopper : Config::CommonConfig, Config::ChopperConfig {
@@ -18,18 +19,11 @@ public:
   }
 
   void chop() {
-    const std::string templatePath = "scripts/stacker.ssf";
-    const std::string tpl = utils::fs::readText(templatePath);
-    const std::string script =
-        utils::string::replace(R"(\{\$.+\})", tpl, "###");
-    std::println("{}", script);
-
     const auto chunks = files | std::views::chunk(size);
 
     for (const auto &chunk : chunks) {
       std::println("------------");
-      const std::filesystem::path first = chunk.front();
-      const std::string dir = first.parent_path().string();
+      const std::string dir = getDir(chunk.front());
       std::println("{}", utils::cli::bold(dir));
 
       for (const auto &file : chunk) {
@@ -42,5 +36,18 @@ public:
     auto q = utils::process::exec("ping -c 4 8.8.8.8");
     // [](auto data) { std::print("{}", data); });
     std::println("{}", q.output);
+  }
+
+  std::string getDir(const std::filesystem::path &path) {
+    return path.parent_path().string();
+  }
+
+  std::string getScript(const std::string &dir) {
+    const std::string templatePath = "scripts/stacker.ssf";
+    const std::string tpl = fs::readText(templatePath);
+    const std::string script = string::replace(R"(\{\$.+\})", tpl, dir);
+    std::println("{}", script);
+
+    return script;
   }
 };
