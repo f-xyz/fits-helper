@@ -23,7 +23,7 @@ include(FetchContent)
 FetchContent_Declare(cpp-dump
   GIT_REPOSITORY https://github.com/philip82148/cpp-dump
   GIT_TAG main
-) 
+)
 FetchContent_MakeAvailable(cpp-dump)
 
 ########################################
