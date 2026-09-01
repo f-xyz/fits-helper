@@ -1,11 +1,12 @@
 #include "Sorter.h"
 #include "image/image.hpp"
 #include "cli/spark.hpp"
+#include <cstddef>
 
 void Sorter::processFiles() {
   logger.header("Processing files...\n");
 
-  for (int i = 0; i < files.size(); ++i) {
+  for (std::size_t i = 0; i < files.size(); ++i) {
     auto file = files[i];
     auto path = std::filesystem::path(file);
     auto image = utils::image::read(path);
@@ -36,11 +37,7 @@ void Sorter::computePercentiles(bool shouldMoveFiles) {
   std::ranges::sort(results, std::ranges::greater {}, &Item::sharpness);
 
   auto n = results.size();
-  auto range = std::ranges::minmax(results, {}, &Item::sharpness);
-  auto min = range.min.sharpness;
-  auto max = range.max.sharpness;
-
-  for (int i = 0; i < n; ++i) {
+  for (std::size_t i = 0; i < n; ++i) {
     auto item = results[i];
     auto percentile = n > 1
       ? 1 - static_cast<double>(i) / (n - 1)

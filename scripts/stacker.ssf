@@ -3,7 +3,7 @@
 requires 1.2.0
 
 # 1. The working directory containing your raw light frames
-cd "/home/andr/projects/fits-helper/images/ngc3675"
+cd "{$PATH}"
 
 # 2. Convert raw images into a Siril FITS sequence named 'light'
 convert light -out=../tmp
