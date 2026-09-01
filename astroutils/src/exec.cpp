@@ -1,9 +1,10 @@
 #include "exec.hpp"
 #include <array>
+#include <string>
 
 namespace utils::process {
 
-ExecResult exec(const std::string &command) {
+ExecResult exec(const std::string &command, ExecCallback callback) {
   std::string output;
   std::array<char, 128> buffer;
 
@@ -13,7 +14,11 @@ ExecResult exec(const std::string &command) {
   }
 
   while (fgets(buffer.data(), buffer.size(), pipe) != nullptr) {
+    const char *data = buffer.data();
     output += buffer.data();
+    if (callback.has_value()) {
+      (*callback)(data);
+    }
   }
 
   int rawCode = pclose(pipe);

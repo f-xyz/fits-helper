@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+#include <optional>
 #include <string>
 
 namespace utils::process {
@@ -9,6 +11,9 @@ struct ExecResult {
   int code = -1;
 };
 
-ExecResult exec(const std::string &command);
+using ExecCallback = std::optional<std::function<void(const char *)>>;
+
+ExecResult exec(const std::string &command,
+                ExecCallback callback = std::nullopt);
 
 }; // namespace utils::process

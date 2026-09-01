@@ -22,10 +22,16 @@ std::string join(const std::vector<std::string> &arr,
 ////////////////////////////////////////
 
 std::optional<std::string>
-regex(const std::regex &regex, const std::string &str, std::size_t nMatch = 0);
+match(const std::regex &regex, const std::string &str, std::size_t nMatch = 0);
 
 std::optional<std::string>
-regex(const std::string &regex, const std::string &str, std::size_t nMatch = 0);
+match(const std::string &regex, const std::string &str, std::size_t nMatch = 0);
+
+std::string replace(const std::regex &regex, const std::string &string,
+                    const std::string &replacement);
+
+std::string replace(const std::string &regex, const std::string &str,
+                    const std::string &replacement);
 
 ////////////////////////////////////////
 // Slicing /////////////////////////////

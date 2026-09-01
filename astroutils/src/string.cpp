@@ -3,6 +3,7 @@
 #include <codecvt>
 #include <cstddef>
 #include <ranges>
+#include <regex>
 
 namespace utils::string {
 
@@ -22,7 +23,7 @@ std::string join(const std::vector<std::string> &arr,
 // Regex ///////////////////////////////
 ////////////////////////////////////////
 
-std::optional<std::string> regex(const std::regex &regex,
+std::optional<std::string> match(const std::regex &regex,
                                  const std::string &str, std::size_t nMatch) {
   std::smatch matches;
   std::regex_search(str, matches, regex);
@@ -32,9 +33,20 @@ std::optional<std::string> regex(const std::regex &regex,
              : std::nullopt;
 }
 
-std::optional<std::string> regex(const std::string &regex,
+std::optional<std::string> match(const std::string &regex,
                                  const std::string &str, std::size_t nMatch) {
-  return utils::string::regex(std::regex(regex), str, nMatch);
+  return utils::string::match(std::regex(regex), str, nMatch);
+}
+
+std::string replace(const std::regex &regex, const std::string &string,
+                    const std::string &replacement) {
+  return std::regex_replace(string, regex, replacement);
+}
+
+std::string replace(const std::string &regex, const std::string &str,
+                    const std::string &replacement) {
+  std::regex rx(regex);
+  return std::regex_replace(str, rx, replacement);
 }
 
 ////////////////////////////////////////
