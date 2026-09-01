@@ -6,7 +6,7 @@
 
 using namespace utils::logging;
 
-class Sorter : Config::CommonConfig, Config::SorterConfig {
+class SorterApp : Config::CommonConfig, Config::SorterConfig {
   struct Item {
     std::string file;
     double sharpness = 0;
@@ -17,7 +17,7 @@ class Sorter : Config::CommonConfig, Config::SorterConfig {
   std::vector<Item> results;
 
 public:
-  explicit Sorter(Config &config, Logger &logger, SharpnessEstimator &estimator)
+  explicit SorterApp(Config &config, Logger &logger, SharpnessEstimator &estimator)
     : logger(logger), estimator(estimator) {
     files = config.common.files;
     select = config.sorter.select;

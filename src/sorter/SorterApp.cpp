@@ -1,9 +1,9 @@
-#include "Sorter.h"
+#include "SorterApp.h"
 #include "image/image.hpp"
 #include "cli/spark.hpp"
 #include <cstddef>
 
-void Sorter::analyzeFiles() {
+void SorterApp::analyzeFiles() {
   logger.header("Processing files...\n");
 
   for (std::size_t i = 0; i < files.size(); ++i) {
@@ -27,7 +27,7 @@ void Sorter::analyzeFiles() {
   }
 }
 
-void Sorter::processFiles(bool moveFiles) {
+void SorterApp::processFiles(bool moveFiles) {
   logger.header("Computing percentiles...\n");
 
   if (moveFiles) {
@@ -57,7 +57,7 @@ void Sorter::processFiles(bool moveFiles) {
   }
 }
 
-void Sorter::printReportLine(const Item &item, bool isClipped, double percentile) {
+void SorterApp::printReportLine(const Item &item, bool isClipped, double percentile) {
   auto dotPos = std::max<int>(0, item.file.find_last_of('.') - 4);
   auto name = item.file.substr(dotPos);
 
@@ -71,7 +71,7 @@ void Sorter::printReportLine(const Item &item, bool isClipped, double percentile
   logger.info("{}", utils::cli::rgb(line, color));
 }
 
-void Sorter::printSpark() {
+void SorterApp::printSpark() {
   auto values = results | std::views::transform(&Item::sharpness);
   logger.info("{}\n", utils::cli::spark(values));
 }
