@@ -3,7 +3,7 @@
 #include "cli/spark.hpp"
 #include <cstddef>
 
-void Sorter::processFiles() {
+void Sorter::analyzeFiles() {
   logger.header("Processing files...\n");
 
   for (std::size_t i = 0; i < files.size(); ++i) {
@@ -27,10 +27,10 @@ void Sorter::processFiles() {
   }
 }
 
-void Sorter::computePercentiles(bool shouldMoveFiles) {
+void Sorter::processFiles(bool moveFiles) {
   logger.header("Computing percentiles...\n");
 
-  if (shouldMoveFiles) {
+  if (moveFiles) {
     std::filesystem::create_directory(destination);
   }
 
@@ -49,7 +49,7 @@ void Sorter::computePercentiles(bool shouldMoveFiles) {
 
     printReportLine(item, isClipped, percentile);
 
-    if (shouldMoveFiles && isClipped) {
+    if (moveFiles && isClipped) {
       std::filesystem::path path(item.file);
       auto name = path.filename().string();
       std::filesystem::rename(item.file, destination + "/" + name);

@@ -1,13 +1,9 @@
 #include "Config.h"
 #include "Logger.hpp"
-#include "Sorter.h"
+#include "chopper/Chopper.h"
 #include "cli/colors.hpp"
-#include "exec.hpp"
-#include "fs.hpp"
 #include "image/image.hpp"
-#include "string.hpp"
-#include <ranges>
-#include <regex>
+#include "sorter/Sorter.h"
 #include <string>
 
 static void onSegfault(int signal) {
@@ -32,9 +28,9 @@ int main(const int argc, const char **argv) {
         SharpnessEstimatorGaussian estimator;
         Sorter app(config, logger, estimator);
 
-        app.processFiles();
+        app.analyzeFiles();
         app.printSpark();
-        app.computePercentiles(subcommand == Config::Subcommand::Move);
+        app.processFiles(subcommand == Config::Subcommand::Move);
         break;
       }
 
@@ -61,33 +57,8 @@ int main(const int argc, const char **argv) {
       }
 
       case Config::Subcommand::Chop: {
-        const std::string templatePath = "scripts/stacker.ssf";
-        const std::string tpl = utils::fs::readText(templatePath);
-        const std::string script =
-            utils::string::replace(R"(\{\$.+\})", tpl, "###");
-        std::println("{}", script);
-
-        const auto chunks = config.common.files
-          | std::views::chunk(config.chopper.size);
-
-        for (const auto &chunk : chunks) {
-          std::println("------------");
-          const std::filesystem::path first = chunk.front();
-          const std::string dir = first.parent_path().string();
-          std::println("{}", utils::cli::bold(dir));
-
-          for (const auto &file : chunk) {
-            std::println("{}", file);
-          }
-
-          std::println("");
-        }
-
-        auto q = utils::process::exec(
-              "ping -c 4 8.8.8.8");
-              // [](auto data) { std::print("{}", data); });
-          std::println("{}", q.output);
-
+        Chopper app(config, logger);
+        app.chop();
         break;
       }
     }

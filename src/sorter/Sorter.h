@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Config.h"
+#include "../Config.h"
 #include "Logger.hpp"
 #include "image/SharpnessEstimator.hpp"
 
@@ -28,8 +28,8 @@ public:
 
   static cv::Mat readImage(const std::string &file);
 
-  void processFiles();
-  void computePercentiles(bool shouldMoveFiles);
+  void analyzeFiles();
+  void processFiles(bool moveFiles);
   void printSpark();
 
 private:
