@@ -1,60 +1,45 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.28)
 project(FITSHelper VERSION 0.0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=always")
-set(CMAKE_BUILD_TYPE Debug)
+
+if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the build type." FORCE)
+endif()
 
 ########################################
-
-find_package(OpenCV REQUIRED)
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(CFITSIO REQUIRED cfitsio)
-
-find_program(CCACHE_PROGRAM ccache)
-if(CCACHE_PROGRAM)
-  set(CMAKE_C_COMPILER_LAUNCHER   ${CCACHE_PROGRAM})
-  set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
-endif()
+# Dependencies #########################
+########################################
 
 include(FetchContent)
 FetchContent_Declare(cpp-dump
   GIT_REPOSITORY https://github.com/philip82148/cpp-dump
-  GIT_TAG main
-)
+  GIT_TAG v0.7.0)
 FetchContent_MakeAvailable(cpp-dump)
 
 ########################################
+## Astroutils Library ##################
+########################################
 
-set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
 add_subdirectory(astroutils)
 
+########################################
+## Executable ##########################
 ########################################
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 add_executable(fits-helper ${SOURCES})
 target_precompile_headers(fits-helper PRIVATE src/pch.h)
-
 target_include_directories(fits-helper PRIVATE
-  include
-  ${OpenCV_INCLUDE_DIRS}
-  ${CFITSIO_INCLUDE_DIRS}
-)
-
-target_link_libraries(fits-helper PRIVATE
-  astroutils
-  stdc++exp
-  tbb
-  ${OpenCV_LIBS}
-  ${CFITSIO_LIBRARIES}
-  cpp-dump
-)
-
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+target_link_libraries(fits-helper PRIVATE astroutils cpp-dump)
+target_compile_options(fits-helper PRIVATE
+  -Wall -Wextra -Wpedantic
+  $<$<CXX_COMPILER_ID:GNU,Clang>:-fdiagnostics-color=always>)
 target_compile_definitions(fits-helper PRIVATE
   NAME="${PROJECT_NAME}"
-  VERSION="${PROJECT_VERSION}"
-)
+  VERSION="${PROJECT_VERSION}")
 
 # include(cmake_modules/sanitizers.cmake)

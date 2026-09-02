@@ -5,9 +5,9 @@ mkdir -p build/
 cmake -S . -B build -G Ninja \
   -DCMAKE_CXX_COMPILER=g++-14 \
   -DCMAKE_BUILD_TYPE=Debug
-cmake --build build --parallel
+cmake --build build --parallel 4
 
-echo "################################"
+echo "########################################"
 
 ./build/tests $*
 
@@ -27,3 +27,5 @@ gcovr \
   --exclude-noncode-lines \
   --html-details \
   -o coverage.html
+
+# 15:18:20

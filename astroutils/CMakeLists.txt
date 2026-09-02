@@ -1,70 +1,70 @@
-cmake_minimum_required(VERSION 3.15)
-cmake_policy(SET CMP0135 NEW)
+cmake_minimum_required(VERSION 3.28)
 project(astroutils VERSION 0.0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -fdiagnostics-color=always")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} --coverage")
-set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} --coverage")
-set(CMAKE_BUILD_TYPE Debug)
 
+if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the build type." FORCE)
+endif()
+
+########################################
+# Dependencies #########################
 ########################################
 
 find_package(OpenCV REQUIRED)
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(CFITSIO REQUIRED cfitsio)
+pkg_check_modules(CFITSIO REQUIRED IMPORTED_TARGET cfitsio)
 
-find_program(CCACHE_PROGRAM ccache)
-if(CCACHE_PROGRAM)
-  set(CMAKE_C_COMPILER_LAUNCHER   ${CCACHE_PROGRAM})
-  set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
-endif()
-
-include(FetchContent)
-FetchContent_Declare(cpp-dump
-  GIT_REPOSITORY https://github.com/philip82148/cpp-dump
-  GIT_TAG main)
-FetchContent_MakeAvailable(cpp-dump)
-
-FetchContent_Declare(googletest
-  URL https://github.com/google/googletest/archive/refs/tags/v1.18.0.zip
-  DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
-FetchContent_MakeAvailable(googletest)
-
+########################################
+# Library ##############################
 ########################################
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 add_library(astroutils SHARED ${SOURCES})
-target_precompile_headers(astroutils INTERFACE src/pch.h)
+target_precompile_headers(astroutils PRIVATE src/pch.h)
 target_include_directories(astroutils PUBLIC
-  include
-  ${OpenCV_INCLUDE_DIRS}
-  ${CFITSIO_INCLUDE_DIRS})
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
 target_link_libraries(astroutils PUBLIC
   stdc++exp
   tbb
+  PkgConfig::CFITSIO
   ${OpenCV_LIBS}
-  ${CFITSIO_LIBRARIES})
+  $<$<CONFIG:Debug>:--coverage>)
+target_compile_options(astroutils PRIVATE
+  -Wall -Wextra -Wpedantic
+  $<$<CXX_COMPILER_ID:GNU,Clang>:-fdiagnostics-color=always>
+  $<$<CONFIG:Debug>:--coverage>)
 
+########################################
+# Unit Tests ###########################
 ########################################
 
 if (PROJECT_IS_TOP_LEVEL)
+  include(FetchContent)
+  FetchContent_Declare(googletest
+    URL https://github.com/google/googletest/archive/refs/tags/v1.18.0.zip
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
+  FetchContent_MakeAvailable(googletest)
+
+  FetchContent_Declare(cpp-dump
+    GIT_REPOSITORY https://github.com/philip82148/cpp-dump
+    GIT_TAG v0.7.0)
+  FetchContent_MakeAvailable(cpp-dump)
+
   file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS "tests/*.cpp")
   add_executable(tests ${TEST_SOURCES})
-  target_precompile_headers(tests PRIVATE tests/pch.h)
-  target_include_directories(tests PRIVATE
-    cpp_dump
-    gmock_main)
+  target_precompile_headers(tests PRIVATE "tests/pch.h")
   target_link_libraries(tests PRIVATE
     astroutils
     gmock_main
-    cpp-dump)
-
-  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(tests PRIVATE -fcondition-coverage)
-  endif()
+    cpp-dump 
+    $<$<CONFIG:Debug>:--coverage>)
+  target_compile_options(tests PRIVATE
+    -Wall -Wextra -Wpedantic
+    $<$<CXX_COMPILER_ID:GNU,Clang>:-fdiagnostics-color=always>)
 
   include(GoogleTest)
   enable_testing()

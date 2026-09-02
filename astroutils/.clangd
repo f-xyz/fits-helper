@@ -8,4 +8,6 @@ CompileFlags:
     -Iinclude/,
     -I/usr/include/opencv4
   ]
-  Remove: [-fcondition-coverage]
+  Remove: [
+    -fcondition-coverage
+  ]

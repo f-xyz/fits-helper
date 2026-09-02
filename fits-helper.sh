@@ -2,12 +2,11 @@
 set -euo pipefail
 
 mkdir -p build/
+cmake -S . -B build -G Ninja \
+  -DCMAKE_CXX_COMPILER=g++-14 \
+  -DCMAKE_BUILD_TYPE=Debug
+cmake --build build --parallel 4
 
-echo "--------------------------------"
-
-cmake -B build -G Ninja -DCMAKE_CXX_COMPILER=g++-14
-cmake --build build --parallel
-
-echo "--------------------------------"
+echo "########################################"
 
 ./build/fits-helper "$@"

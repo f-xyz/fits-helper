@@ -65,13 +65,13 @@ double stddev(const Range &range) {
 ////////////////////////////////////////
 
 template <std::ranges::input_range Range>
-auto slice(Range &&range, int start) {
+auto slice(const Range &range, int start) {
   start = start >= 0 ? start : std::size(range) + start;
   return std::vector(range.begin() + start, range.end());
 }
 
 template <std::ranges::input_range Range>
-auto slice(Range &&range, int start, int end) {
+auto slice(const Range &range, int start, int end) {
   start = start >= 0 ? start : std::size(range) + start;
   end = end >= 0 ? end : std::size(range) + end;
   return std::vector(range.begin() + start, range.begin() + end);

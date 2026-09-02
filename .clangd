@@ -6,7 +6,12 @@ CompileFlags:
     -Wextra,
     -Wpedantic,
     -Iinclude/,
-    -I/usr/include/opencv4,
-    -Iastroutils/include
+    -Iastroutils/include,
+    -I/usr/include/opencv4
   ]
-  Remove: [-fcondition-coverage]
+  Remove: [
+    -fcondition-coverage,
+    -fmodules-ts,
+    -fdeps-format=*,
+    -fmodule-mapper=*
+  ]
