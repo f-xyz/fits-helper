@@ -1,8 +1,4 @@
 #include "process.hpp"
-#include <cerrno>
-#include <gmock/gmock.h>
-#include <vector>
-#include <gtest/gtest.h>
 
 using ::testing::Eq;
 

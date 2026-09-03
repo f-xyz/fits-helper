@@ -1,8 +1,6 @@
 #include "async/Throttle.hpp"
 #include "async/setTimeout.hpp"
 #include <atomic>
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
 #include <thread>
 
 using namespace std::chrono_literals;
@@ -24,7 +22,7 @@ TEST(AsyncThrottle, CallInvokesCallbackAtMostOncePerWindow) {
 
 TEST(AsyncThrottle, SetTimeoutResolvesAfterDelay) {
   // arrange
-  std::atomic<int> calls{0};
+  std::atomic<int> calls {0};
   auto future = utils::async::setTimeout(
       [&] {
         ++calls;

@@ -1,7 +1,4 @@
 #include "cli/spark.hpp"
-#include "gmock/gmock.h"
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
 
 TEST(CliSpark, EmptyRangeReturnsPlaceholder) {
   // arrange

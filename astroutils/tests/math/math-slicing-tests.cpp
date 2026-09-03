@@ -1,6 +1,4 @@
-#include <gtest/gtest.h>
-
-#include "../../include/math.hpp"
+#include "math.hpp"
 
 TEST(MathSlicing, slice_begin) {
   // arrange

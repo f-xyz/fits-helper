@@ -1,5 +1,4 @@
-#include "../../include/math.hpp"
-#include "gtest/gtest.h"
+#include "math.hpp"
 #include <cmath>
 
 TEST(MathDescriptiveStatistics, sum) {

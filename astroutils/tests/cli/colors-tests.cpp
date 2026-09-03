@@ -1,6 +1,4 @@
-#include "../../include/cli/colors.hpp"
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
+#include "cli/colors.hpp"
 
 using ::testing::Eq;
 

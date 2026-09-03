@@ -46,13 +46,13 @@ target_include_directories(astroutils PUBLIC
 target_compile_options(astroutils PRIVATE
   -Wall -Wextra -Wpedantic
   $<$<CXX_COMPILER_ID:GNU,Clang>:-fdiagnostics-color=always>
-  $<$<AND:$<BOOL:${ENABLE_COVERAGE}>,$<CONFIG:Debug>>:--coverage>)
+  $<$<BOOL:${ENABLE_COVERAGE}>:--coverage>)
 target_link_libraries(astroutils PUBLIC
   stdc++exp
   tbb
   PkgConfig::CFITSIO
   ${OpenCV_LIBS}
-  $<$<AND:$<BOOL:${ENABLE_COVERAGE}>,$<CONFIG:Debug>>:--coverage>)
+  $<$<BOOL:${ENABLE_COVERAGE}>:--coverage>)
 
 ########################################
 # Unit Tests ###########################
@@ -75,12 +75,12 @@ if(PROJECT_IS_TOP_LEVEL)
   target_precompile_headers(tests PRIVATE "tests/pch.h")
   target_compile_options(tests PRIVATE
     -Wall -Wextra -Wpedantic
-    $<$<AND:$<BOOL:${ENABLE_COVERAGE}>,$<CONFIG:Debug>>:--coverage>)
+    $<$<BOOL:${ENABLE_COVERAGE}>:--coverage>)
   target_link_libraries(tests PRIVATE
     astroutils
     gmock_main
     cpp-dump 
-    $<$<AND:$<BOOL:${ENABLE_COVERAGE}>,$<CONFIG:Debug>>:--coverage>)
+    $<$<BOOL:${ENABLE_COVERAGE}>:--coverage>)
 
   include(GoogleTest)
   enable_testing()

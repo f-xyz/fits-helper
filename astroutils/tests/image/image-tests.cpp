@@ -1,6 +1,4 @@
-#include "../../include/image/image.hpp"
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
+#include "image/image.hpp"
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
 

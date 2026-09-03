@@ -1,7 +1,5 @@
-#include "../../include/fs.hpp"
-#include "gmock/gmock.h"
+#include "fs.hpp"
 #include <filesystem>
-#include <gtest/gtest.h>
 
 class FS : public testing::Test {
 protected:

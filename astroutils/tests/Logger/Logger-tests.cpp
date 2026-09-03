@@ -1,9 +1,5 @@
-#include "../../include/Logger.hpp"
+#include "Logger.hpp"
 #include "fs.hpp"
-#include <cstdlib>
-#include <filesystem>
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
 
 using ::testing::EndsWith;
 using ::testing::HasSubstr;

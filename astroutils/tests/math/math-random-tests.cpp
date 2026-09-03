@@ -1,5 +1,4 @@
-#include "../../include/math.hpp"
-#include <gtest/gtest.h>
+#include "math.hpp"
 
 TEST(MathRandom, random) {
   // arrange

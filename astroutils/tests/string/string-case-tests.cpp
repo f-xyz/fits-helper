@@ -1,5 +1,4 @@
 #include "string.hpp"
-#include <gtest/gtest.h>
 
 TEST(StringCase, uppercase_utf8) {
   // arrange

@@ -1,6 +1,5 @@
 #include "cli/colors.hpp"
 #include "string.hpp"
-#include <gtest/gtest.h>
 
 TEST(StringFormat, formatNumber_positive) {
   // act

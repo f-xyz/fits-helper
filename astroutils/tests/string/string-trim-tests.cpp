@@ -1,5 +1,4 @@
 #include "string.hpp"
-#include <gtest/gtest.h>
 
 TEST(StringTrim, ltrim_whitespace) {
   // arrange

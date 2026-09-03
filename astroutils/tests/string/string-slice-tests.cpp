@@ -1,5 +1,4 @@
 #include "string.hpp"
-#include <gtest/gtest.h>
 
 TEST(StringSlice, slice_startOnly_positive) {
   // arrange

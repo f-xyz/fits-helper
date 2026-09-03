@@ -1,6 +1,4 @@
-#include <gtest/gtest.h>
-
-#include "../../include/math.hpp"
+#include "math.hpp"
 
 TEST(MathNorm, normalize_with_2_arguments) {
   // arrange

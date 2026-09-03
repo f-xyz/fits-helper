@@ -1,6 +1,4 @@
 #include "string.hpp"
-#include "gmock/gmock.h"
-#include <gtest/gtest.h>
 
 using testing::ElementsAre;
 

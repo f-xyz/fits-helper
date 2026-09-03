@@ -1,5 +1,4 @@
 #include "string.hpp"
-#include <gtest/gtest.h>
 
 TEST(StringRegex, regex_fullMatch) {
   // arrange
