@@ -6,7 +6,7 @@ using namespace utils::image;
 
 class Config {
 public:
-  enum class Subcommand { Analyze, Move, Stretch, Chop };
+  enum class Subcommand { Analyze, Move, Stretch, Chop, Unchop };
   enum class Select { Better, Worse };
 
   struct CommonConfig {
@@ -32,6 +32,7 @@ public:
 
   struct ChopperConfig {
     int size = 10;
+    std::string dir;
   };
 
   CommonConfig common;
@@ -72,7 +73,7 @@ private:
   void addSorterOptionDestination(CLI::App *app, bool isRequired);
 
   //////////////////////////////////////
-  // Stretch options ///////////////////
+  // Stretcher options /////////////////
   //////////////////////////////////////
 
   void addStretcherOptionStretchType(CLI::App *app, bool isRequired);
@@ -82,8 +83,9 @@ private:
   void addStretcherOptionDenoise(CLI::App *app, bool isRequired);
 
   //////////////////////////////////////
-  // Chop options //////////////////////
+  // Chopper options ///////////////////
   //////////////////////////////////////
 
   void addChopperOptionSize(CLI::App *app, bool isRequired);
+  void addChopperOptionDir(CLI::App *app, bool isRequired);
 };

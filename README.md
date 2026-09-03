@@ -3,9 +3,9 @@
 ## Usage
 ```sh
 
-##################
-# Sorting images #
-##################
+###############################
+# Sorting images by sharpness #
+###############################
 
 ./fits-helper.sh analyze \
   -s better \ # Select images better than
@@ -23,6 +23,13 @@
   -p 0.05 \ # 5% percentile
   -f ~/images/M101/*
   -d _bad \ # into "_bad" destination directory
+
+################################
+# Breaking down by sub-folders #
+################################
+
+./fits-helper.sh chop -f images/ngc3675/*
+./fits-helper.sh unchop --dir images/ngc3675
 ```
 
 ## Prerequisites

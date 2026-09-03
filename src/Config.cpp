@@ -1,4 +1,5 @@
 #include "Config.h"
+#include "CLI11.hpp"
 
 int Config::parse(const int argc, const char **argv, const std::function<void(Subcommand)> &callback) {
   CLI::App app;
@@ -40,6 +41,12 @@ int Config::parse(const int argc, const char **argv, const std::function<void(Su
   addChopperOptionSize(chop, false);
   chop->callback([&callback]() {
     callback(Subcommand::Chop);
+  });
+
+  auto unchop = app.add_subcommand("unchop");
+  addChopperOptionDir(unchop, false);
+  unchop->callback([&callback]() {
+    callback(Subcommand::Unchop);
   });
 
   try {
@@ -134,12 +141,19 @@ void Config::addStretcherOptionDenoise(CLI::App *app, bool isRequired) {
 }
 
 //////////////////////////////////////
-// Chop options //////////////////////
+// Chopper options ///////////////////
 //////////////////////////////////////
 
 void Config::addChopperOptionSize(CLI::App *app, bool isRequired) {
   app->add_option("-s,--size", chopper.size)
-     ->description("A chunk size.")
+     ->description("Chunk size.")
      ->required(isRequired)
      ->capture_default_str();
+}
+
+void Config::addChopperOptionDir(CLI::App *app, bool isRequired) {
+  app->add_option("-d,--dir", chopper.dir)
+     ->description("Working directory.")
+     ->required(isRequired)
+     ->check(CLI::ExistingDirectory);
 }

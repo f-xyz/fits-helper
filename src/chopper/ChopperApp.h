@@ -2,7 +2,6 @@
 
 #include "../Config.h"
 #include "Logger.hpp"
-#include "cli/colors.hpp"
 #include "fs.hpp"
 #include "string.hpp"
 
@@ -13,40 +12,16 @@ class ChopperApp : Config::CommonConfig, Config::ChopperConfig {
   Logger &logger;
 
 public:
-  explicit ChopperApp(Config &config, Logger &logger) : logger(logger) {
+  ChopperApp(Config &config, Logger &logger) : logger(logger) {
     files = config.common.files;
     size = config.chopper.size;
+    dir = config.chopper.dir;
   }
 
-  void chop() {
-    auto view = files
-      | std::views::filter(isRegularFile)
-      | std::views::chunk(size);
+  void chop();
+  void unchop();
 
-    using Chunk = std::vector<std::vector<std::string>>;
-    auto chunks = std::ranges::to<Chunk>(view);
-
-    for (std::size_t iChunk = 0; iChunk < chunks.size(); ++iChunk) {
-      const std::vector<std::string> chunk = chunks[iChunk];
-      const std::string baseDir = getBaseDir(chunk.front());
-      logger.header("Base directory: {}", cli::bold(baseDir));
-
-      const std::string chunkDir = getChunkDir(baseDir, iChunk);
-      std::filesystem::create_directory(chunkDir);
-      logger.info("Created directory: {}", cli::bold(chunkDir));
-
-      for (const std::string &file : chunk) {
-        const std::filesystem::path path(file);
-        const std::string source = path.string();
-        const std::string destination = chunkDir + "/" + path.filename().string();
-        logger.info("from: {}", source);
-        logger.info("to:   {}", destination);
-        std::filesystem::rename(file, destination);
-      }
-
-      logger.info("");
-    }
-  }
+private:
 
   static bool isRegularFile(const std::string &file) {
     return std::filesystem::is_regular_file(file);

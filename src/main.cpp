@@ -44,6 +44,12 @@ int main(const int argc, const char **argv) {
         app.chop();
         break;
       }
+
+      case Config::Subcommand::Unchop: {
+        ChopperApp app(config, logger);
+        app.unchop();
+        break;
+      }
     }
   });
 

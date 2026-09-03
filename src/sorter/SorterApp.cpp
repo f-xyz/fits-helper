@@ -1,7 +1,6 @@
 #include "SorterApp.h"
-#include "image/image.hpp"
 #include "cli/spark.hpp"
-#include <cstddef>
+#include "image/image.hpp"
 
 void SorterApp::analyzeFiles() {
   logger.header("Processing files...\n");
