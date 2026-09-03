@@ -27,5 +27,3 @@ gcovr \
   --exclude-noncode-lines \
   --html-details \
   -o coverage.html
-
-# 15:18:20
