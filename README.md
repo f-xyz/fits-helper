@@ -29,7 +29,7 @@
 
 ```sh
 sudo apt update
-sudo apt install build-essential cmake gdb
+sudo apt install build-essential cmake gdb mold
 sudo apt install libopencv-dev # OpenCV
 sudo apt install libcfitsio-dev # CFITSIO
 ```
