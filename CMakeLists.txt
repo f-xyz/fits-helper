@@ -4,7 +4,6 @@ project(FITSHelper VERSION 0.0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-# set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the build type." FORCE)
@@ -54,4 +53,4 @@ target_compile_definitions(fits-helper PRIVATE
   VERSION="${PROJECT_VERSION}")
 target_link_libraries(fits-helper PRIVATE astroutils cpp-dump)
 
-# include(cmake_modules/sanitizers.cmake)
+# include(cmake/sanitizers.cmake)
