@@ -8,7 +8,7 @@ using namespace utils::logging;
 
 class SorterApp : Config::CommonConfig, Config::SorterConfig {
   struct Item {
-    std::string file;
+    std::filesystem::path file;
     double sharpness = 0;
   };
 
@@ -30,8 +30,8 @@ public:
 
   void analyzeFiles();
   void processFiles(bool moveFiles);
-  void printSpark();
 
 private:
+  void printSpark();
   void printReportLine(const Item &item, bool isClipped, double percentile);
 };

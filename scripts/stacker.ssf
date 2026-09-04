@@ -1,31 +1,71 @@
-# Usage: siril -s {path_to_this_file}
+# TODO: Calibration
+# TODO: Background extraction
+# TODO: Photometric color calibration
+# TODO: GraXPert CLI
 
 requires 1.2.0
+setext fit
 
-# 1. The working directory containing your raw light frames
-cd "{$PATH}"
+########################################
+# Convertation #########################
+########################################
 
-# 2. Convert raw images into a Siril FITS sequence named 'light'
-convert light -out=../tmp
+cd "${PATH}"
+convert light -out=tmp
 
-# 3. Navigate into your processing folder 
-cd "../tmp"
+########################################
+# Calibration ##########################
+########################################
 
-# 4. Calibrate and Debayer
+cd "tmp"
+calibrate light -debayer
 # -dark="dark.fit"
 # -flat="flat.fit"
 # -bias="bias.fit"
-calibrate light -debayer
 
-# 5. Register the pre-processed color images 
+########################################
+# Registration #########################
+########################################
+
+# -minpairs=6 (default 10): Requires fewer matching star pairs between frames to register
 register pp_light
 
-# 6. Stack the registered sequence
+########################################
+# Stacking #############################
+########################################
+
 # Algorithms: sum | min | max | median | mean | rej RejectionType
 # RejectionType: percentile | sigmaclip | ksigma | winsorized | linear
 # Norm: nonorm | add | mul | addscale | mulscale
 # Weight: noise | wfwhm | nbstars | nbstack
 # 32b: generate a floating-point image
+stack r_pp_light rej winsorized 3.0 3.0 -32b -weight=wfwhm -norm=addscale -out=integration
 # stack r_pp_light rej winsorized 3.0 3.0 -32b -weight=noise -norm=addscale -out=integration
-stack r_pp_light rej winsorized 3.0 3.0 -32b -filter-fwhm=80% -weight=wfwhm -norm=addscale -out=integration
+# stack r_pp_light rej winsorized 3.0 3.0 -32b -filter-fwhm=80% -weight=wfwhm -norm=addscale -out=integration
 # stack r_pp_light rej winsorized 3.0 3.0 -32b -drizzle -filter-fwhm=80% -weight=wfwhm -norm=addscale -out=integration
+
+########################################
+# Photometric Color Calibration ########
+########################################
+
+# pcc -catalog=gaia
+# save integration_ai_calibrated
+
+########################################
+# Background Extraction ################
+########################################
+
+# Load the 32-bit stacked image
+# load integration
+
+# load integration.fit
+# subsky 1
+# save integration_bg
+
+# Run AI-based background extraction on the single stacked image
+# Output is automatically background-subtracted
+# netbkg
+
+# seqsubsky # Synthetic polynominal model fitting, almost instant
+# seqbkg # Grid-based background samplint, fast
+# seqseqnet # Neural Network inference, slow

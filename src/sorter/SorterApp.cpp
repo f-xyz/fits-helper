@@ -6,9 +6,8 @@ void SorterApp::analyzeFiles() {
   logger.header("Processing files...\n");
 
   for (std::size_t i = 0; i < files.size(); ++i) {
-    auto file = files[i];
-    auto path = std::filesystem::path(file);
-    auto image = utils::image::read(path);
+    const auto file = files[i];
+    const auto image = utils::image::read(file);
 
     cv::Rect roi {
       image.cols / 2 - image.cols / (SorterConfig::roi * 2),
@@ -18,12 +17,14 @@ void SorterApp::analyzeFiles() {
     };
 
     auto sharpness = estimator.getSharpness(image(roi));
-    results.push_back({path, sharpness});
+    results.push_back({file, sharpness});
 
     logger.info("#{}/{}", i + 1, files.size());
-    logger.info("Image: {}", path.filename().string());
+    logger.info("Image: {}", file.filename().string());
     logger.info("Sharpness: {}\n", sharpness);
   }
+
+  printSpark();
 }
 
 void SorterApp::processFiles(bool moveFiles) {
@@ -49,28 +50,27 @@ void SorterApp::processFiles(bool moveFiles) {
     printReportLine(item, isClipped, percentile);
 
     if (moveFiles && isClipped) {
-      std::filesystem::path path(item.file);
-      auto name = path.filename().string();
-      std::filesystem::rename(item.file, destination + "/" + name);
+      std::filesystem::rename(item.file, destination / item.file.filename());
     }
   }
 }
 
 void SorterApp::printReportLine(const Item &item, bool isClipped, double percentile) {
-  auto dotPos = std::max<int>(0, item.file.find_last_of('.') - 4);
-  auto name = item.file.substr(dotPos);
+  const auto name = item.file.string();
+  const auto dotPos = std::max<int>(0, name.find_last_of('.') - 4);
+  const auto alias = name.substr(dotPos);
 
-  auto color = select == Config::Select::Better
+  const auto color = select == Config::Select::Better
     ? isClipped ? 0x00FF00 : 0x888888
     : isClipped ? 0xFF0000 : 0x888888;
 
   auto line = std::format("{:<8}: {:.2f} ({:.2f}%) -> {}",
-    name, item.sharpness, percentile, isClipped ? "move" : "skip");
+    alias, item.sharpness, percentile, isClipped ? "move" : "skip");
 
   logger.info("{}", utils::cli::rgb(line, color));
 }
 
 void SorterApp::printSpark() {
-  auto values = results | std::views::transform(&Item::sharpness);
+  const auto values = results | std::views::transform(&Item::sharpness);
   logger.info("{}\n", utils::cli::spark(values));
 }

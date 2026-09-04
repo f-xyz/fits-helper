@@ -28,7 +28,6 @@ int main(const int argc, const char **argv) {
         SorterApp app(config, logger, estimator);
 
         app.analyzeFiles();
-        app.printSpark();
         app.processFiles(subcommand == Config::Subcommand::Move);
         break;
       }

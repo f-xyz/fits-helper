@@ -2,8 +2,6 @@
 
 #include "../Config.h"
 #include "Logger.hpp"
-#include "fs.hpp"
-#include "string.hpp"
 
 using namespace utils;
 using namespace utils::logging;
@@ -22,25 +20,13 @@ public:
   void unchop();
 
 private:
+  std::string getStackerScript(const std::filesystem::path &chunkDir);
 
-  static bool isRegularFile(const std::string &file) {
-    return std::filesystem::is_regular_file(file);
+  static bool isRegularFile(const std::filesystem::path &path) {
+    return std::filesystem::is_regular_file(path);
   }
 
-  std::string getChunkDir(const std::string &baseDir, std::size_t iChunk) {
-    return baseDir + "/" + std::to_string(iChunk + 1);
-  }
-
-  std::string getBaseDir(const std::filesystem::path &path) {
-    return path.parent_path().string();
-  }
-
-  std::string getStackerScript(const std::string &dir) {
-    const std::string templatePath = "scripts/stacker.ssf";
-    const std::string tpl = fs::readText(templatePath);
-    const std::string script = string::replace(R"(\{\$.+\})", tpl, dir);
-    logger.info("{}", script);
-
-    return script;
+  static bool isDirectory(const std::filesystem::path &path) {
+    return std::filesystem::is_directory(path);
   }
 };

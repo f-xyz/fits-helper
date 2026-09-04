@@ -1,52 +1,78 @@
 #include "ChopperApp.h"
+#include "fs.hpp"
+#include "string.hpp"
+#include <filesystem>
 
 void ChopperApp::chop() {
   auto view = files
     | std::views::filter(isRegularFile)
     | std::views::chunk(size);
 
-  using Chunk = std::vector<std::vector<std::string>>;
-  auto chunks = std::ranges::to<Chunk>(view);
+  using Chunk = std::vector<std::vector<std::filesystem::path>>;
+  const auto chunks = std::ranges::to<Chunk>(view);
 
-  for (std::size_t iChunk = 0; iChunk < chunks.size(); ++iChunk) {
-    const std::vector<std::string> chunk = chunks[iChunk];
-    const std::string baseDir = getBaseDir(chunk.front());
-    logger.header("Base directory: {}", cli::bold(baseDir));
+  if (std::ranges::empty(chunks)) {
+    logger.error("The provided directory contains no files.");
+    return;
+  }
 
-    const std::string chunkDir = getChunkDir(baseDir, iChunk);
+  int iChunk = 0;
+  for (const auto &chunk : chunks) {
+    const auto baseDir = chunk.front().parent_path();
+    const auto chunkDir = baseDir / std::to_string(iChunk + 1);
+
+    logger.info("Creating directory: {}", cli::bold(chunkDir));
     std::filesystem::create_directory(chunkDir);
-    logger.info("Created directory: {}", cli::bold(chunkDir));
 
-    for (const std::string &file : chunk) {
-      const std::filesystem::path path(file);
-      const std::string source = path.string();
-      const std::string destination = chunkDir + "/" + path.filename().string();
-      logger.info("from: {}", source);
-      logger.info("to:   {}", destination);
+    logger.info("  Creating stacker script");
+    const auto script = getStackerScript(chunkDir);
+    fs::writeFile(chunkDir / "stacker.ssf", script);
+
+    logger.info("  Moving {} files", chunk.size());
+    for (const auto &file : chunk) {
+      const auto destination = chunkDir / file.filename();
       std::filesystem::rename(file, destination);
     }
 
+    ++iChunk;
     logger.info("");
   }
 }
 
 void ChopperApp::unchop() {
-  const auto dirs =  fs::readDir(dir);
-  for (const auto &dir : dirs) {
+  auto dirs = fs::readDir(dir) | std::views::filter(isDirectory);
 
-    logger.info("{}", dir);
-    for (const auto &file : fs::readDir(dir)) {
-      std::filesystem::path path(file);
-      const auto ext = path.extension().string();
-      const auto name = path.filename().string();
-      logger.info("  > {}", file);
-      
-      if (ext != "ssf") {
-        std::filesystem::rename(file, ChopperConfig::dir + "/" + name);
+  if (std::ranges::empty(dirs)) {
+    logger.error("The provided directory contains no directories.");
+    return;
+  }
+
+  for (const auto &dir : dirs) {
+    const auto files = fs::readDir(dir);
+
+    logger.info("Moving files from: {}", cli::bold(dir));
+    for (const auto &file : files) {
+      const auto ext = file.extension();
+      const auto name = file.filename();
+
+      if (ext != ".ssf") {
+        const auto destination = ChopperConfig::dir / name;
+        std::filesystem::rename(file, destination);
       }
     }
 
+    logger.info("Removing directory: {}", cli::bold(dir));
     std::filesystem::remove_all(dir);
+
     logger.info("");
   }
+}
+
+std::string ChopperApp::getStackerScript(const std::filesystem::path &chunkDir) {
+  const std::string templatePath = "scripts/stacker.ssf";
+  const std::string tpl = fs::readText(templatePath);
+  const std::string script = string::replace(R"(\$\{.+\})",
+      tpl, std::filesystem::absolute(chunkDir));
+
+  return script;
 }

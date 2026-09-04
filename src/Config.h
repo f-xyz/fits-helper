@@ -11,14 +11,14 @@ public:
 
   struct CommonConfig {
     std::string logFilePath = "fits-helper.log";
-    std::vector<std::string> files;
+    std::vector<std::filesystem::path> files;
   };
 
   struct SorterConfig {
     Select select = Select::Better;
     double percentile = 0.1;
     int roi = 2;
-    std::string destination;
+    std::filesystem::path destination;
   };
 
   struct StretcherConfig {
@@ -32,7 +32,7 @@ public:
 
   struct ChopperConfig {
     int size = 10;
-    std::string dir;
+    std::filesystem::path dir;
   };
 
   CommonConfig common;
