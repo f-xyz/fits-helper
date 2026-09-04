@@ -40,7 +40,7 @@ void ChopperApp::chop() {
 }
 
 void ChopperApp::unchop() {
-  auto dirs = fs::readDir(dir) | std::views::filter(isDirectory);
+  auto dirs = fs::readDir(unchopDir) | std::views::filter(isDirectory);
 
   if (std::ranges::empty(dirs)) {
     logger.error("The provided directory contains no directories.");
@@ -56,7 +56,7 @@ void ChopperApp::unchop() {
       const auto name = file.filename();
 
       if (ext != ".ssf") {
-        const auto destination = ChopperConfig::dir / name;
+        const auto destination = unchopDir / name;
         std::filesystem::rename(file, destination);
       }
     }

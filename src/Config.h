@@ -9,12 +9,12 @@ public:
   enum class Subcommand { Analyze, Move, Stretch, Chop, Unchop };
   enum class Select { Better, Worse };
 
-  struct CommonConfig {
+  struct LoggerConfig {
     std::string logFilePath = "fits-helper.log";
-    std::vector<std::filesystem::path> files;
   };
 
   struct SorterConfig {
+    std::vector<std::filesystem::path> files;
     Select select = Select::Better;
     double percentile = 0.1;
     int roi = 2;
@@ -22,6 +22,7 @@ public:
   };
 
   struct StretcherConfig {
+    std::filesystem::path file;
     using Type = ImageStretcherOptions::Type;
     std::vector<Type> stretchTypes = {Type::CLAHE};
     double claheClipLimit = 10;
@@ -31,11 +32,12 @@ public:
   };
 
   struct ChopperConfig {
+    std::vector<std::filesystem::path> files;
+    std::filesystem::path unchopDir;
     int size = 10;
-    std::filesystem::path dir;
   };
 
-  CommonConfig common;
+  LoggerConfig common;
   SorterConfig sorter;
   StretcherConfig stretcher;
   ChopperConfig chopper;
@@ -58,15 +60,10 @@ private:
   };
 
   //////////////////////////////////////
-  // Common options ////////////////////
-  //////////////////////////////////////
-
-  void addCommonOptionFiles(CLI::App *app, bool isRequired);
-
-  //////////////////////////////////////
   // Sorter options ////////////////////
   //////////////////////////////////////
 
+  void addSorterOptionFiles(CLI::App *app, bool isRequired);
   void addSorterOptionSelect(CLI::App *app, bool isRequired);
   void addSorterOptionPercentile(CLI::App *app, bool isRequired);
   void addSorterOptionRoi(CLI::App *app, bool isRequired);
@@ -76,6 +73,7 @@ private:
   // Stretcher options /////////////////
   //////////////////////////////////////
 
+  void addStretcherOptionFile(CLI::App *app, bool isRequired);
   void addStretcherOptionStretchType(CLI::App *app, bool isRequired);
   void addStretcherOptionClaheClipLimit(CLI::App *app, bool isRequired);
   void addStretcherOptionClaheTileSize(CLI::App *app, bool isRequired);
@@ -86,6 +84,7 @@ private:
   // Chopper options ///////////////////
   //////////////////////////////////////
 
+  void addChopperOptionFiles(CLI::App *app, bool isRequired);
   void addChopperOptionSize(CLI::App *app, bool isRequired);
-  void addChopperOptionDir(CLI::App *app, bool isRequired);
+  void addChopperOptionUnchopDir(CLI::App *app, bool isRequired);
 };

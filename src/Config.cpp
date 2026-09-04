@@ -6,27 +6,27 @@ int Config::parse(const int argc, const char **argv, const std::function<void(Su
   app.require_subcommand(true);
 
   auto analyze = app.add_subcommand("analyze");
+  addSorterOptionFiles(analyze, true);
   addSorterOptionSelect(analyze, true);
   addSorterOptionPercentile(analyze, true);
   addSorterOptionRoi(analyze, false);
-  addCommonOptionFiles(analyze, true);
   addSorterOptionDestination(analyze, false);
   analyze->callback([&callback]() {
     callback(Subcommand::Analyze);
   });
 
   auto move = app.add_subcommand("move");
+  addSorterOptionFiles(move, true);
   addSorterOptionSelect(move, true);
   addSorterOptionPercentile(move, true);
   addSorterOptionRoi(move, false);
-  addCommonOptionFiles(move, true);
   addSorterOptionDestination(move, true);
   move->callback([&callback]() {
     callback(Subcommand::Move);
   });
 
   auto stretch = app.add_subcommand("stretch");
-  addCommonOptionFiles(stretch, true);
+  addStretcherOptionFile(stretch, true);
   addStretcherOptionStretchType(stretch, false);
   addStretcherOptionClaheClipLimit(stretch, false);
   addStretcherOptionClaheTileSize(stretch, false);
@@ -37,14 +37,14 @@ int Config::parse(const int argc, const char **argv, const std::function<void(Su
   });
 
   auto chop = app.add_subcommand("chop");
-  addCommonOptionFiles(chop, true);
+  addChopperOptionFiles(chop, true);
   addChopperOptionSize(chop, false);
   chop->callback([&callback]() {
     callback(Subcommand::Chop);
   });
 
   auto unchop = app.add_subcommand("unchop");
-  addChopperOptionDir(unchop, false);
+  addChopperOptionUnchopDir(unchop, false);
   unchop->callback([&callback]() {
     callback(Subcommand::Unchop);
   });
@@ -58,19 +58,15 @@ int Config::parse(const int argc, const char **argv, const std::function<void(Su
 }
 
 //////////////////////////////////////
-// Common options ////////////////////
+// Sorter options ////////////////////
 //////////////////////////////////////
 
-void Config::addCommonOptionFiles(CLI::App *app, bool isRequired) {
-  app->add_option("-f,--files", common.files)
+void Config::addSorterOptionFiles(CLI::App *app, bool isRequired) {
+  app->add_option("-f,--files", sorter.files)
      ->description("Source files.")
      ->required(isRequired)
      ->check(CLI::ExistingFile);
 }
-
-//////////////////////////////////////
-// Sorter options ////////////////////
-//////////////////////////////////////
 
 void Config::addSorterOptionSelect(CLI::App *app, bool isRequired) {
   app->add_option("-s,--select", sorter.select)
@@ -103,6 +99,13 @@ void Config::addSorterOptionDestination(CLI::App *app, bool isRequired) {
 //////////////////////////////////////
 // Stretch options ///////////////////
 //////////////////////////////////////
+
+void Config::addStretcherOptionFile(CLI::App *app, bool isRequired) {
+  app->add_option("-f,--file", stretcher.file)
+     ->description("Source file.")
+     ->required(isRequired)
+     ->check(CLI::ExistingFile);
+}
 
 void Config::addStretcherOptionStretchType(CLI::App *app, bool isRequired) {
   app->add_option("-t,--type", stretcher.stretchTypes)
@@ -144,6 +147,13 @@ void Config::addStretcherOptionDenoise(CLI::App *app, bool isRequired) {
 // Chopper options ///////////////////
 //////////////////////////////////////
 
+void Config::addChopperOptionFiles(CLI::App *app, bool isRequired) {
+  app->add_option("-f,--files", chopper.files)
+     ->description("Source files.")
+     ->required(isRequired)
+     ->check(CLI::ExistingFile);
+}
+
 void Config::addChopperOptionSize(CLI::App *app, bool isRequired) {
   app->add_option("-s,--size", chopper.size)
      ->description("Chunk size.")
@@ -151,8 +161,8 @@ void Config::addChopperOptionSize(CLI::App *app, bool isRequired) {
      ->capture_default_str();
 }
 
-void Config::addChopperOptionDir(CLI::App *app, bool isRequired) {
-  app->add_option("-d,--dir", chopper.dir)
+void Config::addChopperOptionUnchopDir(CLI::App *app, bool isRequired) {
+  app->add_option("-d,--dir", chopper.unchopDir)
      ->description("Working directory.")
      ->required(isRequired)
      ->check(CLI::ExistingDirectory);

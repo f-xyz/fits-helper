@@ -7,12 +7,12 @@
 using namespace utils;
 using namespace logging;
 
-class StretcherApp : Config::CommonConfig, Config::StretcherConfig {
+class StretcherApp : Config::StretcherConfig {
   Logger &logger;
 
 public:
   explicit StretcherApp(Config &config, Logger &logger) : logger(logger) {
-    files = config.common.files;
+    file = config.stretcher.file;
     stretchTypes = config.stretcher.stretchTypes;
     claheClipLimit = config.stretcher.claheClipLimit;
     claheTileSize = config.stretcher.claheTileSize;
@@ -21,7 +21,6 @@ public:
   }
 
   void stretch() {
-    std::string file = files.front();
     cv::Mat image = image::read(file);
 
     std::string info = image::info(image);

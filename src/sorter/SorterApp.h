@@ -6,7 +6,7 @@
 
 using namespace utils::logging;
 
-class SorterApp : Config::CommonConfig, Config::SorterConfig {
+class SorterApp : Config::SorterConfig {
   struct Item {
     std::filesystem::path file;
     double sharpness = 0;
@@ -19,7 +19,7 @@ class SorterApp : Config::CommonConfig, Config::SorterConfig {
 public:
   explicit SorterApp(Config &config, Logger &logger, SharpnessEstimator &estimator)
     : logger(logger), estimator(estimator) {
-    files = config.common.files;
+    files = config.sorter.files;
     select = config.sorter.select;
     percentile = config.sorter.percentile;
     roi = config.sorter.roi;

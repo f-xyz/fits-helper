@@ -6,14 +6,14 @@
 using namespace utils;
 using namespace utils::logging;
 
-class ChopperApp : Config::CommonConfig, Config::ChopperConfig {
+class ChopperApp : Config::ChopperConfig {
   Logger &logger;
 
 public:
   ChopperApp(Config &config, Logger &logger) : logger(logger) {
-    files = config.common.files;
+    files = config.chopper.files;
     size = config.chopper.size;
-    dir = config.chopper.dir;
+    unchopDir = config.chopper.unchopDir;
   }
 
   void chop();
