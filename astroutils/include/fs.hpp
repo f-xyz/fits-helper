@@ -23,16 +23,16 @@ void throwIfNotOpen(const T &file, const std::filesystem::path &path) {
 
 } // namespace internal
 
-inline std::vector<std::string> readDir(const std::filesystem::path &dir) {
+inline std::vector<std::filesystem::path> readDir(const std::filesystem::path &dir) {
   if (!std::filesystem::exists(dir)) {
     return {};
   }
 
-  std::vector<std::string> result;
+  std::vector<std::filesystem::path> result;
   std::filesystem::directory_iterator iterator(dir);
 
   for (const auto &file : iterator) {
-    result.push_back(file.path());
+    result.push_back(file);
   }
 
   std::ranges::sort(result);
@@ -76,7 +76,7 @@ inline std::string readText(const std::filesystem::path &path) {
 }
 
 inline std::string tmpFile(const std::string &dir) {
-  std::vector<std::string> existing = readDir(dir);
+  std::vector<std::filesystem::path> existing = readDir(dir);
   std::vector<int> indexes;
 
   std::ranges::transform(

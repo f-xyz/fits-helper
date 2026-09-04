@@ -1,6 +1,5 @@
 #pragma once
 
-#include <regex>
 #include <string>
 
 /*
@@ -21,52 +20,32 @@ namespace utils::cli {
 
 namespace constants {
 
-inline constexpr const char* RESET = "\033[0m";
-inline constexpr const char* BLACK = "\033[30m";
-inline constexpr const char* RED = "\033[31m";
-inline constexpr const char* GREEN = "\033[32m";
-inline constexpr const char* YELLOW = "\033[33m";
-inline constexpr const char* BLUE = "\033[34m";
-inline constexpr const char* MAGENTA = "\033[35m";
-inline constexpr const char* CYAN = "\033[36m";
-inline constexpr const char* WHITE = "\033[37m";
-inline constexpr const char* BOLD = "\033[1m";
-inline constexpr const char* BOLD_BLACK = "\033[1m\033[30m";
-inline constexpr const char* BOLD_RED = "\033[1m\033[31m";
-inline constexpr const char* BOLD_GREEN = "\033[1m\033[32m";
-inline constexpr const char* BOLD_YELLOW = "\033[1m\033[33m";
-inline constexpr const char* BOLD_BLUE = "\033[1m\033[34m";
-inline constexpr const char* BOLD_MAGENTA = "\033[1m\033[35m";
-inline constexpr const char* BOLD_CYAN = "\033[1m\033[36m";
-inline constexpr const char* BOLD_WHITE = "\033[1m\033[37m";
+inline constexpr const char *RESET = "\033[0m";
+inline constexpr const char *BLACK = "\033[30m";
+inline constexpr const char *RED = "\033[31m";
+inline constexpr const char *GREEN = "\033[32m";
+inline constexpr const char *YELLOW = "\033[33m";
+inline constexpr const char *BLUE = "\033[34m";
+inline constexpr const char *MAGENTA = "\033[35m";
+inline constexpr const char *CYAN = "\033[36m";
+inline constexpr const char *WHITE = "\033[37m";
+inline constexpr const char *BOLD = "\033[1m";
+inline constexpr const char *BOLD_BLACK = "\033[1m\033[30m";
+inline constexpr const char *BOLD_RED = "\033[1m\033[31m";
+inline constexpr const char *BOLD_GREEN = "\033[1m\033[32m";
+inline constexpr const char *BOLD_YELLOW = "\033[1m\033[33m";
+inline constexpr const char *BOLD_BLUE = "\033[1m\033[34m";
+inline constexpr const char *BOLD_MAGENTA = "\033[1m\033[35m";
+inline constexpr const char *BOLD_CYAN = "\033[1m\033[36m";
+inline constexpr const char *BOLD_WHITE = "\033[1m\033[37m";
 
-}  // namespace constants
+} // namespace constants
 
-inline std::string rgb(const std::string& s, unsigned char r, unsigned g,
-                       unsigned b) {
-  const auto red = std::to_string(r);
-  const auto green = std::to_string(g);
-  const auto blue = std::to_string(b);
+using byte = unsigned char;
 
-  return "\033[38;2;" + red + ";" + green + ";" + blue + "m" + s +
-         constants::RESET;
-}
+std::string rgb(const std::string &s, byte r, byte g, byte b);
+std::string rgb(const std::string &s, const unsigned int color);
+std::string bold(const std::string &s);
+std::string removeColors(const std::string &s);
 
-inline std::string rgb(const std::string& s, const unsigned int color) {
-  unsigned char r = (color >> 16) & 0xFF;
-  unsigned char g = (color >> 8) & 0xFF;
-  unsigned char b = (color) & 0xFF;
-
-  return rgb(s, r, g, b);
-}
-
-inline std::string bold(const std::string& s) {
-  return constants::BOLD + s + constants::RESET;
-}
-
-inline std::string removeColors(const std::string& s) {
-  const std::regex regex("\\x1B\\[[0-9;]*[a-zA-Z]");
-  return std::regex_replace(s, regex, "");
-}
-
-}  // namespace utils::cli
+} // namespace utils::cli
