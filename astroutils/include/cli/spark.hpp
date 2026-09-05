@@ -3,6 +3,8 @@
 #include "../concepts.hpp"
 #include "../math.hpp"
 #include "colors.hpp"
+#include <string>
+#include <vector>
 
 namespace utils::cli {
 

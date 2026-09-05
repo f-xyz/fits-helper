@@ -1,5 +1,10 @@
 #pragma once
 
+#include <optional>
+#include <regex>
+#include <string>
+#include <vector>
+
 namespace utils::string {
 
 ////////////////////////////////////////

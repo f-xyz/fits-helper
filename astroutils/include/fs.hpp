@@ -1,6 +1,11 @@
 #pragma once
 
 #include "concepts.hpp"
+#include <filesystem>
+#include <format>
+#include <regex>
+#include <system_error>
+#include <vector>
 
 namespace utils::fs {
 

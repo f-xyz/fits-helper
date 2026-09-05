@@ -1,6 +1,9 @@
 #pragma once
 
 #include "concepts.hpp"
+#include <cmath>
+#include <random>
+#include <ranges>
 
 namespace utils::math {
 

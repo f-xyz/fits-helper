@@ -1,5 +1,11 @@
 #pragma once
 
+#include <opencv2/core.hpp>
+#include <string>
+#include <tuple>
+#include <utility>
+#include <vector>
+
 namespace utils::image {
 
 cv::Mat read(const std::string &file);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <opencv2/core.hpp>
+
 namespace utils::image {
 
 class SharpnessEstimator {

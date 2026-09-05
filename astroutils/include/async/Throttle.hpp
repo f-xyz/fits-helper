@@ -1,5 +1,10 @@
 #pragma once
 
+#include <chrono>
+#include <functional>
+#include <mutex>
+#include <thread>
+
 namespace utils::async {
 
 class Throttle final {
