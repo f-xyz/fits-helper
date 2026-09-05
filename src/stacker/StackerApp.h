@@ -13,15 +13,11 @@ public:
   StackerApp(Config &config, Logger &logger)
       : Config::StackerConfig(config.stacker), logger(logger) {}
 
+  void unchop();
   void chop();
   void stack();
-  void unchop();
 
 private:
-  std::string getStackerScript(const std::filesystem::path &chunkDir);
-  std::string getShellScript(const std::filesystem::path &chunkDir);
-  std::string getCalibration();
-
   static bool isRegularFile(const std::filesystem::path &path) {
     return std::filesystem::is_regular_file(path);
   }
