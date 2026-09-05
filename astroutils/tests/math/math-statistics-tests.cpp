@@ -1,5 +1,4 @@
 #include "math.hpp"
-#include <cmath>
 
 TEST(MathDescriptiveStatistics, sum) {
   // arrange

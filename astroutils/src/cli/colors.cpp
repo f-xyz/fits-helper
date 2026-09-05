@@ -1,5 +1,4 @@
 #include "cli/colors.hpp"
-#include <regex>
 
 namespace utils::cli {
 

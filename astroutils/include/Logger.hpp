@@ -1,9 +1,6 @@
 #pragma once
 
 #include "cli/colors.hpp"
-#include <filesystem>
-#include <fstream>
-#include <mutex>
 
 namespace utils::logging {
 

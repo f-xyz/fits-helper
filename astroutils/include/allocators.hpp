@@ -1,5 +1,3 @@
-#include <memory>
-
 namespace utils::allocators {
 
 template <typename T> struct UninitializedAllocator : std::allocator<T> {

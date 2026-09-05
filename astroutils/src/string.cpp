@@ -1,9 +1,5 @@
 #include "string.hpp"
 #include "cli/colors.hpp"
-#include <codecvt>
-#include <cstddef>
-#include <ranges>
-#include <regex>
 
 namespace utils::string {
 

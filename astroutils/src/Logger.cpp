@@ -1,7 +1,5 @@
 #include "Logger.hpp"
 #include "string.hpp"
-#include <chrono>
-#include <print>
 
 namespace utils::logging {
 

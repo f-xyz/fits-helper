@@ -1,9 +1,5 @@
 #pragma once
 
-#include <fitsio.h>
-#include <opencv2/core.hpp>
-#include <string>
-
 struct DataType {
   int cvType;
   int fitsType;

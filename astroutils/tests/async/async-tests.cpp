@@ -1,7 +1,5 @@
 #include "async/Throttle.hpp"
 #include "async/setTimeout.hpp"
-#include <atomic>
-#include <thread>
 
 using namespace std::chrono_literals;
 

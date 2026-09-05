@@ -1,12 +1,6 @@
 #pragma once
 
 #include "concepts.hpp"
-#include <algorithm>
-#include <cmath>
-#include <functional>
-#include <map>
-#include <random>
-#include <vector>
 
 namespace utils::math {
 

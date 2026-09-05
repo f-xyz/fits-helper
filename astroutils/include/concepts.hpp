@@ -1,8 +1,5 @@
 #pragma once
 
-#include <ranges>
-#include <type_traits>
-
 namespace utils::concepts {
 
 template <typename T>
@@ -19,5 +16,13 @@ template <typename T>
 concept FileStream = std::same_as<std::remove_cvref_t<T>, std::ifstream> ||
                      std::same_as<std::remove_cvref_t<T>, std::ofstream> ||
                      std::same_as<std::remove_cvref_t<T>, std::fstream>;
+
+template <typename T>
+concept ChronoDuration =
+    requires {
+      typename T::rep;
+      typename T::period;
+    } &&
+    std::same_as<T, std::chrono::duration<typename T::rep, typename T::period>>;
 
 } // namespace utils::concepts

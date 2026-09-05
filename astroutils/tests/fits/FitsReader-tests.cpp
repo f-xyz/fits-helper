@@ -1,10 +1,5 @@
 #include "fits/FitsReader.h"
 #include "fs.hpp"
-#include <array>
-#include <cstddef>
-#include <filesystem>
-#include <string>
-#include <vector>
 
 void createFitsFile(const std::string &path) {
   int status = 0;

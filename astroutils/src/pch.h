@@ -11,11 +11,9 @@
 #include <cstddef>
 #include <cstdlib>
 #include <filesystem>
-#include <fitsio.h>
 #include <fstream>
 #include <functional>
 #include <future>
-#include <longnam.h>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -36,3 +34,7 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/photo.hpp>
+
+// CFITSIO
+#include <fitsio.h>
+#include <longnam.h>

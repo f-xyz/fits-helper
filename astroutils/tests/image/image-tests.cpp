@@ -1,6 +1,4 @@
 #include "image/image.hpp"
-#include <opencv2/core.hpp>
-#include <opencv2/imgproc.hpp>
 
 using ::testing::Eq;
 using ::testing::HasSubstr;

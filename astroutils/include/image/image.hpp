@@ -1,7 +1,5 @@
 #pragma once
 
-#include <opencv2/core/mat.hpp>
-
 namespace utils::image {
 
 cv::Mat read(const std::string &file);

@@ -1,10 +1,5 @@
 #include "image/image.hpp"
 #include "fits/FitsReader.h"
-#include <filesystem>
-#include <opencv2/core/mat.hpp>
-#include <opencv2/highgui.hpp>
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/imgproc.hpp>
 
 namespace utils::image {
 

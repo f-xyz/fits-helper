@@ -1,11 +1,5 @@
 #pragma once
 
-#include <chrono>
-#include <future>
-#include <thread>
-#include <type_traits>
-#include <utility>
-
 namespace utils::async {
 
 template <typename F>

@@ -1,10 +1,5 @@
 #pragma once
 
-#include <optional>
-#include <regex>
-#include <string>
-#include <vector>
-
 namespace utils::string {
 
 ////////////////////////////////////////
@@ -70,4 +65,4 @@ std::string lowercase(const std::string &string);
 
 std::string formatNumber(double number, int precision = 2);
 
-}; // namespace utils::string
+} // namespace utils::string

@@ -1,7 +1,5 @@
 #include "image/ImageStretcher.hpp"
 #include "image/image.hpp"
-#include <opencv2/imgproc.hpp>
-#include <opencv2/photo.hpp>
 
 namespace utils::image {
 

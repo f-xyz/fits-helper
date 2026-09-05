@@ -1,6 +1,4 @@
 #include "image/SharpnessEstimator.hpp"
-#include <opencv2/core/mat.hpp>
-#include <opencv2/imgproc.hpp>
 
 namespace utils::image {
 
