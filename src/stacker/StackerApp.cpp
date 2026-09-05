@@ -1,9 +1,9 @@
 #include "StackerApp.h"
+#include "benchmark.hpp"
 #include "fs.hpp"
 #include "process.hpp"
 #include "string.hpp"
 #include <chrono>
-#include <thread>
 
 void StackerApp::chop() {
   auto view = fs::readDir(directory)
@@ -27,9 +27,10 @@ void StackerApp::chop() {
     std::filesystem::create_directory(chunkDir);
 
     logger.info("  Creating stacking scripts");
-    const auto script = getStackerScript(chunkDir);
-    fs::writeFile(chunkDir / "stacker.ssf", script);
-    std::filesystem::copy("scripts/stack.sh", chunkDir / "stack.sh");
+    const auto siril = getStackerScript(chunkDir);
+    const auto stack = getShellScript(chunkDir);
+    fs::writeFile(chunkDir / "stacker.ssf", siril);
+    fs::writeFile(chunkDir / "stack.sh", stack);
     std::filesystem::copy("scripts/clean.sh", chunkDir / "clean.sh");
 
     logger.info("  Moving {} files", chunk.size());
@@ -46,12 +47,23 @@ void StackerApp::chop() {
 void StackerApp::stack() {
   using namespace std::chrono_literals;
 
-  const auto startTime = std::chrono::system_clock::now();
-  // const auto result = process::exec("./stack.sh");
-  std::this_thread::sleep_for(1s);
-  const auto endTime = std::chrono::system_clock::now();
-  const auto seconds = std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime);
-  std::println("seconds: {}", seconds);
+  auto dirs = fs::readDir(directory);
+  std::ranges::sort(dirs , comparePaths);
+
+  for (const auto &dir : dirs) {
+    logger.info("Processing directory: {}", dir.string());
+
+    const std::string command = "/usr/bin/bash " + (dir / "stack.sh").string();
+    std::println("Command: {}", command);
+
+    const auto seconds = utils::benchmark<std::chrono::seconds>([&command]() {
+      const auto result = process::exec(command, [](const auto &x) { std::println("{}", x); });
+      std::println("Code: {}", result.code);
+    });
+
+    std::println("Time: {} sec", seconds);
+    break;
+  }
 }
 
 void StackerApp::unchop() {
@@ -84,17 +96,24 @@ std::string StackerApp::getStackerScript(const std::filesystem::path &chunkDir) 
     {"${CALIBRATION}", getCalibration()}
   };
 
-  std::string script = fs::readText(scriptTemplatePath);
+  std::string script = fs::readText(sirilScript);
 
   for (const auto &[key, value] : vars) {
-    for (;;) {
-      const auto index = script.find(key);
-      if (index != std::string::npos) {
-        script.replace(index, key.size(), value);
-      } else {
-        break;
-      }
-    }
+    script = string::replace_all(script, key, value);
+  }
+
+  return script;
+}
+
+std::string StackerApp::getShellScript(const std::filesystem::path &chunkDir) {
+  const std::map<std::string, std::string> vars = {
+    {"${PATH}", std::filesystem::canonical(chunkDir)}
+  };
+
+  std::string script = fs::readText(stackScript);
+
+  for (const auto &[key, value] : vars) {
+    script = string::replace_all(script, key, value);
   }
 
   return script;

@@ -13,7 +13,9 @@
 #include <map>
 #include <memory>
 #include <print>
+#include <random>
 #include <ranges>
+#include <regex>
 #include <stacktrace>
 #include <string>
 #include <thread>
