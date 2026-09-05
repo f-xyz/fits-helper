@@ -1,6 +1,7 @@
 #pragma once
 
 #include "image/ImageStretcher.hpp"
+#include <filesystem>
 
 using namespace utils::image;
 
@@ -32,9 +33,13 @@ public:
   };
 
   struct ChopperConfig {
+    std::filesystem::path scriptTemplatePath = "scripts/stacker.ssf";
     std::vector<std::filesystem::path> files;
-    std::filesystem::path unchopDir;
     int size = 10;
+    std::filesystem::path dark;
+    std::filesystem::path flat;
+    std::filesystem::path bias;
+    std::filesystem::path unchopDir;
   };
 
   LoggerConfig common;
@@ -87,4 +92,7 @@ private:
   void addChopperOptionFiles(CLI::App *app, bool isRequired);
   void addChopperOptionSize(CLI::App *app, bool isRequired);
   void addChopperOptionUnchopDir(CLI::App *app, bool isRequired);
+  void addChopperOptionDark(CLI::App *app, bool isRequired);
+  void addChopperOptionFlat(CLI::App *app, bool isRequired);
+  void addChopperOptionBias(CLI::App *app, bool isRequired);
 };

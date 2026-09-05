@@ -28,7 +28,8 @@
 # Breaking down by sub-folders #
 ################################
 
-./fits-helper.sh chop -f images/ngc3675/*
+./fits-helper.sh chop -s 10 -f images/ngc3675/* --dark images/calibration/dark.fit --flat images/calibration/flat.fit --bias images/calibration/bias.fit
+
 ./fits-helper.sh unchop --dir images/ngc3675
 ```
 

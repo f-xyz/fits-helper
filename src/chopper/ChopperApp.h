@@ -13,14 +13,19 @@ public:
   ChopperApp(Config &config, Logger &logger) : logger(logger) {
     files = config.chopper.files;
     size = config.chopper.size;
+    dark = config.chopper.dark;
+    flat = config.chopper.flat;
+    bias = config.chopper.bias;
     unchopDir = config.chopper.unchopDir;
   }
 
   void chop();
+  void stack();
   void unchop();
 
 private:
   std::string getStackerScript(const std::filesystem::path &chunkDir);
+  std::string getCalibration();
 
   static bool isRegularFile(const std::filesystem::path &path) {
     return std::filesystem::is_regular_file(path);

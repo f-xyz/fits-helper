@@ -1,7 +1,9 @@
 #include "ChopperApp.h"
 #include "fs.hpp"
+#include "process.hpp"
 #include "string.hpp"
-#include <filesystem>
+#include <chrono>
+#include <thread>
 
 void ChopperApp::chop() {
   auto view = files
@@ -24,9 +26,11 @@ void ChopperApp::chop() {
     logger.info("Creating directory: {}", cli::bold(chunkDir));
     std::filesystem::create_directory(chunkDir);
 
-    logger.info("  Creating stacker script");
+    logger.info("  Creating stacking scripts");
     const auto script = getStackerScript(chunkDir);
     fs::writeFile(chunkDir / "stacker.ssf", script);
+    std::filesystem::copy("scripts/stack.sh", chunkDir / "stack.sh");
+    std::filesystem::copy("scripts/clean.sh", chunkDir / "clean.sh");
 
     logger.info("  Moving {} files", chunk.size());
     for (const auto &file : chunk) {
@@ -39,13 +43,19 @@ void ChopperApp::chop() {
   }
 }
 
+void ChopperApp::stack() {
+  using namespace std::chrono_literals;
+
+  const auto startTime = std::chrono::system_clock::now();
+  // const auto result = process::exec("./stack.sh");
+  std::this_thread::sleep_for(1s);
+  const auto endTime = std::chrono::system_clock::now();
+  const auto seconds = std::chrono::duration_cast<std::chrono::seconds>(endTime - startTime);
+  std::println("seconds: {}", seconds);
+}
+
 void ChopperApp::unchop() {
   auto dirs = fs::readDir(unchopDir) | std::views::filter(isDirectory);
-
-  if (std::ranges::empty(dirs)) {
-    logger.error("The provided directory contains no directories.");
-    return;
-  }
 
   for (const auto &dir : dirs) {
     const auto files = fs::readDir(dir);
@@ -55,7 +65,7 @@ void ChopperApp::unchop() {
       const auto ext = file.extension();
       const auto name = file.filename();
 
-      if (ext != ".ssf") {
+      if (ext == ".fit" || ext == ".fits") {
         const auto destination = unchopDir / name;
         std::filesystem::rename(file, destination);
       }
@@ -69,10 +79,43 @@ void ChopperApp::unchop() {
 }
 
 std::string ChopperApp::getStackerScript(const std::filesystem::path &chunkDir) {
-  const std::string templatePath = "scripts/stacker.ssf";
-  const std::string tpl = fs::readText(templatePath);
-  const std::string script = string::replace(R"(\$\{.+\})",
-      tpl, std::filesystem::absolute(chunkDir));
+  const std::map<std::string, std::string> vars = {
+    {"${PATH}", std::filesystem::canonical(chunkDir)},
+    {"${CALIBRATION}", getCalibration()}
+  };
+
+  std::string script = fs::readText(scriptTemplatePath);
+
+  for (const auto &[key, value] : vars) {
+    for (;;) {
+      const auto index = script.find(key);
+      if (index != std::string::npos) {
+        script.replace(index, key.size(), value);
+      } else {
+        break;
+      }
+    }
+  }
 
   return script;
+}
+
+std::string ChopperApp::getCalibration() {
+  const std::map<std::string, std::string> vars = {
+    {"-bias", bias},
+    {"-dark", dark},
+    {"-flat", flat}
+  };
+
+  std::vector<std::string> result;
+
+  for (const auto &[key, value] : vars) {
+    if (!value.empty()) {
+      std::string path = std::filesystem::canonical(value);
+      std::string item = key + "=" + path;
+      result.push_back(item);
+    }
+  }
+
+  return string::join(result, " ");
 }

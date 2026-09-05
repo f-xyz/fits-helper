@@ -39,6 +39,9 @@ int Config::parse(const int argc, const char **argv, const std::function<void(Su
   auto chop = app.add_subcommand("chop");
   addChopperOptionFiles(chop, true);
   addChopperOptionSize(chop, false);
+  addChopperOptionDark(chop, false);
+  addChopperOptionFlat(chop, false);
+  addChopperOptionBias(chop, false);
   chop->callback([&callback]() {
     callback(Subcommand::Chop);
   });
@@ -166,4 +169,25 @@ void Config::addChopperOptionUnchopDir(CLI::App *app, bool isRequired) {
      ->description("Working directory.")
      ->required(isRequired)
      ->check(CLI::ExistingDirectory);
+}
+
+void Config::addChopperOptionDark(CLI::App *app, bool isRequired) {
+  app->add_option("--dark", chopper.dark)
+     ->description("Dark frame.")
+     ->required(isRequired)
+     ->check(CLI::ExistingFile);
+}
+
+void Config::addChopperOptionFlat(CLI::App *app, bool isRequired) {
+  app->add_option("--flat", chopper.flat)
+     ->description("Flat frame.")
+     ->required(isRequired)
+     ->check(CLI::ExistingFile);
+}
+
+void Config::addChopperOptionBias(CLI::App *app, bool isRequired) {
+  app->add_option("--bias", chopper.bias)
+     ->description("Bias frame.")
+     ->required(isRequired)
+     ->check(CLI::ExistingFile);
 }

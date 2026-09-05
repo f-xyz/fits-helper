@@ -40,7 +40,9 @@ int main(const int argc, const char **argv) {
 
       case Config::Subcommand::Chop: {
         ChopperApp app(config, logger);
+        app.unchop();
         app.chop();
+        app.stack();
         break;
       }
 
