@@ -6,11 +6,11 @@
 using namespace utils;
 using namespace utils::logging;
 
-class ChopperApp : Config::ChopperConfig {
+class StackerApp : Config::StackerConfig {
   Logger &logger;
 
 public:
-  ChopperApp(Config &config, Logger &logger) : logger(logger) {
+  StackerApp(Config &config, Logger &logger) : logger(logger) {
     files = config.chopper.files;
     size = config.chopper.size;
     dark = config.chopper.dark;

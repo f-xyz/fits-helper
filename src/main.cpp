@@ -1,6 +1,6 @@
 #include "Config.h"
 #include "Logger.hpp"
-#include "chopper/ChopperApp.h"
+#include "stacker/StackerApp.h"
 #include "cli/colors.hpp"
 #include "sorter/SorterApp.h"
 #include "stretcher/StretcherApp.h"
@@ -39,7 +39,7 @@ int main(const int argc, const char **argv) {
       }
 
       case Config::Subcommand::Chop: {
-        ChopperApp app(config, logger);
+        StackerApp app(config, logger);
         app.unchop();
         app.chop();
         app.stack();
@@ -47,7 +47,7 @@ int main(const int argc, const char **argv) {
       }
 
       case Config::Subcommand::Unchop: {
-        ChopperApp app(config, logger);
+        StackerApp app(config, logger);
         app.unchop();
         break;
       }

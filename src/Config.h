@@ -7,7 +7,17 @@ using namespace utils::image;
 
 class Config {
 public:
-  enum class Subcommand { Analyze, Move, Stretch, Chop, Unchop };
+  enum class Subcommand {
+    // Sorter
+    Analyze,
+    Move,
+    // Stretcher
+    Stretch,
+    // Stacker
+    Chop,
+    Unchop
+  };
+
   enum class Select { Better, Worse };
 
   struct LoggerConfig {
@@ -32,7 +42,7 @@ public:
     int denoise = 0;
   };
 
-  struct ChopperConfig {
+  struct StackerConfig {
     std::filesystem::path scriptTemplatePath = "scripts/stacker.ssf";
     std::vector<std::filesystem::path> files;
     int size = 10;
@@ -45,7 +55,7 @@ public:
   LoggerConfig common;
   SorterConfig sorter;
   StretcherConfig stretcher;
-  ChopperConfig chopper;
+  StackerConfig chopper;
 
   int parse(const int argc, const char **argv, const std::function<void(Subcommand)> &callback);
 

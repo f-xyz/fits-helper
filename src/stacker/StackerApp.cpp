@@ -1,11 +1,11 @@
-#include "ChopperApp.h"
+#include "StackerApp.h"
 #include "fs.hpp"
 #include "process.hpp"
 #include "string.hpp"
 #include <chrono>
 #include <thread>
 
-void ChopperApp::chop() {
+void StackerApp::chop() {
   auto view = files
     | std::views::filter(isRegularFile)
     | std::views::chunk(size);
@@ -43,7 +43,7 @@ void ChopperApp::chop() {
   }
 }
 
-void ChopperApp::stack() {
+void StackerApp::stack() {
   using namespace std::chrono_literals;
 
   const auto startTime = std::chrono::system_clock::now();
@@ -54,7 +54,7 @@ void ChopperApp::stack() {
   std::println("seconds: {}", seconds);
 }
 
-void ChopperApp::unchop() {
+void StackerApp::unchop() {
   auto dirs = fs::readDir(unchopDir) | std::views::filter(isDirectory);
 
   for (const auto &dir : dirs) {
@@ -78,7 +78,7 @@ void ChopperApp::unchop() {
   }
 }
 
-std::string ChopperApp::getStackerScript(const std::filesystem::path &chunkDir) {
+std::string StackerApp::getStackerScript(const std::filesystem::path &chunkDir) {
   const std::map<std::string, std::string> vars = {
     {"${PATH}", std::filesystem::canonical(chunkDir)},
     {"${CALIBRATION}", getCalibration()}
@@ -100,7 +100,7 @@ std::string ChopperApp::getStackerScript(const std::filesystem::path &chunkDir) 
   return script;
 }
 
-std::string ChopperApp::getCalibration() {
+std::string StackerApp::getCalibration() {
   const std::map<std::string, std::string> vars = {
     {"-bias", bias},
     {"-dark", dark},
