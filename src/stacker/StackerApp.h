@@ -11,12 +11,11 @@ class StackerApp : Config::StackerConfig {
 
 public:
   StackerApp(Config &config, Logger &logger) : logger(logger) {
-    files = config.chopper.files;
-    size = config.chopper.size;
-    dark = config.chopper.dark;
-    flat = config.chopper.flat;
-    bias = config.chopper.bias;
-    unchopDir = config.chopper.unchopDir;
+    directory = config.stacker.directory;
+    size = config.stacker.size;
+    dark = config.stacker.dark;
+    flat = config.stacker.flat;
+    bias = config.stacker.bias;
   }
 
   void chop();

@@ -44,18 +44,17 @@ public:
 
   struct StackerConfig {
     std::filesystem::path scriptTemplatePath = "scripts/stacker.ssf";
-    std::vector<std::filesystem::path> files;
+    std::filesystem::path directory;
     int size = 10;
     std::filesystem::path dark;
     std::filesystem::path flat;
     std::filesystem::path bias;
-    std::filesystem::path unchopDir;
   };
 
   LoggerConfig common;
   SorterConfig sorter;
   StretcherConfig stretcher;
-  StackerConfig chopper;
+  StackerConfig stacker;
 
   int parse(const int argc, const char **argv, const std::function<void(Subcommand)> &callback);
 
@@ -99,9 +98,8 @@ private:
   // Chopper options ///////////////////
   //////////////////////////////////////
 
-  void addChopperOptionFiles(CLI::App *app, bool isRequired);
+  void addChopperOptionDirectory(CLI::App *app, bool isRequired);
   void addChopperOptionSize(CLI::App *app, bool isRequired);
-  void addChopperOptionUnchopDir(CLI::App *app, bool isRequired);
   void addChopperOptionDark(CLI::App *app, bool isRequired);
   void addChopperOptionFlat(CLI::App *app, bool isRequired);
   void addChopperOptionBias(CLI::App *app, bool isRequired);

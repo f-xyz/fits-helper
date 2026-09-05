@@ -6,7 +6,7 @@
 #include <thread>
 
 void StackerApp::chop() {
-  auto view = files
+  auto view = fs::readDir(directory)
     | std::views::filter(isRegularFile)
     | std::views::chunk(size);
 
@@ -55,7 +55,7 @@ void StackerApp::stack() {
 }
 
 void StackerApp::unchop() {
-  auto dirs = fs::readDir(unchopDir) | std::views::filter(isDirectory);
+  auto dirs = fs::readDir(directory) | std::views::filter(isDirectory);
 
   for (const auto &dir : dirs) {
     const auto files = fs::readDir(dir);
@@ -66,7 +66,7 @@ void StackerApp::unchop() {
       const auto name = file.filename();
 
       if (ext == ".fit" || ext == ".fits") {
-        const auto destination = unchopDir / name;
+        const auto destination = directory / name;
         std::filesystem::rename(file, destination);
       }
     }

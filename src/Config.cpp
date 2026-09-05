@@ -37,7 +37,7 @@ int Config::parse(const int argc, const char **argv, const std::function<void(Su
   });
 
   auto chop = app.add_subcommand("chop");
-  addChopperOptionFiles(chop, true);
+  addChopperOptionDirectory(chop, true);
   addChopperOptionSize(chop, false);
   addChopperOptionDark(chop, false);
   addChopperOptionFlat(chop, false);
@@ -47,7 +47,7 @@ int Config::parse(const int argc, const char **argv, const std::function<void(Su
   });
 
   auto unchop = app.add_subcommand("unchop");
-  addChopperOptionUnchopDir(unchop, false);
+  addChopperOptionDirectory(unchop, false);
   unchop->callback([&callback]() {
     callback(Subcommand::Unchop);
   });
@@ -147,46 +147,39 @@ void Config::addStretcherOptionDenoise(CLI::App *app, bool isRequired) {
 }
 
 //////////////////////////////////////
-// Chopper options ///////////////////
+// Sorter options ////////////////////
 //////////////////////////////////////
 
-void Config::addChopperOptionFiles(CLI::App *app, bool isRequired) {
-  app->add_option("-f,--files", chopper.files)
-     ->description("Source files.")
-     ->required(isRequired)
-     ->check(CLI::ExistingFile);
-}
-
-void Config::addChopperOptionSize(CLI::App *app, bool isRequired) {
-  app->add_option("-s,--size", chopper.size)
-     ->description("Chunk size.")
-     ->required(isRequired)
-     ->capture_default_str();
-}
-
-void Config::addChopperOptionUnchopDir(CLI::App *app, bool isRequired) {
-  app->add_option("-d,--dir", chopper.unchopDir)
+void Config::addChopperOptionDirectory(CLI::App *app, bool isRequired) {
+  app->add_option("-d,--dir", stacker.directory)
      ->description("Working directory.")
      ->required(isRequired)
      ->check(CLI::ExistingDirectory);
 }
 
+void Config::addChopperOptionSize(CLI::App *app, bool isRequired) {
+  app->add_option("-s,--size", stacker.size)
+     ->description("Chunk size.")
+     ->required(isRequired)
+     ->capture_default_str();
+}
+
 void Config::addChopperOptionDark(CLI::App *app, bool isRequired) {
-  app->add_option("--dark", chopper.dark)
+  app->add_option("--dark", stacker.dark)
      ->description("Dark frame.")
      ->required(isRequired)
      ->check(CLI::ExistingFile);
 }
 
 void Config::addChopperOptionFlat(CLI::App *app, bool isRequired) {
-  app->add_option("--flat", chopper.flat)
+  app->add_option("--flat", stacker.flat)
      ->description("Flat frame.")
      ->required(isRequired)
      ->check(CLI::ExistingFile);
 }
 
 void Config::addChopperOptionBias(CLI::App *app, bool isRequired) {
-  app->add_option("--bias", chopper.bias)
+  app->add_option("--bias", stacker.bias)
      ->description("Bias frame.")
      ->required(isRequired)
      ->check(CLI::ExistingFile);
