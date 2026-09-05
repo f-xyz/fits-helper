@@ -76,6 +76,7 @@ if(PROJECT_IS_TOP_LEVEL)
   target_precompile_headers(tests PRIVATE "tests/pch.h")
   target_compile_options(tests PRIVATE
     -Wall -Wextra -Wpedantic
+    $<$<CXX_COMPILER_ID:GNU,Clang>:-fdiagnostics-color=always>
     $<$<BOOL:${ENABLE_COVERAGE}>:--coverage>)
   target_link_libraries(tests PRIVATE
     astroutils
