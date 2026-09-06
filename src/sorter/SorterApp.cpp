@@ -43,7 +43,7 @@ void SorterApp::processFiles(bool moveFiles) {
       ? 1 - static_cast<double>(i) / (n - 1)
       : 0.5;
 
-    auto isClipped = select == Config::Select::Better
+    auto isClipped = select == SorterConfig::Select::Better
       ? percentile >= SorterConfig::percentile
       : percentile <= SorterConfig::percentile;
 
@@ -60,7 +60,7 @@ void SorterApp::printReportLine(const Item &item, bool isClipped, double percent
   const auto dotPos = std::max<int>(0, name.find_last_of('.') - 4);
   const auto alias = name.substr(dotPos);
 
-  const auto color = select == Config::Select::Better
+  const auto color = select == SorterConfig::Select::Better
     ? isClipped ? 0x00FF00 : 0x888888
     : isClipped ? 0xFF0000 : 0x888888;
 

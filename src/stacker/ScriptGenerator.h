@@ -12,7 +12,7 @@ class ScriptGenerator {
   std::filesystem::path flat;
 
 public:
-  explicit ScriptGenerator(const Config::StackerConfig &config)
+  explicit ScriptGenerator(const StackerConfig &config)
       : sirilScript(config.sirilScript), shellScript(config.shellScript),
         bias(config.bias), dark(config.dark), flat(config.flat) {}
 

@@ -1,12 +1,13 @@
 #pragma once
 
-#include "../Config.h"
 #include "Logger.hpp"
+#include "SorterConfig.h"
 #include "image/SharpnessEstimator.hpp"
 
-using namespace utils::logging;
+using utils::logging::Logger;;
+using utils::image::SharpnessEstimator;
 
-class SorterApp : Config::SorterConfig {
+class SorterApp : SorterConfig {
   struct Item {
     std::filesystem::path file;
     double sharpness = 0;
@@ -17,16 +18,14 @@ class SorterApp : Config::SorterConfig {
   std::vector<Item> results;
 
 public:
-  explicit SorterApp(Config &config, Logger &logger, SharpnessEstimator &estimator)
+  explicit SorterApp(SorterConfig &config, Logger &logger, SharpnessEstimator &estimator)
     : logger(logger), estimator(estimator) {
-    files = config.sorter.files;
-    select = config.sorter.select;
-    percentile = config.sorter.percentile;
-    roi = config.sorter.roi;
-    destination = config.sorter.destination;
+    files = config.files;
+    select = config.select;
+    percentile = config.percentile;
+    roi = config.roi;
+    destination = config.destination;
   }
-
-  static cv::Mat readImage(const std::string &file);
 
   void analyzeFiles();
   void processFiles(bool moveFiles);

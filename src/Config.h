@@ -1,108 +1,17 @@
 #pragma once
 
-#include "image/ImageStretcher.hpp"
-#include <filesystem>
-
-using namespace utils::image;
+#include "Subcommand.h"
+#include "sorter/SorterConfig.h"
+#include "stacker/StackerConfig.h"
+#include "stretcher/StretcherConfig.h"
 
 class Config {
 public:
-  enum class Subcommand {
-    // Sorter
-    Analyze,
-    Move,
-    // Stretcher
-    Stretch,
-    // Stacker
-    Chop,
-    Unchop
-  };
-
-  enum class Select { Better, Worse };
-
-  struct LoggerConfig {
-    std::string logFilePath = "fits-helper.log";
-  };
-
-  struct SorterConfig {
-    std::vector<std::filesystem::path> files;
-    Select select = Select::Better;
-    double percentile = 0.1;
-    int roi = 2;
-    std::filesystem::path destination;
-  };
-
-  struct StretcherConfig {
-    std::filesystem::path file;
-    using Type = ImageStretcherOptions::Type;
-    std::vector<Type> stretchTypes = {Type::CLAHE};
-    double claheClipLimit = 10;
-    int claheTileSize = 8;
-    float asinhFactor = 0.2;
-    int denoise = 0;
-  };
-
-  struct StackerConfig {
-    std::filesystem::path sirilScript = "scripts/stacker.ssf";
-    std::filesystem::path shellScript = "scripts/stack.sh";
-    std::filesystem::path directory;
-    int chunkSize = 10;
-    std::filesystem::path dark;
-    std::filesystem::path flat;
-    std::filesystem::path bias;
-  };
-
-  LoggerConfig common;
+  std::string logFilePath = "fits-helper.log";
   SorterConfig sorter;
   StretcherConfig stretcher;
   StackerConfig stacker;
 
-  int parse(const int argc, const char **argv, const std::function<void(Subcommand)> &callback);
-
-private:
-  const std::map<std::string, Select> selectMap = {
-    {"better", Select::Better},
-    {"best", Select::Better},
-    {"worse", Select::Worse},
-    {"worst", Select::Worse}
-  };
-
-  const std::map<std::string, ImageStretcherOptions::Type> stretchTypeMap = {
-    {"clahe", ImageStretcherOptions::Type::CLAHE},
-    {"asinh", ImageStretcherOptions::Type::Asinh},
-    {"hist", ImageStretcherOptions::Type::Histogram},
-    {"histogram", ImageStretcherOptions::Type::Histogram}
-  };
-
-  //////////////////////////////////////
-  // Sorter options ////////////////////
-  //////////////////////////////////////
-
-  void addSorterOptionFiles(CLI::App *app, bool isRequired);
-  void addSorterOptionSelect(CLI::App *app, bool isRequired);
-  void addSorterOptionPercentile(CLI::App *app, bool isRequired);
-  void addSorterOptionRoi(CLI::App *app, bool isRequired);
-  void addSorterOptionDestination(CLI::App *app, bool isRequired);
-
-  //////////////////////////////////////
-  // Stretcher options /////////////////
-  //////////////////////////////////////
-
-  void addStretcherOptionFile(CLI::App *app, bool isRequired);
-  void addStretcherOptionStretchType(CLI::App *app, bool isRequired);
-  void addStretcherOptionClaheClipLimit(CLI::App *app, bool isRequired);
-  void addStretcherOptionClaheTileSize(CLI::App *app, bool isRequired);
-  void addStretcherOptionAsinhFactor(CLI::App *app, bool isRequired);
-  void addStretcherOptionDenoise(CLI::App *app, bool isRequired);
-
-  //////////////////////////////////////
-  // Chopper options ///////////////////
-  //////////////////////////////////////
-
-  void addChopperOptionDirectory(CLI::App *app, bool isRequired);
-  void addChopperOptionChunkSize(CLI::App *app, bool isRequired);
-  void addChopperOptionScript(CLI::App *app, bool isRequired);
-  void addChopperOptionDark(CLI::App *app, bool isRequired);
-  void addChopperOptionFlat(CLI::App *app, bool isRequired);
-  void addChopperOptionBias(CLI::App *app, bool isRequired);
+  int parse(const int argc, const char **argv,
+            const std::function<void(Subcommand)> &callback);
 };

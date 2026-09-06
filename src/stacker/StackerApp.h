@@ -1,17 +1,17 @@
 #pragma once
 
-#include "../Config.h"
 #include "Logger.hpp"
+#include "StackerConfig.h"
 
 using namespace utils;
 using namespace utils::logging;
 
-class StackerApp : Config::StackerConfig {
+class StackerApp : StackerConfig {
   Logger &logger;
 
 public:
-  StackerApp(Config &config, Logger &logger)
-      : Config::StackerConfig(config.stacker), logger(logger) {}
+  StackerApp(StackerConfig &config, Logger &logger)
+      : StackerConfig(config), logger(logger) {}
 
   void flatten();
   void chop();

@@ -1,42 +1,38 @@
 #pragma once
 
-#include "../Config.h"
 #include "Logger.hpp"
+#include "StretcherConfig.h"
 #include "image/image.hpp"
 
-using namespace utils;
-using namespace logging;
+using utils::image::ImageStretcher;
+using utils::logging::Logger;
 
-class StretcherApp : Config::StretcherConfig {
+class StretcherApp : StretcherConfig {
   Logger &logger;
 
 public:
-  explicit StretcherApp(Config &config, Logger &logger) : logger(logger) {
-    file = config.stretcher.file;
-    stretchTypes = config.stretcher.stretchTypes;
-    claheClipLimit = config.stretcher.claheClipLimit;
-    claheTileSize = config.stretcher.claheTileSize;
-    asinhFactor = config.stretcher.asinhFactor;
-    denoise = config.stretcher.denoise;
-  }
+  explicit StretcherApp(StretcherConfig &config, Logger &logger)
+      : StretcherConfig(config), logger(logger) {}
 
   void stretch() {
-    cv::Mat image = image::read(file);
+    cv::Mat image = utils::image::read(file);
 
-    std::string info = image::info(image);
-    logger.info("image: {}", info);
+    std::string info = utils::image::info(image);
+    logger.info("Image info: {}", info);
 
     cv::Size size(1280, 960);
     cv::resize(image, image, size);
 
-    ImageStretcher stretcher({.types = {stretchTypes},
-                              .claheClipLimit = claheClipLimit,
-                              .claheTileSize = claheTileSize,
-                              .asinhFactor = asinhFactor,
-                              .histogramTopBins = 10,
-                              .denoiseH = denoise});
+    utils::image::ImageStretcher stretcher({
+      .types = {stretchTypes},
+      .claheClipLimit = claheClipLimit,
+      .claheTileSize = claheTileSize,
+      .asinhFactor = asinhFactor,
+      .histogramTopBins = 10,
+      .denoiseH = denoise
+    });
 
     cv::Mat stretched = stretcher.stretch(image.clone());
-    image::show(stretched);
+    utils::image::show(stretched);
   }
 };

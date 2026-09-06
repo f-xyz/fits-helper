@@ -1,9 +1,11 @@
 #include "Config.h"
-#include "Logger.hpp"
-#include "stacker/StackerApp.h"
+#include "Subcommand.h"
 #include "cli/colors.hpp"
 #include "sorter/SorterApp.h"
+#include "stacker/StackerApp.h"
 #include "stretcher/StretcherApp.h"
+
+using utils::image::SharpnessEstimatorGaussian;
 
 static void onSegfault(int signal) {
   std::println("Segmentation fault {}:", signal);
@@ -18,36 +20,36 @@ int main(const int argc, const char **argv) {
   std::println("{} v{}\n", utils::cli::bold(NAME), utils::cli::bold(VERSION));
 
   Config config;
-  Logger logger(config.common.logFilePath);
+  Logger logger(config.logFilePath);
 
-  config.parse(argc, argv, [&config, &logger](Config::Subcommand subcommand) {
+  config.parse(argc, argv, [&config, &logger](Subcommand subcommand) {
     switch (subcommand) {
-      case Config::Subcommand::Analyze:
-      case Config::Subcommand::Move: {
+      case Subcommand::SorterAnalyze:
+      case Subcommand::SorterSort: {
         SharpnessEstimatorGaussian estimator;
-        SorterApp app(config, logger, estimator);
+        SorterApp app(config.sorter, logger, estimator);
 
         app.analyzeFiles();
-        app.processFiles(subcommand == Config::Subcommand::Move);
+        app.processFiles(subcommand == Subcommand::SorterSort);
         break;
       }
 
-      case Config::Subcommand::Stretch: {
-        StretcherApp app(config, logger);
+      case Subcommand::Stretch: {
+        StretcherApp app(config.stretcher, logger);
         app.stretch();
         break;
       }
 
-      case Config::Subcommand::Chop: {
-        StackerApp app(config, logger);
+      case Subcommand::Stack: {
+        StackerApp app(config.stacker, logger);
         app.flatten();
         app.chop();
         app.stack();
         break;
       }
 
-      case Config::Subcommand::Unchop: {
-        StackerApp app(config, logger);
+      case Subcommand::Unstack: {
+        StackerApp app(config.stacker, logger);
         app.flatten();
         break;
       }
