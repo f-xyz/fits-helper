@@ -46,7 +46,7 @@ public:
     std::filesystem::path sirilScript = "scripts/stacker.ssf";
     std::filesystem::path shellScript = "scripts/stack.sh";
     std::filesystem::path directory;
-    int size = 10;
+    int chunkSize = 10;
     std::filesystem::path dark;
     std::filesystem::path flat;
     std::filesystem::path bias;

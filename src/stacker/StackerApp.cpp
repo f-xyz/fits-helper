@@ -1,6 +1,9 @@
 #include "StackerApp.h"
 #include "ScriptRunner.h"
 #include "ScriptGenerator.h"
+#include "fs.hpp"
+#include <filesystem>
+#include <string>
 
 void StackerApp::flatten() {
   auto dirs = fs::readDir(directory) | std::views::filter(isDirectory);
@@ -29,7 +32,7 @@ void StackerApp::flatten() {
 void StackerApp::chop() {
   auto view = fs::readDir(directory)
     | std::views::filter(isRegularFile)
-    | std::views::chunk(size);
+    | std::views::chunk(chunkSize);
 
   using Chunk = std::vector<std::vector<std::filesystem::path>>;
   const auto chunks = std::ranges::to<Chunk>(view);
@@ -66,19 +69,32 @@ void StackerApp::chop() {
 }
 
 void StackerApp::stack() {
-  auto dirs = fs::readDir(directory);
-  std::ranges::sort(dirs , comparePaths);
+  auto chunkDirs = fs::readDir(directory);
+  std::ranges::sort(chunkDirs , comparePaths);
+
+  const auto masterDirName = directory.filename().string() + "-stacked";
+  const auto masterDirPath = directory.parent_path() / masterDirName;
+  std::filesystem::remove_all(masterDirPath);
+  std::filesystem::create_directory(masterDirPath);
 
   int index = 1;
-  for (const auto &dir : dirs) {
-    logger.info("Processing directory: {} ({} of {})",
-       cli::bold(dir), index, dirs.size());
+  for (const auto &chunkDir : chunkDirs) {
+    logger.info("Stacking images in: {} ({} of {})",
+       cli::bold(chunkDir), index, chunkDirs.size());
 
-    const auto result = ScriptRunner(logger, dir).execute();
-    std::println("");
+    const auto result = ScriptRunner(chunkDir).execute();
+    if (result.code == 0) {
+      logger.info("  Finished in {} s", result.seconds);
+      logger.info("  Result code {} s", result.code);
 
-    ++index;
-
-    break; // !!!
+      const auto integrationName = std::to_string(index) + ".fit";
+      const auto integrationPath = masterDirPath / integrationName;
+      logger.info("  Saving integration to {}", cli::bold(integrationPath));
+      std::filesystem::rename(result.integration, integrationPath);
+      logger.info("");
+      ++index;
+    } else {
+      logger.error("Stacking has failed, see stacker.log");
+    }
   }
 }

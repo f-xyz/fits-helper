@@ -158,7 +158,7 @@ void Config::addChopperOptionDirectory(CLI::App *app, bool isRequired) {
 }
 
 void Config::addChopperOptionSize(CLI::App *app, bool isRequired) {
-  app->add_option("-s,--size", stacker.size)
+  app->add_option("-s,--size", stacker.chunkSize)
      ->description("Chunk size.")
      ->required(isRequired)
      ->capture_default_str();
