@@ -38,7 +38,8 @@ int Config::parse(const int argc, const char **argv, const std::function<void(Su
 
   auto chop = app.add_subcommand("chop");
   addChopperOptionDirectory(chop, true);
-  addChopperOptionSize(chop, false);
+  addChopperOptionChunkSize(chop, false);
+  addChopperOptionScript(chop, false);
   addChopperOptionDark(chop, false);
   addChopperOptionFlat(chop, false);
   addChopperOptionBias(chop, false);
@@ -157,11 +158,19 @@ void Config::addChopperOptionDirectory(CLI::App *app, bool isRequired) {
      ->check(CLI::ExistingDirectory);
 }
 
-void Config::addChopperOptionSize(CLI::App *app, bool isRequired) {
+void Config::addChopperOptionChunkSize(CLI::App *app, bool isRequired) {
   app->add_option("-s,--size", stacker.chunkSize)
      ->description("Chunk size.")
      ->required(isRequired)
      ->capture_default_str();
+}
+
+void Config::addChopperOptionScript(CLI::App *app, bool isRequired) {
+  app->add_option("--script", stacker.sirilScript)
+     ->description("Working directory.")
+     ->required(isRequired)
+     ->capture_default_str()
+     ->check(CLI::ExistingFile);
 }
 
 void Config::addChopperOptionDark(CLI::App *app, bool isRequired) {

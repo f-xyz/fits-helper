@@ -100,7 +100,8 @@ private:
   //////////////////////////////////////
 
   void addChopperOptionDirectory(CLI::App *app, bool isRequired);
-  void addChopperOptionSize(CLI::App *app, bool isRequired);
+  void addChopperOptionChunkSize(CLI::App *app, bool isRequired);
+  void addChopperOptionScript(CLI::App *app, bool isRequired);
   void addChopperOptionDark(CLI::App *app, bool isRequired);
   void addChopperOptionFlat(CLI::App *app, bool isRequired);
   void addChopperOptionBias(CLI::App *app, bool isRequired);
