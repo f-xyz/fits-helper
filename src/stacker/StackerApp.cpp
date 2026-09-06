@@ -2,9 +2,6 @@
 #include "ScriptRunner.h"
 #include "ScriptGenerator.h"
 #include "fs.hpp"
-#include <cstdlib>
-#include <filesystem>
-#include <string>
 
 void StackerApp::flatten() {
   auto dirs = fs::readDir(directory) | std::views::filter(isDirectory);
@@ -94,11 +91,9 @@ void StackerApp::stack() {
 
       logger.info("");
       ++index;
-      break; //////////////////////////////////////// !!!
     } else {
-      logger.error("  Stacking has failed.");
-      logger.error("  Code: {}", result.code);
-      std::println("  See stacker.log");
+      logger.error("  Stacking has failed with code {}", result.code);
+      std::println("  See {} for details.", (chunkDir / "stacker.log").string());
       std::exit(1);
     }
   }
