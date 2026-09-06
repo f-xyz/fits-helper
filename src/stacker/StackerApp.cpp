@@ -2,6 +2,7 @@
 #include "ScriptRunner.h"
 #include "ScriptGenerator.h"
 #include "fs.hpp"
+#include <cstdlib>
 #include <filesystem>
 #include <string>
 
@@ -89,12 +90,16 @@ void StackerApp::stack() {
 
       const auto integrationName = std::to_string(index) + ".fit";
       const auto integrationPath = masterDirPath / integrationName;
-      logger.info("  Saving integration to {}", cli::bold(integrationPath));
       std::filesystem::rename(result.integration, integrationPath);
+
       logger.info("");
       ++index;
+      break; //////////////////////////////////////// !!!
     } else {
-      logger.error("Stacking has failed, see stacker.log");
+      logger.error("  Stacking has failed.");
+      logger.error("  Code: {}", result.code);
+      std::println("  See stacker.log");
+      std::exit(1);
     }
   }
 }

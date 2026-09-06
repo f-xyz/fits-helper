@@ -1,20 +1,18 @@
 #include "ScriptRunner.h"
+#include "benchmarking/Timer.hpp"
 #include "process.hpp"
 
 using namespace utils;
 using std::filesystem::path;
 
 ScriptResult ScriptRunner::execute() {
-  using namespace std::chrono;
-  const auto start = steady_clock::now();
+  benchmarking::Timer<std::chrono::seconds> timer;
 
-  result.code = stack();
-  result.integration = cleanup();
-
-  const auto end = steady_clock::now();
-  result.seconds = duration_cast<seconds>(end - start);
-
-  return result;
+  return ScriptResult {
+    .code = stack(),
+    .integration = cleanup(),
+    .seconds = timer.measure()
+  };
 }
 
 int ScriptRunner::stack() {

@@ -24,7 +24,7 @@ concept FileStream = std::same_as<std::remove_cvref_t<T>, std::ifstream> ||
                      std::same_as<std::remove_cvref_t<T>, std::fstream>;
 
 template <typename T>
-concept ChronoDuration =
+concept Duration =
     requires {
       typename T::rep;
       typename T::period;
