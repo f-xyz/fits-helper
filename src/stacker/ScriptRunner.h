@@ -1,43 +1,68 @@
-#include "benchmark.hpp"
+#pragma once
+
+#include "Logger.hpp"
 #include "process.hpp"
-#include <stdexcept>
 
 using namespace utils;
 
+struct ScriptResult {
+  int code;
+  std::filesystem::path integration;
+  std::chrono::seconds seconds;
+};
+
 class ScriptRunner {
+  logging::Logger &logger;
   std::filesystem::path dir;
-  int index = 0;
+  ScriptResult result;
 
 public:
-  ScriptRunner(const std::filesystem::path &dir, int index)
-      : dir(dir), index(index) {}
+  explicit ScriptRunner(logging::Logger &logger,
+                        const std::filesystem::path &dir)
+      : logger(logger), dir(dir) {}
 
-  void execute() {
-    const auto process = std::bind(&ScriptRunner::stack, this);
-    const auto seconds = benchmark<std::chrono::seconds>(process);
-    std::println("  Time: {} sec", seconds);
-  }
+  ScriptResult execute() {
+    using namespace std::chrono;
+    const auto start = steady_clock::now();
 
-  void stack() {
-    const std::string bash = "/usr/bin/bash";
-    const std::string stack = (dir / "stack.sh").string();
-    const std::string command = bash + " " + stack;
-    std::println("  Command: {}", command);
+    result.code = stack();
+    result.integration = cleanup();
 
-    const auto result = process::exec(command);
-    std::println("  Code: {}", result.code);
+    const auto end = steady_clock::now();
+    result.seconds = duration_cast<seconds>(end - start);
+    logger.info("  Time: {} sec", result.seconds);
 
-    if (result.code == 0) {
-      // const auto name = std::to_string(index) + ".fit";
-      // std::filesystem::rename(dir / "tmp/integration.fit",
-      //                         dir / "../masters" / name);
-      std::filesystem::rename(dir / "tmp/integration.fit",
-                              dir / "integration.fit");
-      std::filesystem::remove_all(dir / "tmp");
-    } else {
-      throw std::runtime_error("Siril has failed, see siril.log");
-    }
+    return result;
   }
 
 private:
+  int stack() {
+    logger.info("Stacking...");
+
+    const auto command = getCommand();
+    const auto result = process::exec(command);
+
+    return result.code;
+  }
+
+  std::filesystem::path cleanup() {
+    logger.info("Cleaning up...");
+
+    const std::filesystem::path tmp = "tmp";
+    const std::filesystem::path integration = "integration.fit";
+
+    const std::filesystem::path src = dir / tmp / integration;
+    const std::filesystem::path dst = dir / integration;
+
+    std::filesystem::rename(src, dst);
+    std::filesystem::remove_all(dir / "tmp");
+
+    return dst;
+  }
+
+  std::string getCommand() {
+    const std::string bash = "bash";
+    const std::string stack = (dir / "stack.sh").string();
+    return bash + " " + stack;
+  }
 };

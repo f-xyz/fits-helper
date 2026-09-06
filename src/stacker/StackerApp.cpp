@@ -1,11 +1,8 @@
 #include "StackerApp.h"
 #include "ScriptRunner.h"
 #include "ScriptGenerator.h"
-#include <filesystem>
 
-void StackerApp::unchop() {
-  std::filesystem::remove_all(directory / "masters");
-
+void StackerApp::flatten() {
   auto dirs = fs::readDir(directory) | std::views::filter(isDirectory);
 
   for (const auto &dir : dirs) {
@@ -72,14 +69,14 @@ void StackerApp::stack() {
   auto dirs = fs::readDir(directory);
   std::ranges::sort(dirs , comparePaths);
 
-  std::filesystem::create_directory(directory / "masters");
-
   int index = 1;
   for (const auto &dir : dirs) {
     logger.info("Processing directory: {} ({} of {})",
        cli::bold(dir), index, dirs.size());
 
-    ScriptRunner(dir, index).execute();
+    const auto result = ScriptRunner(logger, dir).execute();
+    std::println("");
+
     ++index;
 
     break; // !!!

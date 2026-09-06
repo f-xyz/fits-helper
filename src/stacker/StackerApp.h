@@ -13,7 +13,7 @@ public:
   StackerApp(Config &config, Logger &logger)
       : Config::StackerConfig(config.stacker), logger(logger) {}
 
-  void unchop();
+  void flatten();
   void chop();
   void stack();
 

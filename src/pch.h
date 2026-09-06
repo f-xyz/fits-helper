@@ -6,6 +6,7 @@
 #include <chrono>
 #include <cmath>
 #include <csignal>
+#include <expected>
 #include <filesystem>
 #include <functional>
 #include <future>
@@ -17,6 +18,7 @@
 #include <ranges>
 #include <regex>
 #include <stacktrace>
+#include <stdexcept>
 #include <string>
 #include <thread>
 #include <vector>

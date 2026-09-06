@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../Config.h"
 #include "fs.hpp"
 #include "string.hpp"
@@ -7,7 +9,7 @@ using namespace utils;
 class ScriptGenerator {
   // Internal scripts
   std::filesystem::path sirilScript;
-  std::filesystem::path stackScript;
+  std::filesystem::path shellScript;
   // Calibration frames
   std::filesystem::path bias;
   std::filesystem::path dark;
@@ -15,7 +17,7 @@ class ScriptGenerator {
 
 public:
   explicit ScriptGenerator(const Config::StackerConfig &config)
-      : sirilScript(config.sirilScript), stackScript(config.stackScript),
+      : sirilScript(config.sirilScript), shellScript(config.shellScript),
         bias(config.bias), dark(config.dark), flat(config.flat) {}
 
   std::string getStackerScript(const std::filesystem::path &chunkDir) {
@@ -37,7 +39,7 @@ public:
       {"${PATH}", std::filesystem::canonical(chunkDir)}
     };
 
-    std::string script = fs::readText(stackScript);
+    std::string script = fs::readText(shellScript);
     for (const auto &[key, value] : vars) {
       script = string::replace_all(script, key, value);
     }

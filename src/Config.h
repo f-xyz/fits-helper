@@ -44,8 +44,7 @@ public:
 
   struct StackerConfig {
     std::filesystem::path sirilScript = "scripts/stacker.ssf";
-    std::filesystem::path stackScript = "scripts/stack.sh";
-    std::filesystem::path cleanScript = "scripts/clean.sh";
+    std::filesystem::path shellScript = "scripts/stack.sh";
     std::filesystem::path directory;
     int size = 10;
     std::filesystem::path dark;

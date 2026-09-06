@@ -40,7 +40,7 @@ int main(const int argc, const char **argv) {
 
       case Config::Subcommand::Chop: {
         StackerApp app(config, logger);
-        app.unchop();
+        app.flatten();
         app.chop();
         app.stack();
         break;
@@ -48,7 +48,7 @@ int main(const int argc, const char **argv) {
 
       case Config::Subcommand::Unchop: {
         StackerApp app(config, logger);
-        app.unchop();
+        app.flatten();
         break;
       }
     }
