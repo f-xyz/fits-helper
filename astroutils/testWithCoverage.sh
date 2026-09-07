@@ -12,6 +12,7 @@ echo "########################################"
 
 ./build/tests "$@"
 
+rm -fv build/**/*.gcda # for llvm-cov-18 only
 rm -rf coverage
 mkdir -p coverage
 cd coverage

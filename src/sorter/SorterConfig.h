@@ -1,9 +1,6 @@
 #pragma once
 
 #include "../Subcommand.h"
-#include "image/ImageStretcher.hpp"
-
-using utils::image::ImageStretcherOptions;
 
 class SorterConfig {
 public:
@@ -15,24 +12,24 @@ public:
   int roi = 2;
   std::filesystem::path destination;
 
-  void bind(CLI::App &app, const std::function<void(Subcommand)> &callback) {
-    auto analyze = app.add_subcommand("analyze");
+  void bindSubcommands(CLI::App &app, const std::function<void(Subcommand)> &callback) {
+    const auto analyze = app.add_subcommand("analyze");
     setup(analyze, false);
     analyze->callback([&callback]() { callback(Subcommand::SorterAnalyze); });
 
-    auto move = app.add_subcommand("move");
+    const auto move = app.add_subcommand("move");
     setup(move, true);
     move->callback([&callback]() { callback(Subcommand::SorterSort); });
   }
 
 private:
-  void setup(CLI::App *scmd, bool isMove) {
-    static const std::map<std::string, SorterConfig::Select> selectMap = {
-        {"better", SorterConfig::Select::Better},
-        {"best", SorterConfig::Select::Better},
-        {"worse", SorterConfig::Select::Worse},
-        {"worst", SorterConfig::Select::Worse}};
+  const std::map<std::string, SorterConfig::Select> selectMap = {
+      {"better", SorterConfig::Select::Better},
+      {"best", SorterConfig::Select::Better},
+      {"worse", SorterConfig::Select::Worse},
+      {"worst", SorterConfig::Select::Worse}};
 
+  void setup(CLI::App *scmd, bool isMove) {
     scmd->add_option("-f,--files", files)
         ->description("Source files.")
         ->required(true)

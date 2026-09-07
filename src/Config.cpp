@@ -7,9 +7,9 @@ int Config::parse(const int argc, const char **argv,
   CLI::App app;
   app.require_subcommand(true);
 
-  sorter.bind(app, callback);
-  stretcher.bind(app, callback);
-  stacker.bind(app, callback);
+  sorter.bindSubcommands(app, callback);
+  stretcher.bindSubcommands(app, callback);
+  stacker.bindSubcommands(app, callback);
 
   try {
     app.parse(argc, argv);

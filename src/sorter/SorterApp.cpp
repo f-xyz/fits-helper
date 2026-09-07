@@ -1,10 +1,17 @@
 #include "SorterApp.h"
+#include "cli/colors.hpp"
 #include "cli/spark.hpp"
 #include "image/image.hpp"
+#include "benchmarking/Timer.hpp"
+
+using std::chrono::seconds;
+using utils::benchmarking::Timer;
 
 void SorterApp::analyzeFiles() {
   logger.header("Processing files...\n");
+  Timer<seconds> timer;
 
+  #pragma omp parallel for
   for (std::size_t i = 0; i < files.size(); ++i) {
     const auto file = files[i];
     const auto image = utils::image::read(file);
@@ -19,10 +26,17 @@ void SorterApp::analyzeFiles() {
     auto sharpness = estimator.getSharpness(image(roi));
     results.push_back({file, sharpness});
 
-    logger.info("#{}/{}", i + 1, files.size());
-    logger.info("Image: {}", file.filename().string());
-    logger.info("Sharpness: {}\n", sharpness);
+    #pragma omp critical
+    {
+      const double percents = 100.0 * results.size() / files.size();
+      logger.info("Progress: {:.1f}%", percents);
+      logger.info("Image: {}", file.filename().string());
+      logger.info("Sharpness: {}\n", sharpness);
+    }
   }
+
+  const auto seconds = timer.measure();
+  logger.info("Duration: {}\n", seconds);
 
   printSpark();
 }
@@ -36,14 +50,14 @@ void SorterApp::processFiles(bool moveFiles) {
 
   std::ranges::sort(results, std::ranges::greater {}, &Item::sharpness);
 
-  auto n = results.size();
+  const auto n = results.size();
   for (std::size_t i = 0; i < n; ++i) {
-    auto item = results[i];
-    auto percentile = n > 1
+    const auto item = results[i];
+    const auto percentile = n > 1
       ? 1 - static_cast<double>(i) / (n - 1)
       : 0.5;
 
-    auto isClipped = select == SorterConfig::Select::Better
+    const auto isClipped = select == SorterConfig::Select::Better
       ? percentile >= SorterConfig::percentile
       : percentile <= SorterConfig::percentile;
 
@@ -64,7 +78,7 @@ void SorterApp::printReportLine(const Item &item, bool isClipped, double percent
     ? isClipped ? 0x00FF00 : 0x888888
     : isClipped ? 0xFF0000 : 0x888888;
 
-  auto line = std::format("{:<8}: {:.2f} ({:.2f}%) -> {}",
+  const auto line = std::format("{:<8}: {:.2f} ({:.2f}%) -> {}",
     alias, item.sharpness, percentile, isClipped ? "move" : "skip");
 
   logger.info("{}", utils::cli::rgb(line, color));

@@ -5,9 +5,11 @@
 #include "stacker/StackerConfig.h"
 #include "stretcher/StretcherConfig.h"
 
+using std::filesystem::path;
+
 class Config {
 public:
-  std::string logFilePath = "fits-helper.log";
+  path logFilePath = "fits-helper.log";
   SorterConfig sorter;
   StretcherConfig stretcher;
   StackerConfig stacker;

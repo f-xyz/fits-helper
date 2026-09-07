@@ -12,24 +12,26 @@ public:
   std::filesystem::path flat;
   std::filesystem::path bias;
 
-  void bind(CLI::App &app, const std::function<void(Subcommand)> &callback) {
-    auto stack = app.add_subcommand("stack");
+  void bindSubcommands(CLI::App &app,
+                       const std::function<void(Subcommand)> &callback) {
+    const auto stack = app.add_subcommand("stack");
     bindCommon(stack);
     bindStack(stack);
     stack->callback([&callback]() { callback(Subcommand::Stack); });
 
-    auto unstack = app.add_subcommand("unstack");
+    const auto unstack = app.add_subcommand("unstack");
     bindCommon(unstack);
     unstack->callback([&callback]() { callback(Subcommand::Unstack); });
   }
 
+private:
   void bindCommon(CLI::App *scmd) {
     scmd->add_option("-d,--dir", directory)
         ->description("Working directory.")
         ->required(true)
         ->check(CLI::ExistingDirectory);
   }
-  
+
   void bindStack(CLI::App *scmd) {
     scmd->add_option("-n,--number", chunkSize)
         ->description("Number of images in a chunk.")

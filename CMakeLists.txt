@@ -14,6 +14,8 @@ endif()
 # Dependencies #########################
 ########################################
 
+find_package(OpenMP REQUIRED)
+
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
   set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
@@ -47,11 +49,11 @@ target_precompile_headers(fits-helper PRIVATE src/pch.h)
 target_include_directories(fits-helper PRIVATE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 target_compile_options(fits-helper PRIVATE
-  -Wall -Wextra -Wpedantic
+  -Wall -Wextra -Wpedantic -fopenmp
   $<$<CXX_COMPILER_ID:GNU,Clang>:-fdiagnostics-color=always>)
 target_compile_definitions(fits-helper PRIVATE
   NAME="${PROJECT_NAME}"
   VERSION="${PROJECT_VERSION}")
-target_link_libraries(fits-helper PRIVATE astroutils cpp-dump)
+target_link_libraries(fits-helper PRIVATE astroutils cpp-dump OpenMP::OpenMP_CXX)
 
 # include(cmake/sanitizers.cmake)

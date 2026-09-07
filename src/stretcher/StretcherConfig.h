@@ -13,19 +13,20 @@ public:
   float asinhFactor = 0.2;
   int denoise = 0;
 
-  void bind(CLI::App &app, const std::function<void(Subcommand)> &callback) {
-    auto stretch = app.add_subcommand("stretch");
+  void bindSubcommands(CLI::App &app, const std::function<void(Subcommand)> &callback) {
+    const auto stretch = app.add_subcommand("stretch");
     setup(stretch);
     stretch->callback([&callback]() { callback(Subcommand::Stretch); });
   }
 
-  void setup(CLI::App *scmd) {
-    static const std::map<std::string, Type> stretchTypeMap = {
-        {"clahe", Type::CLAHE},
-        {"asinh", Type::Asinh},
-        {"hist", Type::Histogram},
-        {"histogram", Type::Histogram}};
+private:
+  const std::map<std::string, Type> stretchTypeMap = {
+      {"clahe", Type::CLAHE},
+      {"asinh", Type::Asinh},
+      {"hist", Type::Histogram},
+      {"histogram", Type::Histogram}};
 
+  void setup(CLI::App *scmd) {
     scmd->add_option("-f,--file", file)
         ->description("Source file.")
         ->required(true)
