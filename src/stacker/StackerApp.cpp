@@ -82,8 +82,8 @@ void StackerApp::stack() {
 
     const auto result = ScriptRunner(chunkDir).execute();
     if (result.code == 0) {
-      logger.info("  Finished in {} s", result.seconds);
-      logger.info("  Result code {} s", result.code);
+      logger.info("  Finished in {}", result.seconds);
+      logger.info("  Result code {}", result.code);
 
       const auto integrationName = std::to_string(index) + ".fit";
       const auto integrationPath = masterDirPath / integrationName;
