@@ -4,9 +4,9 @@ using ::testing::DoubleNear;
 using ::testing::Gt;
 using ::testing::Lt;
 
-// -----------------------------------------------------------------------
-// SharpnessEstimator static helpers
-// -----------------------------------------------------------------------
+////////////////////////////////////////
+// Static Helpers //////////////////////
+////////////////////////////////////////
 
 TEST(SharpnessEstimator, GetGrayscaleImage_ColorInputConvertsToFloat) {
   // arrange
@@ -69,9 +69,9 @@ TEST(SharpnessEstimator, GetStdDev_VaryingImageReturnsPositive) {
   EXPECT_THAT(stdDev, Gt(0.0));
 }
 
-// -----------------------------------------------------------------------
-// SharpnessEstimatorGaussian
-// -----------------------------------------------------------------------
+////////////////////////////////////////
+// SharpnessEstimatorGaussian //////////
+////////////////////////////////////////
 
 TEST(SharpnessEstimatorGaussian, SharpCheckerboardScoresHigherThanBlurred) {
   // arrange
@@ -120,16 +120,18 @@ TEST(SharpnessEstimatorGaussian, CustomSigmasConstructor) {
   EXPECT_THAT(score, DoubleNear(0.0, 1.0));
 }
 
-// -----------------------------------------------------------------------
-// SharpnessEstimatorLaplacian
-// -----------------------------------------------------------------------
+////////////////////////////////////////
+// SharpnessEstimatorLaplacian /////////
+////////////////////////////////////////
 
 TEST(SharpnessEstimatorLaplacian, SharpCheckerboardScoresHigherThanBlurred) {
   // arrange
   cv::Mat sharp(16, 16, CV_8UC1);
-  for (int r = 0; r < 16; ++r)
-    for (int c = 0; c < 16; ++c)
-      sharp.at<uchar>(r, c) = ((r + c) % 2 == 0) ? 0 : 255;
+  for (int y = 0; y < 16; ++y) {
+    for (int x = 0; x < 16; ++x) {
+      sharp.at<uchar>(y, x) = ((y + x) % 2 == 0) ? 0 : 255;
+    }
+  }
 
   cv::Mat blurred;
   cv::GaussianBlur(sharp, blurred, cv::Size(7, 7), 3.0);
@@ -164,9 +166,11 @@ TEST(SharpnessEstimatorLaplacian, ColorImageIsAccepted) {
 TEST(SharpnessEstimatorLaplacian, PreBlurWithSigmaReducesScore) {
   // arrange — positive sigma pre-blurs before Laplacian, softening edges
   cv::Mat sharp(16, 16, CV_8UC1);
-  for (int r = 0; r < 16; ++r)
-    for (int c = 0; c < 16; ++c)
-      sharp.at<uchar>(r, c) = ((r + c) % 2 == 0) ? 0 : 255;
+  for (int y = 0; y < 16; ++y) {
+    for (int x = 0; x < 16; ++x) {
+      sharp.at<uchar>(y, x) = ((y + x) % 2 == 0) ? 0 : 255;
+    }
+  }
 
   // act
   utils::image::SharpnessEstimatorLaplacian withSigma(2.0);
