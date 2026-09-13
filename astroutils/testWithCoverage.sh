@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+########################################
+# Building (Debug) #####################
+########################################
+
 mkdir -p build/
 cmake -S . -B build -G Ninja \
   -DCMAKE_CXX_COMPILER=clang++ \
@@ -8,9 +12,15 @@ cmake -S . -B build -G Ninja \
   -DENABLE_COVERAGE=ON
 cmake --build build -j4
 
-echo "----------------------------------------"
+########################################
+# Running Unit Tests ###################
+########################################
 
-./build/tests "$@"
+./build/tests "$@" # --gtest_filter="*"
+
+########################################
+# Coverage #############################
+########################################
 
 rm -fv build/**/*.gcda # for llvm-cov-18 only
 rm -rf coverage

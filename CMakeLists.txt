@@ -14,6 +14,7 @@ endif()
 # Dependencies #########################
 ########################################
 
+find_package(astroutils REQUIRED)
 find_package(OpenMP REQUIRED)
 
 find_program(CCACHE_PROGRAM ccache)
@@ -54,6 +55,17 @@ target_compile_options(fits-helper PRIVATE
 target_compile_definitions(fits-helper PRIVATE
   NAME="${PROJECT_NAME}"
   VERSION="${PROJECT_VERSION}")
-target_link_libraries(fits-helper PRIVATE astroutils cpp-dump OpenMP::OpenMP_CXX)
+target_link_libraries(fits-helper PRIVATE
+  # astroutils::astroutils # For the installed lib
+  astroutils # For the subirectory
+  OpenMP::OpenMP_CXX
+  cpp-dump)
 
 # include(cmake/sanitizers.cmake)
+
+########################################
+## Installation ########################
+########################################
+
+include(GNUInstallDirs)
+install(TARGETS fits-helper RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

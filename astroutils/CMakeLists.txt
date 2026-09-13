@@ -43,7 +43,8 @@ add_library(astroutils SHARED ${SOURCES})
 target_precompile_headers(astroutils PRIVATE src/pch.h)
 target_include_directories(astroutils PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>)
+  $<INSTALL_INTERFACE:include>
+  ${OpenCV_INCLUDE_DIRS})
 target_compile_options(astroutils PRIVATE
   -Wall -Wextra -Wpedantic
   $<$<CXX_COMPILER_ID:GNU,Clang>:-fdiagnostics-color=always>
@@ -63,12 +64,14 @@ if(PROJECT_IS_TOP_LEVEL)
   include(FetchContent)
   FetchContent_Declare(googletest
     URL https://github.com/google/googletest/archive/refs/tags/v1.18.0.zip
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    EXCLUDE_FROM_ALL)
   FetchContent_MakeAvailable(googletest)
 
   FetchContent_Declare(cpp-dump
     GIT_REPOSITORY https://github.com/philip82148/cpp-dump
-    GIT_TAG v0.7.0)
+    GIT_TAG v0.7.0
+    EXCLUDE_FROM_ALL)
   FetchContent_MakeAvailable(cpp-dump)
 
   file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS "tests/*.cpp")
@@ -88,3 +91,44 @@ if(PROJECT_IS_TOP_LEVEL)
   enable_testing()
   gtest_discover_tests(tests)
 endif()
+
+########################################
+# Installation & Package Config ########
+########################################
+
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+
+# 1. Define installation rules for targets and public headers
+install(TARGETS astroutils
+  EXPORT astroutilsTargets
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+# 2. Export targets to a file in the install directory
+install(EXPORT astroutilsTargets
+  FILE astroutilsTargets.cmake
+  NAMESPACE astroutils::
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/astroutils)
+
+# 3. Generate package version file
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/astroutilsConfigVersion.cmake"
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY SameMajorVersion)
+
+# 4. Generate package config file
+configure_package_config_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/astroutilsConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/astroutilsConfig.cmake"
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/astroutils)
+
+# 5. Install configuration files
+install(FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/astroutilsConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/astroutilsConfigVersion.cmake"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/astroutils)
