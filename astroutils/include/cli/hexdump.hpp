@@ -1,5 +1,9 @@
 #pragma once
 
+#include <cstddef>
+#include <span>
+#include <string>
+
 namespace utils::cli {
 
 std::string hexdump(std::span<const std::byte> data);
