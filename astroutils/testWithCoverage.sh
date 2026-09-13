@@ -8,7 +8,7 @@ cmake -S . -B build -G Ninja \
   -DENABLE_COVERAGE=ON
 cmake --build build -j4
 
-echo "########################################"
+echo "----------------------------------------"
 
 ./build/tests "$@"
 
