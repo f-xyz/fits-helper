@@ -1,11 +1,9 @@
 #pragma once
 
+#include "../Subcommand.h"
+#include <CLI11.hpp>
 #include <filesystem>
 #include <functional>
-
-#include <CLI11.hpp>
-
-#include "../Subcommand.h"
 
 class StackerConfig {
 public:
@@ -17,9 +15,12 @@ public:
   std::filesystem::path flat;
   std::filesystem::path bias;
 
-  void bindSubcommands(CLI::App &app, const std::function<void(Subcommand)> &callback);
+  void bindSubcommands(CLI::App &app,
+                       const std::function<void(Subcommand)> &callback);
 
 private:
   void bindCommon(CLI::App *scmd);
   void bindStack(CLI::App *scmd);
+
+  static std::string removeTerminalSlash(const std::string &str);
 };

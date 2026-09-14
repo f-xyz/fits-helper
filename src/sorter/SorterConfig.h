@@ -1,13 +1,11 @@
 #pragma once
 
+#include "../Subcommand.h"
+#include <CLI11.hpp>
 #include <filesystem>
 #include <functional>
 #include <map>
 #include <string>
-
-#include <CLI11.hpp>
-
-#include "../Subcommand.h"
 
 class SorterConfig {
 public:

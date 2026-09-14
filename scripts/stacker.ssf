@@ -36,7 +36,7 @@ register pp_light
 # Norm: nonorm | add | mul | addscale | mulscale
 # Weight: noise | wfwhm | nbstars | nbstack
 # 32b: generate a floating-point image
-stack r_pp_light rej winsorized 3.0 3.0 -32b -weight=wfwhm -norm=addscale -out=integration
+stack r_pp_light rej winsorized 3.0 3.0 -32b -weight=noise -norm=addscale -out=integration
 # stack r_pp_light rej winsorized 3.0 3.0 -32b -weight=noise -norm=addscale -out=integration
 # stack r_pp_light rej winsorized 3.0 3.0 -32b -filter-fwhm=80% -weight=wfwhm -norm=addscale -out=integration
 # stack r_pp_light rej winsorized 3.0 3.0 -32b -drizzle -filter-fwhm=80% -weight=wfwhm -norm=addscale -out=integration

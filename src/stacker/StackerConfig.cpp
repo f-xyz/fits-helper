@@ -17,6 +17,7 @@ void StackerConfig::bindCommon(CLI::App *scmd) {
   scmd->add_option("-d,--dir", directory)
       ->description("Working directory.")
       ->required(true)
+      ->transform(removeTerminalSlash)
       ->check(CLI::ExistingDirectory);
 }
 
@@ -46,4 +47,8 @@ void StackerConfig::bindStack(CLI::App *scmd) {
       ->description("Bias frame.")
       ->required(false)
       ->check(CLI::ExistingFile);
+}
+
+std::string StackerConfig::removeTerminalSlash(const std::string &str) {
+  return str.ends_with('/') ? str.substr(0, str.size() - 1) : str;
 }

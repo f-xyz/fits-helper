@@ -3,6 +3,7 @@
 #include "ScriptRunner.h"
 #include <algorithm>
 #include <cstddef>
+#include <cstdlib>
 #include <filesystem>
 #include <fs.hpp>
 #include <print>
@@ -82,6 +83,7 @@ void StackerApp::stack() const {
 
   const auto masterDirName = directory.filename().string() + "-stacked";
   const auto masterDirPath = directory.parent_path() / masterDirName;
+
   std::filesystem::remove_all(masterDirPath);
   std::filesystem::create_directory(masterDirPath);
 
