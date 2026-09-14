@@ -38,9 +38,8 @@ double SharpnessEstimator::getStdDev(const cv::Mat &image) {
 
 double SharpnessEstimatorGaussian::getSharpness(const cv::Mat &image) const {
   cv::Mat gray = getGrayscaleImage(image);
-
-  cv::Mat high = getBlurredImage(gray, sigmaHigh);
-  cv::Mat low = getBlurredImage(gray, sigmaLow);
+  cv::Mat high = getBlurredImage(gray, sigmaNarrow);
+  cv::Mat low = getBlurredImage(gray, sigmaWide);
 
   cv::Mat difference;
   cv::subtract(high, low, difference);

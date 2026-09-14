@@ -15,13 +15,12 @@ public:
 };
 
 class SharpnessEstimatorGaussian final : public SharpnessEstimator {
-  double sigmaHigh = 1;
-  double sigmaLow = 10;
+  double sigmaNarrow = 1;
+  double sigmaWide = 10;
 
 public:
-  SharpnessEstimatorGaussian() = default;
-  SharpnessEstimatorGaussian(double sigmaNarrow, double sigmaWide)
-      : sigmaHigh(sigmaNarrow), sigmaLow(sigmaWide) {}
+  SharpnessEstimatorGaussian(double sigmaNarrow = 1, double sigmaWide = 10)
+      : sigmaNarrow(sigmaNarrow), sigmaWide(sigmaWide) {}
 
   double getSharpness(const cv::Mat &image) const override;
 };
