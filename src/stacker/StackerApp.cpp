@@ -1,9 +1,15 @@
 #include "StackerApp.h"
-#include "ScriptRunner.h"
 #include "ScriptGenerator.h"
-#include "fs.hpp"
+#include "ScriptRunner.h"
+#include <algorithm>
+#include <cstddef>
+#include <filesystem>
+#include <fs.hpp>
+#include <print>
+#include <ranges>
+#include <string>
 
-void StackerApp::flatten() {
+void StackerApp::flatten() const {
   auto dirs = fs::readDir(directory) | std::views::filter(isDirectory);
 
   for (const auto &dir : dirs) {
@@ -27,9 +33,13 @@ void StackerApp::flatten() {
   }
 }
 
-void StackerApp::chop() {
-  auto view = fs::readDir(directory)
-    | std::views::filter(isRegularFile)
+void StackerApp::chop() const {
+  const auto files = readFiles();
+  auto results = analyzer.analyzeFiles(files, 2);
+  std::ranges::sort(results, std::ranges::greater(), &FileSharpness::sharpness);
+
+  auto view = results
+    | std::views::transform(&FileSharpness::file)
     | std::views::chunk(chunkSize);
 
   using Chunk = std::vector<std::vector<std::filesystem::path>>;
@@ -40,7 +50,7 @@ void StackerApp::chop() {
     return;
   }
 
-  int index = 1;
+  std::size_t index = 1;
   for (const auto &chunk : chunks) {
     const auto baseDir = chunk.front().parent_path();
     const auto chunkDir = baseDir / std::to_string(index);
@@ -66,7 +76,7 @@ void StackerApp::chop() {
   }
 }
 
-void StackerApp::stack() {
+void StackerApp::stack() const {
   auto chunkDirs = fs::readDir(directory);
   std::ranges::sort(chunkDirs , comparePaths);
 
@@ -75,7 +85,7 @@ void StackerApp::stack() {
   std::filesystem::remove_all(masterDirPath);
   std::filesystem::create_directory(masterDirPath);
 
-  int index = 1;
+  std::size_t index = 1;
   for (const auto &chunkDir : chunkDirs) {
     logger.info("Stacking images in: {} ({} of {})",
        cli::bold(chunkDir), index, chunkDirs.size());

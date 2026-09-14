@@ -1,6 +1,8 @@
 #pragma once
 
-#include "../Config.h"
+#include "StackerConfig.h"
+#include <filesystem>
+#include <string>
 
 class ScriptGenerator {
   // Internal scripts

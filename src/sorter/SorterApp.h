@@ -1,36 +1,27 @@
 #pragma once
 
-#include "Logger.hpp"
+#include "../SharpnessAnalyzer.h"
 #include "SorterConfig.h"
-#include "image/SharpnessEstimator.hpp"
+#include <Logger.hpp>
+#include <cstdlib>
+#include <vector>
 
-using utils::logging::Logger;;
-using utils::image::SharpnessEstimator;
+using utils::logging::Logger;
 
 class SorterApp : SorterConfig {
-  struct Item {
-    std::filesystem::path file;
-    double sharpness = 0;
-  };
-
   Logger &logger;
-  SharpnessEstimator &estimator;
-  std::vector<Item> results;
+  SharpnessAnalyzer &analyzer;
 
 public:
-  explicit SorterApp(SorterConfig &config, Logger &logger, SharpnessEstimator &estimator)
-    : logger(logger), estimator(estimator) {
-    files = config.files;
-    select = config.select;
-    percentile = config.percentile;
-    roi = config.roi;
-    destination = config.destination;
-  }
+  SorterApp(const SorterConfig &config, Logger &logger, SharpnessAnalyzer &analyzer)
+      : SorterConfig(config), logger(logger), analyzer(analyzer) {}
 
-  void analyzeFiles();
-  void processFiles(bool moveFiles);
+  std::vector<FileSharpness> analyzeFiles() const;
+  void processFiles(std::vector<FileSharpness> results, bool moveFiles) const;
+  void printSpark(const std::vector<FileSharpness> &results) const;
 
 private:
-  void printSpark();
-  void printReportLine(const Item &item, bool isClipped, double percentile);
+  void createOutputDirectory(bool isNeeded) const;
+  void printReportLine(const FileSharpness &item, bool isClipped,
+                       double percentile) const;
 };

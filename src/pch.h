@@ -6,6 +6,7 @@
 #include <chrono>
 #include <cmath>
 #include <csignal>
+#include <execution>
 #include <expected>
 #include <filesystem>
 #include <functional>
@@ -13,6 +14,7 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <print>
 #include <random>
 #include <ranges>

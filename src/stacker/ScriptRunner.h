@@ -1,5 +1,9 @@
 #pragma once
 
+#include <chrono>
+#include <filesystem>
+#include <string>
+
 struct ScriptResult {
   int code;
   std::filesystem::path integration;

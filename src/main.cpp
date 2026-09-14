@@ -1,11 +1,14 @@
 #include "Config.h"
 #include "Subcommand.h"
-#include "cli/colors.hpp"
+#include "image/SharpnessEstimator.hpp"
 #include "sorter/SorterApp.h"
 #include "stacker/StackerApp.h"
 #include "stretcher/StretcherApp.h"
+#include <cli/colors.hpp>
+#include <utility>
 
 using utils::image::SharpnessEstimatorGaussian;
+using utils::logging::Logger;
 
 static void onSegfault(int signal) {
   std::println("Segmentation fault {}:", signal);
@@ -21,36 +24,38 @@ int main(const int argc, const char **argv) {
 
   Config config;
   Logger logger(config.logFilePath);
+  SharpnessEstimatorGaussian gaussian;
+  SharpnessAnalyzer analyzer(logger, gaussian);
 
-  config.parse(argc, argv, [&config, &logger](Subcommand subcommand) {
+  config.parse(argc, argv, [&config, &logger, &analyzer](Subcommand subcommand) {
     switch (subcommand) {
       case Subcommand::SorterAnalyze:
       case Subcommand::SorterSort: {
-        SharpnessEstimatorGaussian estimator;
-        SorterApp app(config.sorter, logger, estimator);
-
-        app.analyzeFiles();
-        app.processFiles(subcommand == Subcommand::SorterSort);
+        SorterApp sorter { config.sorter, logger, analyzer };
+        auto results = sorter.analyzeFiles();
+        auto moveFiles = subcommand == Subcommand::SorterSort;
+        sorter.printSpark(results);
+        sorter.processFiles(std::move(results), moveFiles);
         break;
       }
 
       case Subcommand::Stretch: {
-        StretcherApp app(config.stretcher, logger);
-        app.stretch();
+        StretcherApp stretcher { config.stretcher, logger };
+        stretcher.stretch();
         break;
       }
 
       case Subcommand::Stack: {
-        StackerApp app(config.stacker, logger);
-        app.flatten();
-        app.chop();
-        app.stack();
+        StackerApp stacker { config.stacker, logger, analyzer };
+        stacker.flatten();
+        stacker.chop();
+        stacker.stack();
         break;
       }
 
       case Subcommand::Unstack: {
-        StackerApp app(config.stacker, logger);
-        app.flatten();
+        StackerApp stacker { config.stacker, logger, analyzer };
+        stacker.flatten();
         break;
       }
     }

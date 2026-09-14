@@ -1,14 +1,17 @@
 #include "ScriptGenerator.h"
-#include "fs.hpp"
-#include "string.hpp"
+#include <fs.hpp>
+#include <map>
+#include <string.hpp>
+#include <vector>
 
 using namespace utils;
 using std::filesystem::path;
 
 std::string ScriptGenerator::getStackerScript(const path &chunkDir) {
   const std::map<std::string, std::string> vars = {
-      {"${PATH}", std::filesystem::canonical(chunkDir)},
-      {"${CALIBRATION}", getCalibration()}};
+    {"${PATH}", std::filesystem::canonical(chunkDir)},
+    {"${CALIBRATION}", getCalibration()}
+  };
 
   std::string script = fs::readText(sirilScript);
   for (const auto &[key, value] : vars) {
@@ -20,7 +23,8 @@ std::string ScriptGenerator::getStackerScript(const path &chunkDir) {
 
 std::string ScriptGenerator::getShellScript(const path &chunkDir) {
   const std::map<std::string, std::string> vars = {
-      {"${PATH}", std::filesystem::canonical(chunkDir)}};
+    {"${PATH}", std::filesystem::canonical(chunkDir)}
+  };
 
   std::string script = fs::readText(shellScript);
   for (const auto &[key, value] : vars) {
@@ -32,7 +36,10 @@ std::string ScriptGenerator::getShellScript(const path &chunkDir) {
 
 std::string ScriptGenerator::getCalibration() {
   const std::map<std::string, std::string> vars = {
-      {"-bias", bias}, {"-dark", dark}, {"-flat", flat}};
+    {"-bias", bias},
+    {"-dark", dark},
+    {"-flat", flat}
+  };
 
   std::vector<std::string> result;
   for (const auto &[key, value] : vars) {

@@ -1,6 +1,6 @@
 #pragma once
 
-enum class Subcommand {
+enum class Subcommand : char {
   // Sorter
   SorterAnalyze,
   SorterSort,
