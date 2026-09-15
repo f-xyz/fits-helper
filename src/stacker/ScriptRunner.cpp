@@ -1,42 +1,46 @@
 #include "ScriptRunner.h"
+#include "string.hpp"
 #include <benchmarking/Timer.hpp>
 #include <filesystem>
 #include <process.hpp>
 
-using namespace utils;
+using std::chrono::seconds;
 using std::filesystem::path;
+using utils::benchmarking::Timer;
 
-ScriptResult ScriptRunner::execute() {
-  benchmarking::Timer<std::chrono::seconds> timer;
+ScriptResult ScriptRunner::execute(const std::filesystem::path &output) {
+  Timer<seconds> timer;
 
-  return ScriptResult {
-    .code = stack(),
-    .integration = cleanup(),
-    .seconds = timer.measure()
-  };
+  const auto code = stack();
+  const auto seconds = timer.measure();
+
+  if (code == 0) {
+    copyIntegration(output);
+    cleanup();
+    return ScriptResult {.code = code,
+                         .seconds = seconds};
+  } else {
+    cleanup();
+    return ScriptResult {.code = code,
+                         .seconds = seconds};
+  }
 }
 
 int ScriptRunner::stack() {
   const auto command = getCommand();
-  const auto result = process::exec(command);
+  const auto result = utils::process::exec(command);
   return result.code;
 }
 
-path ScriptRunner::cleanup() {
-  const path tmp = "tmp";
-  const path integration = "integration.fit";
+void ScriptRunner::copyIntegration(const std::filesystem::path &output) {
+  const path src = directory / "tmp" / "integration.fit";
+  std::filesystem::rename(src, output);
+}
 
-  const path src = dir / tmp / integration;
-  const path dst = dir / integration;
-
-  std::filesystem::rename(src, dst);
-  std::filesystem::remove_all(dir / "tmp");
-
-  return dst;
+void ScriptRunner::cleanup() {
+  std::filesystem::remove_all(directory / "tmp");
 }
 
 std::string ScriptRunner::getCommand() {
-  const std::string bash = "bash";
-  const std::string stack = dir / "stack.sh";
-  return bash + " " + stack;
+  return "bash " + utils::string::quote(directory / "stack.sh");
 }

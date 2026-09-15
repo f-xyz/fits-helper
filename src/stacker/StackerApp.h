@@ -43,7 +43,7 @@ private:
     try {
       return std::stoi(a.filename()) < std::stoi(b.filename());
     } catch (const std::invalid_argument &) {
-      return false;
+      return a.filename() < b.filename();
     }
   }
 };

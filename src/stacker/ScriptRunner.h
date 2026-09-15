@@ -6,21 +6,19 @@
 
 struct ScriptResult {
   int code;
-  std::filesystem::path integration;
   std::chrono::seconds seconds;
 };
 
 class ScriptRunner {
-  std::filesystem::path dir;
-  ScriptResult result;
+  std::filesystem::path directory;
 
 public:
-  explicit ScriptRunner(const std::filesystem::path &dir) : dir(dir) {}
-
-  ScriptResult execute();
+  explicit ScriptRunner(const std::filesystem::path &dir) : directory(dir) {}
+  ScriptResult execute(const std::filesystem::path &output);
 
 private:
   int stack();
-  std::filesystem::path cleanup();
+  void copyIntegration(const std::filesystem::path &output);
+  void cleanup();
   std::string getCommand();
 };

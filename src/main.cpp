@@ -5,6 +5,7 @@
 #include "stacker/StackerApp.h"
 #include "stretcher/StretcherApp.h"
 #include <cli/colors.hpp>
+#include <exception>
 #include <utility>
 
 using utils::image::SharpnessEstimatorGaussian;
@@ -20,6 +21,7 @@ static void onSegfault(int signal) {
 int main(const int argc, const char **argv) {
   setenv("QT_QPA_PLATFORM", "xcb", 1); // Fixes QT windows on Wayland
   std::signal(SIGSEGV, onSegfault);
+  std::set_terminate([]() { onSegfault(0); });
   std::println("{} v{}\n", utils::cli::bold(NAME), utils::cli::bold(VERSION));
 
   Config config;

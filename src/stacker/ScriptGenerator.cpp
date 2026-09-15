@@ -4,7 +4,6 @@
 #include <string.hpp>
 #include <vector>
 
-using namespace utils;
 using std::filesystem::path;
 
 std::string ScriptGenerator::getStackerScript(const path &chunkDir) {
@@ -13,9 +12,9 @@ std::string ScriptGenerator::getStackerScript(const path &chunkDir) {
     {"${CALIBRATION}", getCalibration()}
   };
 
-  std::string script = fs::readText(sirilScript);
+  std::string script = utils::fs::readText(sirilScript);
   for (const auto &[key, value] : vars) {
-    script = string::replace_all(script, key, value);
+    script = utils::string::replace_all(script, key, value);
   }
 
   return script;
@@ -26,9 +25,9 @@ std::string ScriptGenerator::getShellScript(const path &chunkDir) {
     {"${PATH}", std::filesystem::canonical(chunkDir)}
   };
 
-  std::string script = fs::readText(shellScript);
+  std::string script = utils::fs::readText(shellScript);
   for (const auto &[key, value] : vars) {
-    script = string::replace_all(script, key, value);
+    script = utils::string::replace_all(script, key, value);
   }
 
   return script;
@@ -45,10 +44,11 @@ std::string ScriptGenerator::getCalibration() {
   for (const auto &[key, value] : vars) {
     if (!value.empty()) {
       std::string path = std::filesystem::canonical(value);
-      std::string item = key + "=" + path;
+      std::string item = key;
+      item += "=" + path;
       result.push_back(item);
     }
   }
 
-  return string::join(result, " ");
+  return utils::string::join(result, " ");
 }

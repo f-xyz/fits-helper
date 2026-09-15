@@ -4,13 +4,15 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdlib>
+#include <cstring>
 #include <filesystem>
 #include <fs.hpp>
-#include <print>
 #include <ranges>
 #include <string>
 
 void StackerApp::flatten() const {
+  logger.header("Flattenning the directory...\n");
+
   auto dirs = fs::readDir(directory) | std::views::filter(isDirectory);
 
   for (const auto &dir : dirs) {
@@ -34,10 +36,16 @@ void StackerApp::flatten() const {
   }
 }
 
+template <typename...> struct TD;
+
 void StackerApp::chop() const {
+  logger.header("Analyzing image sharpnesses...\n");
+
   const auto files = readFiles();
   auto results = analyzer.analyzeFiles(files, 2);
   std::ranges::sort(results, std::ranges::greater(), &FileSharpness::sharpness);
+
+  logger.header("Chopping the directory...\n");
 
   auto view = results
     | std::views::transform(&FileSharpness::file)
@@ -60,9 +68,9 @@ void StackerApp::chop() const {
     std::filesystem::create_directory(chunkDir);
 
     logger.info("  Creating stacking scripts");
-    ScriptGenerator gen(*this);
-    const auto siril = gen.getStackerScript(chunkDir);
-    const auto stack = gen.getShellScript(chunkDir);
+    ScriptGenerator generator(*this);
+    const auto siril = generator.getStackerScript(chunkDir);
+    const auto stack = generator.getShellScript(chunkDir);
     fs::writeFile(chunkDir / "stacker.ssf", siril);
     fs::writeFile(chunkDir / "stack.sh", stack);
 
@@ -78,6 +86,8 @@ void StackerApp::chop() const {
 }
 
 void StackerApp::stack() const {
+  logger.header("Stacking...\n");
+
   auto chunkDirs = fs::readDir(directory);
   std::ranges::sort(chunkDirs , comparePaths);
 
@@ -92,21 +102,19 @@ void StackerApp::stack() const {
     logger.info("Stacking images in: {} ({} of {})",
        cli::bold(chunkDir), index, chunkDirs.size());
 
-    const auto result = ScriptRunner(chunkDir).execute();
+    ScriptRunner runner(chunkDir);
+    const auto integrationName = std::to_string(index) + ".fit";
+    const auto integrationPath = masterDirPath / integrationName;
+    const auto result = runner.execute(integrationPath);
+
     if (result.code == 0) {
-      logger.info("  Finished in {}", result.seconds);
-      logger.info("  Result code {}", result.code);
-
-      const auto integrationName = std::to_string(index) + ".fit";
-      const auto integrationPath = masterDirPath / integrationName;
-      std::filesystem::rename(result.integration, integrationPath);
-
-      logger.info("");
-      ++index;
+      logger.info("  Finished in: {}", result.seconds);
     } else {
-      logger.error("  Stacking has failed with code {}", result.code);
-      std::println("  See {} for details.", (chunkDir / "stacker.log").string());
-      std::exit(1);
+      logger.error("  Failed in: {}", result.seconds);
+      logger.error("  Result code {}", result.code);
+      logger.error("  See {} for details\n", (chunkDir / "stacker.log").string());
     }
+
+    ++index;
   }
 }
