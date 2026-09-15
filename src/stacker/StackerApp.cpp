@@ -1,12 +1,8 @@
 #include "StackerApp.h"
 #include "ScriptGenerator.h"
 #include "ScriptRunner.h"
-#include <algorithm>
 #include <cstddef>
-#include <cstdlib>
-#include <cstring>
 #include <filesystem>
-#include <fs.hpp>
 #include <ranges>
 #include <string>
 
@@ -21,11 +17,8 @@ void StackerApp::flatten() const {
     logger.info("Moving files from: {}", cli::bold(dir));
     for (const auto &file : files) {
       const auto ext = file.extension();
-      const auto name = file.filename();
-
       if (ext == ".fit" || ext == ".fits") {
-        const auto destination = directory / name;
-        std::filesystem::rename(file, destination);
+        std::filesystem::rename(file, directory / file.filename());
       }
     }
 
@@ -36,12 +29,12 @@ void StackerApp::flatten() const {
   }
 }
 
-template <typename...> struct TD;
-
 void StackerApp::chop() const {
   logger.header("Analyzing image sharpnesses...\n");
 
-  const auto files = readFiles();
+  auto qwe = fs::readDir(directory) | std::views::filter(isRegularFile);
+  auto files = std::ranges::to<std::vector<std::filesystem::path>>(qwe);
+
   auto results = analyzer.analyzeFiles(files, 2);
   std::ranges::sort(results, std::ranges::greater(), &FileSharpness::sharpness);
 
@@ -108,7 +101,7 @@ void StackerApp::stack() const {
     const auto result = runner.execute(integrationPath);
 
     if (result.code == 0) {
-      logger.info("  Finished in: {}", result.seconds);
+      logger.info("  Finished in: {}\n", result.seconds);
     } else {
       logger.error("  Failed in: {}", result.seconds);
       logger.error("  Result code {}", result.code);

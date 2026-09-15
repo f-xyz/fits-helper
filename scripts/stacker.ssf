@@ -1,6 +1,9 @@
 requires 1.2.0
 setext fit
 
+# Siril command reference:
+# https://siril.readthedocs.io/en/stable/Commands.html
+
 ########################################
 # Convertation #########################
 ########################################
@@ -24,7 +27,16 @@ calibrate light -debayer ${CALIBRATION}
 # Registration #########################
 ########################################
 
+# -sigma (default 1): Sensetivity threshold
+# -roundness (default 0.5): Star eccentricity checks
+# -convergence (default 1): Sharpness of a star profile
+# -relax (default off): Bypasses star quality checks
+# setfindstar -sigma=1 -roundness=0.5 -convergence=1 -relax=on
+
 # -minpairs=6 (default 10): Requires fewer matching star pairs between frames to register
+# -2pass: Selects the best reference frame
+# -framing=current | min | max | cog: Sets the overlapping mode (min - common overlapping)
+# -drizzle: Enabled drizzling.
 register pp_light
 
 ########################################

@@ -4,10 +4,6 @@
 #include "StackerConfig.h"
 #include <Logger.hpp>
 #include <fs.hpp>
-#include <ranges>
-#include <stdexcept>
-#include <string>
-#include <vector>
 
 using namespace utils;
 using namespace utils::logging;
@@ -25,11 +21,6 @@ public:
   void stack() const;
 
 private:
-  std::vector<std::filesystem::path> readFiles() const {
-    auto files = fs::readDir(directory) | std::views::filter(isRegularFile);
-    return {files.begin(), files.end()};
-  }
-
   static bool isRegularFile(const std::filesystem::path &path) {
     return std::filesystem::is_regular_file(path);
   }
