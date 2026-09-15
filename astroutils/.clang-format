@@ -1,0 +1,10 @@
+BasedOnStyle: LLVM # LLVM | Google | Chromium | Mozilla | WebKit | Microsoft | GNU
+ColumnLimit: 80
+IndentWidth: 2
+UseTab: Never
+ContinuationIndentWidth: 4
+ConstructorInitializerIndentWidth: 4
+
+# Penalizes splitting initializer lists across multiple lines
+# PenaltyBreakBeforeFirstCallParameter: 100
+# PenaltyExcessCharacter: 1000

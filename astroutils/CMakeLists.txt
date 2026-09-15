@@ -99,7 +99,7 @@ endif()
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-# 1. Define installation rules for targets and public headers
+# Install binary artifacts and header files
 install(TARGETS astroutils
   EXPORT astroutilsTargets
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -109,25 +109,25 @@ install(TARGETS astroutils
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-# 2. Export targets to a file in the install directory
+# Export targets to a file in the install directory
 install(EXPORT astroutilsTargets
   FILE astroutilsTargets.cmake
   NAMESPACE astroutils::
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/astroutils)
 
-# 3. Generate package version file
+# Generate package version file
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/astroutilsConfigVersion.cmake"
   VERSION ${PROJECT_VERSION}
   COMPATIBILITY SameMajorVersion)
 
-# 4. Generate package config file
+# Generate package config file
 configure_package_config_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake/astroutilsConfig.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/astroutilsConfig.cmake"
   INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/astroutils)
 
-# 5. Install configuration files
+# Install configuration files
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/astroutilsConfig.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/astroutilsConfigVersion.cmake"
