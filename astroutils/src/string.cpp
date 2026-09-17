@@ -1,5 +1,7 @@
 #include "string.hpp"
 #include "cli/colors.hpp"
+#include <codecvt>
+#include <ranges>
 
 namespace utils::string {
 

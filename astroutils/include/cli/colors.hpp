@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 /*
 ANSI Escape Codes:
   - The core syntax for a standard 16-color ANSI code follows this structure: `\033[Style;ColorCode m`.
@@ -13,6 +15,7 @@ Advanced Colors (256-Color & True Color RGB):
   - 256 Colors: Format via `\033[38;5;[0-255]m` (Foreground) or `\033[48;5;[0-255]m` (Background).
   - True Color (RGB): Format via `\033[38;2;R;G;Bm` (where R, G, B are integers from 0 to 255).
 */
+
 
 namespace utils::cli {
 

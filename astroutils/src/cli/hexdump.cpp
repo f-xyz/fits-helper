@@ -1,4 +1,5 @@
 #include "cli/hexdump.hpp"
+#include <format>
 
 namespace utils::cli {
 
@@ -14,8 +15,8 @@ std::string hexdump(std::span<const std::byte> data) {
     // Hex data
     for (std::size_t j = i; j < i + 16; ++j) {
       if (j < i + inc) {
-        result +=
-            std::format("{:02X} ", std::to_integer<unsigned char>(data[j]));
+        result += std::format("{:02X} ",
+          std::to_integer<unsigned char>(data[j]));
         // 8 byte separator
         if (j == i + 7) {
           result += "| ";

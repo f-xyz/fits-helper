@@ -1,4 +1,5 @@
 #include "image/SharpnessEstimator.hpp"
+#include <opencv2/imgproc.hpp>
 
 using ::testing::DoubleNear;
 using ::testing::Gt;

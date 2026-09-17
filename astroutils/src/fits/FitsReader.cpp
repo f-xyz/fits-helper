@@ -1,4 +1,6 @@
 #include "../../include/fits/FitsReader.h"
+#include <opencv2/imgproc.hpp>
+#include <print>
 
 cv::Mat FitsReader::read(const std::string &file) {
   const auto fptr = openFile(file);

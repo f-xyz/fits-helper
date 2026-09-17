@@ -84,7 +84,7 @@ if(PROJECT_IS_TOP_LEVEL)
   target_link_libraries(tests PRIVATE
     astroutils
     gmock_main
-    cpp-dump 
+    cpp-dump
     $<$<BOOL:${ENABLE_COVERAGE}>:--coverage>)
 
   include(GoogleTest)
