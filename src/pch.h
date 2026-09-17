@@ -2,13 +2,18 @@
 
 // Core STL
 #include <algorithm>
+#include <atomic>
 #include <cctype>
 #include <chrono>
 #include <cmath>
 #include <csignal>
+#include <cstddef>
+#include <cstdlib>
+#include <exception>
 #include <execution>
 #include <expected>
 #include <filesystem>
+#include <format>
 #include <functional>
 #include <future>
 #include <iostream>
@@ -23,6 +28,7 @@
 #include <stdexcept>
 #include <string>
 #include <thread>
+#include <utility>
 #include <vector>
 
 // CLI 11

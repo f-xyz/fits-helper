@@ -42,14 +42,14 @@ public:
   template <typename... Args>
   void error(const std::format_string<Args...> &fmt, Args &&...args) {
     auto message = std::format(fmt, std::forward<Args>(args)...);
-    printLine(message, 128, 0, 0);
+    printLine(message, 192, 0, 0);
     writeLine(message, "ERROR");
   }
 
   template <typename... Args>
   void success(const std::format_string<Args...> &fmt, Args &&...args) {
     auto message = std::format(fmt, std::forward<Args>(args)...);
-    printLine(message, 0, 128, 0);
+    printLine(message, 0, 192, 0);
     writeLine(message, "INFO");
   }
 

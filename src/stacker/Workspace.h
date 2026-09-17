@@ -21,72 +21,26 @@ public:
   // Files ///////////////////////////////
   ////////////////////////////////////////
 
-  Files getFiles() {
-    auto contents = utils::fs::readDir(directory);
-    auto files = contents | std::views::filter(isRegularFile);
-    return std::ranges::to<Files>(files);
-  }
+  Files getFiles();
+  Files getDirs();
 
-  Chunks getSortedChunks(int chunkSize) {
-    const auto files = getFiles();
+  Chunks getSortedChunks(int chunkSize);
 
-    auto results = analyzer.analyzeFiles(files, 2);
-    std::ranges::sort(results, std::ranges::greater(),
-                      &FileSharpness::sharpness);
-
-    auto view = results
-      | std::views::transform(&FileSharpness::file)
-      | std::views::chunk(chunkSize);
-
-    return std::ranges::to<Chunks>(view);
-  }
-
-  void moveFilesToParent(const path &dir) {
-    const auto files = utils::fs::readDir(dir);
-    for (const auto &file : files) {
-      const auto ext = file.extension();
-      if (ext == ".fit" || ext == ".fits") {
-        std::filesystem::rename(file, directory / file.filename());
-      }
-    }
-  }
+  void moveFilesToParent(const path &dir);
+  void moveFilesToChild(const path &dir, const Files &files);
 
   ////////////////////////////////////////
   // Directories /////////////////////////
   ////////////////////////////////////////
 
-  Files getDirs() {
-    auto dirs = utils::fs::readDir(directory);
-    return std::ranges::to<Files>(dirs | std::views::filter(isDirectory));
-  }
 
-  Files getSortedDirs() {
-    auto dirs = getDirs();
-    std::ranges::sort(dirs, comparePaths);
-    return std::ranges::to<Files>(dirs);
-  }
 
   ////////////////////////////////////////
   // Output //////////////////////////////
   ////////////////////////////////////////
 
-  void makeOutputDirectory() {
-    const auto outDirName = directory.filename().string() + outDirSuffix;
-    const auto outDirPath = directory.parent_path() / outDirName;
-
-    std::filesystem::remove_all(outDirPath);
-    std::filesystem::create_directory(outDirPath);
-  }
-
-  path getOutputFileName(std::size_t index) {
-    const auto outDirName = directory.filename().string() + outDirSuffix;
-    const auto outDirPath = directory.parent_path() / outDirName;
-
-    const auto integrationName = std::to_string(index) + ".fit";
-    const auto integrationPath = outDirPath / integrationName;
-
-    return integrationPath;
-  }
+  void makeOutputDirectory();
+  path getOutputFileName(std::size_t index);
 
 private:
   static bool isRegularFile(const path &path) {

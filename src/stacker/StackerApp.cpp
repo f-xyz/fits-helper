@@ -1,17 +1,20 @@
 #include "StackerApp.h"
 #include "ScriptGenerator.h"
 #include "ScriptRunner.h"
+#include <benchmarking/Timer.hpp>
 #include <cstddef>
 #include <filesystem>
 #include <ranges>
 #include <string>
 
+using std::chrono::seconds;
+using utils::benchmarking::Timer;
 using utils::cli::bold;
 
 void StackerApp::flatten() {
   logger.header("Flattenning {}\n", directory.string());
 
-  for (const auto &dir : workspace.getSortedDirs()) {
+  for (const auto &dir : workspace.getDirs()) {
     logger.info("Moving files from: {}", bold(dir));
     workspace.moveFilesToParent(dir);
 
@@ -23,35 +26,38 @@ void StackerApp::flatten() {
 }
 
 void StackerApp::chop() {
-  logger.header("Chopping files in {}\n", directory.string());
+  logger.header("Analyzing files in {}\n", directory.string());
 
+  Timer<seconds> timer;
   const auto chunks = workspace.getSortedChunks(chunkSize);
+  const auto seconds = timer.measure();
+  logger.info("Finished in: {}\n", seconds);
+
   if (std::ranges::empty(chunks)) {
     logger.error("The directory contains no files.\n");
     return;
   }
 
+  logger.header("Chopping files in {}\n", directory.string());
+
   std::size_t index = 1;
   ScriptGenerator generator(*this);
 
-  for (const auto &chunk : chunks) {
-    const auto baseDir = chunk.front().parent_path();
+  for (const auto &files : chunks) {
+    const auto baseDir = files.front().parent_path();
     const auto chunkDir = baseDir / std::to_string(index);
 
     logger.info("Creating directory: {}", bold(chunkDir));
     std::filesystem::create_directory(chunkDir);
 
-    logger.info("  Creating stacking scripts");
+    logger.info("  Moving {} files", files.size());
+    workspace.moveFilesToChild(chunkDir, files);
+
+    logger.info("  Creating stacking scripts\n");
     const auto siril = generator.getStackerScript(chunkDir);
     const auto stack = generator.getShellScript(chunkDir);
     utils::fs::writeFile(chunkDir / "stacker.ssf", siril);
     utils::fs::writeFile(chunkDir / "stack.sh", stack);
-
-    logger.info("  Moving {} files\n", chunk.size());
-    for (const auto &file : chunk) {
-      const auto destination = chunkDir / file.filename();
-      std::filesystem::rename(file, destination);
-    }
 
     ++index;
   }
@@ -62,7 +68,7 @@ void StackerApp::stack() {
   workspace.makeOutputDirectory();
 
   std::size_t index = 1;
-  auto chunkDirs = workspace.getSortedDirs();
+  auto chunkDirs = workspace.getDirs();
 
   for (const auto &chunkDir : chunkDirs) {
     logger.info("Stacking images in: {} ({} of {})",
@@ -70,7 +76,10 @@ void StackerApp::stack() {
 
     ScriptRunner runner(chunkDir);
     const auto integrationPath = workspace.getOutputFileName(index);
-    const auto result = runner.execute(integrationPath);
+    const auto result = runner.execute(integrationPath,
+      [this](std::string_view message) {
+        logger.info("  {}", message);
+      });
 
     if (result.code == 0) {
       logger.info("  Finished in: {}\n", result.seconds);

@@ -4,9 +4,9 @@
 #include "sorter/SorterApp.h"
 #include "stacker/StackerApp.h"
 #include "stretcher/StretcherApp.h"
+#include <TerminateHandler.hpp>
 #include <cli/colors.hpp>
 #include <utility>
-#include "TerminateHandler.hpp"
 
 using utils::cli::bold;
 using utils::image::SharpnessEstimatorGaussian;
