@@ -131,8 +131,8 @@ std::string lowercase(const std::string &string) {
 // Miscellaneous ///////////////////////
 ////////////////////////////////////////
 
-std::string quote(const std::string &string) {
-  return '"' + string + '"';
+std::string quote(const std::string &string, const std::string &wrapper) {
+  return wrapper + string + wrapper;
 }
 
 ////////////////////////////////////////
@@ -142,9 +142,9 @@ std::string quote(const std::string &string) {
 std::string formatNumber(double number, int precision) {
   const auto string = std::format("{:.{}f}", number, precision);
   const auto getColor = [](double x) {
-    return x > 0   ? 0x008000  // Green
-           : x < 0 ? 0x800000  // Red
-                   : 0x888888; // Gray
+    return x > 0 ? 0x008000  // Green
+         : x < 0 ? 0x800000  // Red
+                 : 0x888888; // Gray
   };
   return std::format("{}", utils::cli::rgb(string, getColor(number)));
 }

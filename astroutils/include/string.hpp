@@ -68,7 +68,7 @@ std::string lowercase(const std::string &string);
 // Miscellaneous ///////////////////////
 ////////////////////////////////////////
 
-std::string quote(const std::string &string);
+std::string quote(const std::string &string, const std::string &wrapper = "\"");
 
 ////////////////////////////////////////
 // Formatting //////////////////////////

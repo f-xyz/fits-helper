@@ -6,7 +6,7 @@
       "type": "cppdbg",
       "request": "launch",
       "program": "${workspaceFolder}/build/fits-helper",
-      "args": ["stretch", "-tasinh", "-f", "images/random/bay.jpg"],
+      "args": ["stack", "-n5", "-d", "images/ngc3675"],
       "cwd": "${workspaceFolder}",
       "targetArchitecture": "x64",
       "stopAtEntry": false,

@@ -21,7 +21,7 @@ convert light -out=tmp
 #   -bias="${BIAS}"
 
 cd "tmp"
-calibrate light -debayer ${CALIBRATION}
+calibrate light -debayer -bias="=100" ${CALIBRATION}
 
 ########################################
 # Registration #########################
@@ -36,18 +36,18 @@ calibrate light -debayer ${CALIBRATION}
 # -minpairs=6 (default 10): Requires fewer matching star pairs between frames to register
 # -2pass: Selects the best reference frame
 # -framing=current | min | max | cog: Sets the overlapping mode (min - common overlapping)
-# -drizzle: Enabled drizzling.
+# -drizzle: Enable drizzling.
 register pp_light
 
 ########################################
 # Stacking #############################
 ########################################
 
-# Algorithms: sum | min | max | median | mean | rej RejectionType
+# Algorithms: sum | min | max | median | mean | rej ${RejectionType}
 # RejectionType: percentile | sigmaclip | ksigma | winsorized | linear
-# Norm: nonorm | add | mul | addscale | mulscale
-# Weight: noise | wfwhm | nbstars | nbstack
-# 32b: generate a floating-point image
+# -norm: nonorm | add | mul | addscale | mulscale
+# -weight: noise | wfwhm | nbstars | nbstack
+# -32b: generate a floating-point image
 stack r_pp_light rej winsorized 3.0 3.0 -32b -weight=noise -norm=addscale -out=integration
 # stack r_pp_light rej winsorized 3.0 3.0 -32b -weight=noise -norm=addscale -out=integration
 # stack r_pp_light rej winsorized 3.0 3.0 -32b -filter-fwhm=80% -weight=wfwhm -norm=addscale -out=integration

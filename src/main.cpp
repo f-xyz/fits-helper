@@ -5,24 +5,17 @@
 #include "stacker/StackerApp.h"
 #include "stretcher/StretcherApp.h"
 #include <cli/colors.hpp>
-#include <exception>
 #include <utility>
+#include "TerminateHandler.hpp"
 
+using utils::cli::bold;
 using utils::image::SharpnessEstimatorGaussian;
 using utils::logging::Logger;
 
-static void onSegfault(int signal) {
-  std::println("Segmentation fault {}:", signal);
-  std::println("{}", std::stacktrace::current());
-  std::signal(signal, SIG_DFL);
-  std::raise(signal);
-}
-
 int main(const int argc, const char **argv) {
+  TerminateHandler::install();
   setenv("QT_QPA_PLATFORM", "xcb", 1); // Fixes QT windows on Wayland
-  std::signal(SIGSEGV, onSegfault);
-  std::set_terminate([]() { onSegfault(0); });
-  std::println("{} v{}\n", utils::cli::bold(NAME), utils::cli::bold(VERSION));
+  std::println("{} v{}\n", bold(NAME), bold(VERSION));
 
   Config config;
   Logger logger(config.logFilePath);

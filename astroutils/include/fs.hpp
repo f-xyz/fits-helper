@@ -58,7 +58,7 @@ inline std::vector<T> readFile(const std::filesystem::path &path) {
 
   std::size_t size = std::filesystem::file_size(path);
   std::vector<T> buffer(size / sizeof(T));
-  file.read(reinterpret_cast<char *>(buffer.data()), size);
+  file.read(reinterpret_cast<char *>(buffer.data()), static_cast<long>(size));
 
   return buffer;
 }

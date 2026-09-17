@@ -61,7 +61,7 @@ target_link_libraries(fits-helper PRIVATE
   OpenMP::OpenMP_CXX
   cpp-dump)
 
-# include(cmake/sanitizers.cmake)
+# include(cmake/Sanitizers.cmake)
 
 ########################################
 ## Installation ########################
