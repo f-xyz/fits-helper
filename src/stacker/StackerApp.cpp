@@ -31,7 +31,7 @@ void StackerApp::chop() {
   Timer<seconds> timer;
   const auto chunks = workspace.getSortedChunks(chunkSize);
   const auto seconds = timer.measure();
-  logger.info("Finished in: {}\n", seconds);
+  logger.success("Finished in: {}\n", seconds);
 
   if (std::ranges::empty(chunks)) {
     logger.error("The directory contains no files.\n");
@@ -82,7 +82,7 @@ void StackerApp::stack() {
       });
 
     if (result.code == 0) {
-      logger.info("  Finished in: {}\n", result.seconds);
+      logger.success("  Finished in: {}\n", result.seconds);
     } else {
       logger.error("  Failed in: {}", result.seconds);
       logger.error("  Result code {}", result.code);
