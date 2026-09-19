@@ -4,7 +4,6 @@
 #include <csignal>
 #include <exception>
 #include <format>
-#include <mutex>
 #include <print>
 #include <stacktrace>
 #include <string>
@@ -37,7 +36,7 @@ private:
 
   static void onSignal(int signal) {
     if (!isHandled.test_and_set()) {
-      std::println(stderr, "Signal received: {}", signal);
+      std::println(stderr, "Signal received: {} {}", signal, strsignal(signal));
       std::println(stderr, "{}", std::stacktrace::current(2));
     }
     std::signal(signal, SIG_DFL);
