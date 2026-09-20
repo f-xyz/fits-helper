@@ -2,6 +2,8 @@
 
 #include "concepts.hpp"
 #include <cmath>
+#include <concepts>
+#include <limits>
 #include <random>
 #include <ranges>
 
@@ -156,12 +158,24 @@ auto groupBy(const Range &range, Proj proj = {}) {
 // Random //////////////////////////////
 ////////////////////////////////////////
 
-inline double random(double min = 0, double max = 1) {
+// Returns a random value in range: [min, max).
+template <std::floating_point T>
+inline T random(T min = 0.0, T max = 1.0) {
   static thread_local std::random_device rd;
   static thread_local std::mt19937 gen(rd());
-  std::uniform_real_distribution<double> doubles(min, max);
+  std::uniform_real_distribution<T> numbers(min, max);
 
-  return doubles(gen);
+  return numbers(gen);
+}
+
+// Returns a random integer in range: [min, max].
+template <std::integral T>
+inline T random(T min = 0, T max = std::numeric_limits<T>::max()) {
+  static thread_local std::random_device rd;
+  static thread_local std::mt19937 gen(rd());
+  std::uniform_int_distribution<T> numbers(min, max);
+
+  return numbers(gen);
 }
 
 } // namespace utils::math
