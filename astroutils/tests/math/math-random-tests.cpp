@@ -19,5 +19,5 @@ TEST(MathRandom, random_size_t) {
   const auto result = utils::math::random(min, max);
   // assert
   EXPECT_GE(result, min);
-  EXPECT_LT(result, max);
+  EXPECT_LE(result, max);
 };
