@@ -1,6 +1,10 @@
 #include "Workspace.h"
 #include <ranges>
 
+////////////////////////////////////////
+// Files ///////////////////////////////
+////////////////////////////////////////
+
 Files Workspace::getFiles() {
   auto contents = utils::fs::readDir(directory)
     | std::views::filter(isRegularFile);
