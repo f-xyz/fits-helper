@@ -1,8 +1,8 @@
 #pragma once
 
 #include "StretcherConfig.h"
-#include <Logger.hpp>
-#include <image/image.hpp>
+#include <astroutils/Logger.hpp>
+#include <astroutils/image/image.hpp>
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
 #include <string>

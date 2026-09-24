@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Logger.hpp>
+#include <astroutils/Logger.hpp>
 #include <filesystem>
-#include <image/SharpnessEstimator.hpp>
+#include <astroutils/image/SharpnessEstimator.hpp>
 #include <opencv2/core.hpp>
 #include <vector>
 

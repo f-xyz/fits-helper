@@ -1,8 +1,8 @@
 #include "ScriptRunner.h"
-#include "string.hpp"
-#include <benchmarking/Timer.hpp>
+#include <astroutils/string.hpp>
+#include <astroutils/benchmarking/Timer.hpp>
 #include <filesystem>
-#include <process.hpp>
+#include <astroutils/process.hpp>
 
 using std::chrono::seconds;
 using std::filesystem::path;

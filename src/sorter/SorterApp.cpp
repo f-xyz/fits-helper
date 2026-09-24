@@ -1,12 +1,12 @@
 #include "SorterApp.h"
 #include <algorithm>
-#include <benchmarking/Timer.hpp>
-#include <cli/colors.hpp>
-#include <cli/spark.hpp>
+#include <astroutils/benchmarking/Timer.hpp>
+#include <astroutils/cli/colors.hpp>
+#include <astroutils/cli/spark.hpp>
 #include <cstddef>
 #include <filesystem>
 #include <format>
-#include <fs.hpp>
+#include <astroutils/fs.hpp>
 
 using std::chrono::seconds;
 using utils::benchmarking::Timer;

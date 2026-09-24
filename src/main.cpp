@@ -1,11 +1,11 @@
 #include "Config.h"
 #include "Subcommand.h"
-#include "image/SharpnessEstimator.hpp"
+#include <astroutils/image/SharpnessEstimator.hpp>
 #include "sorter/SorterApp.h"
 #include "stacker/StackerApp.h"
 #include "stretcher/StretcherApp.h"
-#include <TerminateHandler.hpp>
-#include <cli/colors.hpp>
+#include <astroutils/TerminateHandler.hpp>
+#include <astroutils/cli/colors.hpp>
 #include <utility>
 
 using utils::cli::bold;

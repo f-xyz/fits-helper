@@ -3,7 +3,7 @@
 #include "../SharpnessAnalyzer.h"
 #include "StackerConfig.h"
 #include "Workspace.h"
-#include <Logger.hpp>
+#include <astroutils/Logger.hpp>
 
 class StackerApp : StackerConfig {
   Logger &logger;

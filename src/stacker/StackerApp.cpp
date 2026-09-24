@@ -1,7 +1,7 @@
 #include "StackerApp.h"
 #include "ScriptGenerator.h"
 #include "ScriptRunner.h"
-#include <benchmarking/Timer.hpp>
+#include <astroutils/benchmarking/Timer.hpp>
 #include <cstddef>
 #include <filesystem>
 #include <ranges>

@@ -4,7 +4,7 @@
 #include <CLI11.hpp>
 #include <filesystem>
 #include <functional>
-#include <image/ImageStretcher.hpp>
+#include <astroutils/image/ImageStretcher.hpp>
 #include <map>
 #include <string>
 #include <vector>

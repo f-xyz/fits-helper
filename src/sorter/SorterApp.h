@@ -2,7 +2,7 @@
 
 #include "../SharpnessAnalyzer.h"
 #include "SorterConfig.h"
-#include <Logger.hpp>
+#include <astroutils/Logger.hpp>
 #include <cstdlib>
 #include <vector>
 

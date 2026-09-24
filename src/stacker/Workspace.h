@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../SharpnessAnalyzer.h"
-#include <fs.hpp>
+#include <astroutils/fs.hpp>
 
 using std::filesystem::path;
 using Files = std::vector<std::filesystem::path>;

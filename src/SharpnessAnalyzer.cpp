@@ -5,7 +5,7 @@
 #include <cstddef>
 #include <execution>
 #include <filesystem>
-#include <image/image.hpp>
+#include <astroutils/image/image.hpp>
 #include <mutex>
 
 std::vector<FileSharpness>

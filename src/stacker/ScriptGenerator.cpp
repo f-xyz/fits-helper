@@ -1,7 +1,7 @@
 #include "ScriptGenerator.h"
-#include <fs.hpp>
+#include <astroutils/fs.hpp>
 #include <map>
-#include <string.hpp>
+#include <astroutils/string.hpp>
 #include <vector>
 
 using std::filesystem::path;
