@@ -1,4 +1,4 @@
-#include "benchmarking/benchmark.hpp"
+#include <astroutils/benchmarking/benchmark.hpp>
 
 TEST(BenchmarkingBenchmark, benchmark) {
   // arrange

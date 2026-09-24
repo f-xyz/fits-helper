@@ -1,5 +1,5 @@
-#include "string.hpp"
-#include "cli/colors.hpp"
+#include <astroutils/string.hpp>
+#include <astroutils/cli/colors.hpp>
 #include <codecvt>
 #include <ranges>
 

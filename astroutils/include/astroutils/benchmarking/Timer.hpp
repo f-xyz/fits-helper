@@ -1,6 +1,6 @@
 #pragma once
 
-#include "concepts.hpp"
+#include <astroutils/concepts.hpp>
 #include <chrono>
 
 namespace utils::benchmarking {

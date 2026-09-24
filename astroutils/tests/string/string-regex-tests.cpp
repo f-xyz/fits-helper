@@ -1,4 +1,4 @@
-#include "string.hpp"
+#include <astroutils/string.hpp>
 
 TEST(StringRegex, regex_fullMatch) {
   // arrange

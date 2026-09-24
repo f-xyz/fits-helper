@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Timer.hpp"
+#include <astroutils/benchmarking/Timer.hpp>
 #include <chrono>
 #include <functional>
 #include <utility>

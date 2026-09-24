@@ -1,5 +1,5 @@
-#include "image/image.hpp"
-#include "fits/FitsReader.h"
+#include <astroutils/image/image.hpp>
+#include <astroutils/fits/FitsReader.h>
 #include <filesystem>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>

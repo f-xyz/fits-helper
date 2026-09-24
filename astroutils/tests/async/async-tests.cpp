@@ -1,5 +1,5 @@
-#include "async/Throttle.hpp"
-#include "async/setTimeout.hpp"
+#include <astroutils/async/Throttle.hpp>
+#include <astroutils/async/setTimeout.hpp>
 
 using namespace std::chrono_literals;
 

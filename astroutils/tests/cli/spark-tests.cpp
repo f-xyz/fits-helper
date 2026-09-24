@@ -1,4 +1,4 @@
-#include "cli/spark.hpp"
+#include <astroutils/cli/spark.hpp>
 
 TEST(CliSpark, EmptyRangeReturnsPlaceholder) {
   // arrange

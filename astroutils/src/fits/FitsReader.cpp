@@ -1,4 +1,4 @@
-#include "../../include/fits/FitsReader.h"
+#include <astroutils/fits/FitsReader.h>
 #include <opencv2/imgproc.hpp>
 #include <print>
 

@@ -1,4 +1,4 @@
-#include "benchmarking/Timer.hpp"
+#include <astroutils/benchmarking/Timer.hpp>
 
 TEST(BenchmarkingTimer, measure) {
   // arrange

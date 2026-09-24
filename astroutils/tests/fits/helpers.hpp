@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fs.hpp"
+#include <astroutils/fs.hpp>
 
 void createFitsFile(const std::string &path) {
   int status = 0;

@@ -1,5 +1,5 @@
-#include "fits/FitsReader.h"
-#include "fs.hpp"
+#include <astroutils/fits/FitsReader.h>
+#include <astroutils/fs.hpp>
 #include "helpers.hpp"
 
 TEST(FitsReader, InvalidMemoryReturnsEmptyMat) {

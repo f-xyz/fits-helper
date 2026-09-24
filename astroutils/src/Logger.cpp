@@ -1,5 +1,5 @@
-#include "Logger.hpp"
-#include "string.hpp"
+#include <astroutils/Logger.hpp>
+#include <astroutils/string.hpp>
 #include <chrono>
 #include <format>
 #include <print>

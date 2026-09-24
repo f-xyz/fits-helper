@@ -107,7 +107,7 @@ install(TARGETS astroutils
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(DIRECTORY include/astroutils DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # Export targets to a file in the install directory
 install(EXPORT astroutilsTargets

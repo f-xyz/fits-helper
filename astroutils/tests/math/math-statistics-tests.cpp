@@ -1,4 +1,4 @@
-#include "math.hpp"
+#include <astroutils/math.hpp>
 
 TEST(MathDescriptiveStatistics, sum) {
   // arrange

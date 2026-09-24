@@ -1,5 +1,5 @@
-#include "image/ImageStretcher.hpp"
-#include "image/image.hpp"
+#include <astroutils/image/ImageStretcher.hpp>
+#include <astroutils/image/image.hpp>
 #include <opencv2/photo.hpp>
 
 namespace utils::image {

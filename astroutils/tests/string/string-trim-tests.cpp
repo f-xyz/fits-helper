@@ -1,4 +1,4 @@
-#include "string.hpp"
+#include <astroutils/string.hpp>
 
 TEST(StringTrim, ltrim_whitespace) {
   // arrange

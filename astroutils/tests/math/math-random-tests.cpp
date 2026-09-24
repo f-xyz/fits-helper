@@ -1,4 +1,4 @@
-#include "math.hpp"
+#include <astroutils/math.hpp>
 
 TEST(MathRandom, random_double) {
   // arrange

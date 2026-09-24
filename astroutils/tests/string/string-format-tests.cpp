@@ -1,5 +1,5 @@
-#include "cli/colors.hpp"
-#include "string.hpp"
+#include <astroutils/cli/colors.hpp>
+#include <astroutils/string.hpp>
 
 TEST(StringFormat, formatNumber_positive) {
   // act

@@ -1,4 +1,4 @@
-#include "cli/colors.hpp"
+#include <astroutils/cli/colors.hpp>
 #include <regex>
 
 namespace utils::cli {

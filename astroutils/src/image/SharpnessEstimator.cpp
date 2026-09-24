@@ -1,4 +1,4 @@
-#include "image/SharpnessEstimator.hpp"
+#include <astroutils/image/SharpnessEstimator.hpp>
 #include <opencv2/imgproc.hpp>
 
 namespace utils::image {

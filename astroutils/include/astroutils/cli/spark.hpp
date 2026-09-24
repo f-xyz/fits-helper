@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../concepts.hpp"
-#include "../math.hpp"
-#include "colors.hpp"
+#include <astroutils/concepts.hpp>
+#include <astroutils/math.hpp>
+#include <astroutils/cli/colors.hpp>
 #include <string>
 #include <vector>
 

@@ -1,4 +1,4 @@
-#include "math.hpp"
+#include <astroutils/math.hpp>
 
 TEST(MathNorm, normalize_with_2_arguments) {
   // arrange

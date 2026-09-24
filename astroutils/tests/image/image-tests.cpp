@@ -1,4 +1,4 @@
-#include "image/image.hpp"
+#include <astroutils/image/image.hpp>
 
 using ::testing::Eq;
 using ::testing::HasSubstr;

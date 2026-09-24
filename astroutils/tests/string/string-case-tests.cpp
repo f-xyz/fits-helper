@@ -1,4 +1,4 @@
-#include "string.hpp"
+#include <astroutils/string.hpp>
 
 TEST(StringCase, uppercase_utf8) {
   // arrange

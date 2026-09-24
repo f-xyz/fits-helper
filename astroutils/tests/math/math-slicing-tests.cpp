@@ -1,4 +1,4 @@
-#include "math.hpp"
+#include <astroutils/math.hpp>
 
 TEST(MathSlicing, slice_begin) {
   // arrange
