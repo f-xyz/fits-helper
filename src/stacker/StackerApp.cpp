@@ -7,9 +7,10 @@
 #include <ranges>
 #include <string>
 
+using astroutils::benchmarking::Timer;
+using astroutils::cli::bold;
+using astroutils::fs::writeFile;
 using std::chrono::seconds;
-using utils::benchmarking::Timer;
-using utils::cli::bold;
 
 void StackerApp::flatten() {
   logger.header("Flattenning {}\n", directory.string());
@@ -56,8 +57,8 @@ void StackerApp::chop() {
     logger.info("  Creating stacking scripts\n");
     const auto siril = generator.getStackerScript(chunkDir);
     const auto stack = generator.getShellScript(chunkDir);
-    utils::fs::writeFile(chunkDir / "stacker.ssf", siril);
-    utils::fs::writeFile(chunkDir / "stack.sh", stack);
+    writeFile(chunkDir / "stacker.ssf", siril);
+    writeFile(chunkDir / "stack.sh", stack);
 
     ++index;
   }

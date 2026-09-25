@@ -7,8 +7,8 @@
 #include <opencv2/imgproc.hpp>
 #include <string>
 
-using utils::image::ImageStretcher;
-using utils::logging::Logger;
+using astroutils::image::ImageStretcher;
+using astroutils::logging::Logger;
 
 class StretcherApp : StretcherConfig {
   Logger &logger;
@@ -18,14 +18,14 @@ public:
       : StretcherConfig(config), logger(logger) {}
 
   void stretch() {
-    const cv::Mat image = utils::image::read(file);
-    const std::string info = utils::image::info(image);
+    const cv::Mat image = astroutils::image::read(file);
+    const std::string info = astroutils::image::info(image);
     logger.info("Image info: {}", info);
 
     const cv::Size size(1280, 960);
     cv::resize(image, image, size);
 
-    utils::image::ImageStretcher stretcher({
+    astroutils::image::ImageStretcher stretcher({
       .types = {stretchTypes},
       .claheClipLimit = claheClipLimit,
       .claheTileSize = claheTileSize,
@@ -35,6 +35,6 @@ public:
     });
 
     const cv::Mat stretched = stretcher.stretch(image);
-    utils::image::show(stretched);
+    astroutils::image::show(stretched);
   }
 };

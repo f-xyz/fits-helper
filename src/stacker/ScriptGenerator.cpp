@@ -12,9 +12,9 @@ std::string ScriptGenerator::getStackerScript(const path &chunkDir) {
     {"${CALIBRATION}", getCalibration()}
   };
 
-  std::string script = utils::fs::readText(sirilScript);
+  std::string script = astroutils::fs::readText(sirilScript);
   for (const auto &[key, value] : vars) {
-    script = utils::string::replace_all(script, key, value);
+    script = astroutils::string::replace_all(script, key, value);
   }
 
   return script;
@@ -25,9 +25,9 @@ std::string ScriptGenerator::getShellScript(const path &chunkDir) {
     {"${PATH}", std::filesystem::canonical(chunkDir)}
   };
 
-  std::string script = utils::fs::readText(shellScript);
+  std::string script = astroutils::fs::readText(shellScript);
   for (const auto &[key, value] : vars) {
-    script = utils::string::replace_all(script, key, value);
+    script = astroutils::string::replace_all(script, key, value);
   }
 
   return script;
@@ -50,5 +50,5 @@ std::string ScriptGenerator::getCalibration() {
     }
   }
 
-  return utils::string::join(result, " ");
+  return astroutils::string::join(result, " ");
 }

@@ -9,15 +9,15 @@
 #include <astroutils/fs.hpp>
 
 using std::chrono::seconds;
-using utils::benchmarking::Timer;
-using utils::cli::rgb;
-using utils::cli::spark;
+using astroutils::benchmarking::Timer;
+using astroutils::cli::rgb;
+using astroutils::cli::spark;
 
 std::vector<FileSharpness> SorterApp::analyzeFiles() const {
   logger.header("Analyzing files...\n");
   Timer<seconds> timer;
 
-  const auto files = utils::fs::readDir(directory);
+  const auto files = astroutils::fs::readDir(directory);
   const auto results = analyzer.analyzeFiles(files, roi);
 
   const auto seconds = timer.measure();

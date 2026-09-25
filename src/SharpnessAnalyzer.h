@@ -1,13 +1,13 @@
 #pragma once
 
 #include <astroutils/Logger.hpp>
-#include <filesystem>
 #include <astroutils/image/SharpnessEstimator.hpp>
+#include <filesystem>
 #include <opencv2/core.hpp>
 #include <vector>
 
-using utils::image::SharpnessEstimator;
-using utils::logging::Logger;
+using astroutils::image::SharpnessEstimator;
+using astroutils::logging::Logger;
 
 struct FileSharpness {
   std::filesystem::path file;

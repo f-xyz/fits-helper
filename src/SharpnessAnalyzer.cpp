@@ -49,7 +49,7 @@ SharpnessAnalyzer::analyzeFiles(const std::vector<std::filesystem::path> &files,
 
 double SharpnessAnalyzer::getSharpness(const std::filesystem::path &file,
                                        int divider) const {
-  const auto image = utils::image::read(file);
+  const auto image = astroutils::image::read(file);
   const auto roi = getRoi(image, divider);
   const auto sharpness = estimator.getSharpness(roi);
 
@@ -69,7 +69,7 @@ cv::Mat SharpnessAnalyzer::getRoi(const cv::Mat &image, int divider) const {
 
 double SharpnessAnalyzer::getProgress(const std::size_t nFiles,
                                       std::atomic<std::size_t> &index) const {
-                                        
+
   const auto nResults = index.fetch_add(1, std::memory_order_relaxed) + 1;
   const auto percents =
       100.0 * static_cast<double>(nResults) / static_cast<double>(nFiles);

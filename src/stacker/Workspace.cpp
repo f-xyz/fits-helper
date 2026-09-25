@@ -6,14 +6,14 @@
 ////////////////////////////////////////
 
 Files Workspace::getFiles() {
-  auto contents = utils::fs::readDir(directory)
+  auto contents = astroutils::fs::readDir(directory)
     | std::views::filter(isRegularFile);
 
   return std::ranges::to<Files>(contents);
 }
 
 Files Workspace::getDirs() {
-  auto contents = utils::fs::readDir(directory)
+  auto contents = astroutils::fs::readDir(directory)
     | std::views::filter(isDirectory);
 
   auto dirs = std::ranges::to<Files>(contents);
@@ -37,7 +37,7 @@ Chunks Workspace::getSortedChunks(int chunkSize) {
 }
 
 void Workspace::moveFilesToParent(const path &dir) {
-  for (const auto &file : utils::fs::readDir(dir)) {
+  for (const auto &file : astroutils::fs::readDir(dir)) {
     const auto ext = file.extension();
     if (ext == ".fit" || ext == ".fits") {
       std::filesystem::rename(file, directory / file.filename());

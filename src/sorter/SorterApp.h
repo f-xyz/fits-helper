@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <vector>
 
-using utils::logging::Logger;
+using astroutils::logging::Logger;
 
 class SorterApp : SorterConfig {
   Logger &logger;

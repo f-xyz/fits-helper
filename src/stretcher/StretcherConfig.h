@@ -2,16 +2,16 @@
 
 #include "../Subcommand.h"
 #include <CLI11.hpp>
+#include <astroutils/image/ImageStretcher.hpp>
 #include <filesystem>
 #include <functional>
-#include <astroutils/image/ImageStretcher.hpp>
 #include <map>
 #include <string>
 #include <vector>
 
 class StretcherConfig {
 public:
-  using Type = utils::image::ImageStretcherOptions::Type;
+  using Type = astroutils::image::ImageStretcherOptions::Type;
   std::filesystem::path file;
   std::vector<Type> stretchTypes = {Type::CLAHE};
   double claheClipLimit = 10;

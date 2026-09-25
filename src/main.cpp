@@ -1,16 +1,17 @@
 #include "Config.h"
 #include "Subcommand.h"
-#include <astroutils/image/SharpnessEstimator.hpp>
 #include "sorter/SorterApp.h"
 #include "stacker/StackerApp.h"
 #include "stretcher/StretcherApp.h"
-#include <astroutils/TerminateHandler.hpp>
 #include <astroutils/cli/colors.hpp>
+#include <astroutils/exception/TerminateHandler.hpp>
+#include <astroutils/image/SharpnessEstimator.hpp>
 #include <utility>
 
-using utils::cli::bold;
-using utils::image::SharpnessEstimatorGaussian;
-using utils::logging::Logger;
+using astroutils::cli::bold;
+using astroutils::exception::TerminateHandler;
+using astroutils::image::SharpnessEstimatorGaussian;
+using astroutils::logging::Logger;
 
 int main(const int argc, const char **argv) {
   TerminateHandler::install();

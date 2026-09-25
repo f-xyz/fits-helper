@@ -6,10 +6,10 @@
 
 using std::chrono::seconds;
 using std::filesystem::path;
-using utils::benchmarking::Timer;
-using utils::process::exec;
-using utils::string::quote;
-using utils::string::trim;
+using astroutils::benchmarking::Timer;
+using astroutils::process::exec;
+using astroutils::string::quote;
+using astroutils::string::trim;
 
 ScriptResult ScriptRunner::execute(const path &output,
                                    const Progress &progress) {
