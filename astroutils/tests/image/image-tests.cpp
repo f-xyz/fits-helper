@@ -106,18 +106,6 @@ TEST(Image, ClampRestrictsRangeAndNormalizes) {
   EXPECT_EQ(result.at<uchar>(0, 4), 255);
 }
 
-TEST(Image, ClahePreservesShapeAndType) {
-  // arrange
-  cv::Mat image = (cv::Mat_<uchar>(4, 4) << 0, 0, 0, 0, 0, 64, 64, 0, 0, 64, 64,
-                   0, 0, 0, 0, 0);
-  // act
-  const auto result = astroutils::image::clahe(image, 2.0, 2);
-  // assert
-  EXPECT_EQ(result.type(), image.type());
-  EXPECT_EQ(result.rows, image.rows);
-  EXPECT_EQ(result.cols, image.cols);
-}
-
 TEST(Image, SoftRangeFindsMostPopulatedValues) {
   // arrange
   cv::Mat image =

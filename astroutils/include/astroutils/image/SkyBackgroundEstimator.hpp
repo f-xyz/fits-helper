@@ -1,10 +1,15 @@
+////////////////////////////////////////
+// GENERATED ///////////////////////////
+////////////////////////////////////////
+
 #pragma once
 
+#include <cstdint>
 #include <opencv2/core.hpp>
 
 namespace astroutils::stars {
 
-enum class BackgroundMethod {
+enum class BackgroundMethod : std::uint8_t {
   Constant,    // Constant background estimated using robust sigma-clipping / median
   GridInterpolation // Grid-based local background estimation with bilinear interpolation
 };
@@ -33,8 +38,8 @@ public:
   [[nodiscard]] BackgroundResult removeBackground(const cv::Mat &image) const;
 
   // Helper method to perform iterative sigma clipping on pixel data
-  static void computeSigmaClippedStats(const cv::Mat &singleChannelFloatImg, 
-                                       double &outMean, 
+  static void computeSigmaClippedStats(const cv::Mat &singleChannelFloatImg,
+                                       double &outMean,
                                        double &outStdDev,
                                        double sigmaThreshold = 3.0,
                                        int maxIterations = 5);

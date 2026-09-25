@@ -5,17 +5,33 @@
 namespace astroutils::image {
 
 cv::Mat ImageStretcher::stretch(const cv::Mat &image) {
-  cv::Mat norm = getNormalizedLab(image);
+  if (image.empty()) {
+    return {};
+  }
+
+  cv::Mat color;
+  if (image.channels() == 1) {
+    cv::Mat raw;
+    image.convertTo(raw, CV_16U);
+    cv::cvtColor(raw, color, cv::COLOR_BayerRG2BGR_EA);
+  } else {
+    color = image;
+  }
+
+  cv::Mat input;
+  color.convertTo(input, CV_32F);
+
+  cv::Mat norm = getNormalizedLab(input);
   std::vector<cv::Mat> channels = astroutils::image::split(norm);
   cv::Mat lightness = getLightness(channels[0]);
 
   for (const auto &type : options.types) {
     switch (type) {
     case ImageStretcherOptions::Type::CLAHE:
-      stretchClahe(channels[0], options.claheClipLimit, options.claheTileSize);
+      channels[0] = stretchClahe(channels[0], options.claheClipLimit, options.claheTileSize);
       break;
     case ImageStretcherOptions::Type::Asinh:
-      stretchAsinh(channels[0], options.asinhFactor);
+      channels[0] = stretchAsinh(channels[0], options.asinhFactor);
       break;
     case ImageStretcherOptions::Type::Histogram:
       using namespace astroutils::image;
@@ -55,29 +71,33 @@ cv::Mat ImageStretcher::getLightness(const cv::Mat &lightness) {
   return result;
 }
 
-void ImageStretcher::stretchClahe(cv::Mat &image, double clipLimit,
-                                  int tileSize) {
-  auto clahe = cv::createCLAHE(clipLimit, cv::Size(tileSize, tileSize));
-  clahe->apply(image, image);
+cv::Mat ImageStretcher::stretchClahe(cv::Mat &image, double clipLimit, int tileSize) {
+  cv::Mat result;
+  const auto clahe = cv::createCLAHE(clipLimit, cv::Size(tileSize, tileSize));
+  clahe->apply(image, result);
+  return result;
 }
 
-void ImageStretcher::stretchAsinh(cv::Mat &image, float factor) {
-  image.convertTo(image, CV_32F);
+cv::Mat ImageStretcher::stretchAsinh(cv::Mat &image, float factor) {
+  cv::Mat result;
+
+  image.convertTo(result, CV_32F);
 
   double min, max;
-  cv::minMaxLoc(image, &min, &max);
-  image -= min;
+  cv::minMaxLoc(result, &min, &max);
+  result -= min;
 
-  image.forEach<float>([factor](float &pixel, const int *) {
+  result.forEach<float>([factor](float &pixel, const int *) {
     pixel = std::asinh(factor * pixel) / std::asinh(factor);
   });
 
-  cv::normalize(image, image, 0, 255, cv::NORM_MINMAX, CV_32F);
-  image.convertTo(image, CV_8U);
+  cv::normalize(result, result, 0, 255, cv::NORM_MINMAX, CV_32F);
+  result.convertTo(result, CV_8U);
+
+  return result;
 }
 
-void ImageStretcher::scaleChroma(std::vector<cv::Mat> &channels,
-                                 const cv::Mat &lightness) {
+void ImageStretcher::scaleChroma(std::vector<cv::Mat> &channels, const cv::Mat &lightness) {
   for (int i = 0; i < 3; ++i) {
     channels[i].convertTo(channels[i], CV_32F);
     if (i > 0) {

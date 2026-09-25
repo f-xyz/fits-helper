@@ -22,17 +22,18 @@ class ImageStretcher {
   ImageStretcherOptions options;
 
 public:
-  explicit ImageStretcher(const ImageStretcherOptions &options = {}) : options(options) {}
+  explicit ImageStretcher(const ImageStretcherOptions &options = {})
+      : options(options) {}
+
   cv::Mat stretch(const cv::Mat &image);
 
 private:
   static cv::Mat getNormalizedLab(const cv::Mat &image);
   static cv::Mat getLightness(const cv::Mat &lightness);
-  static void stretchClahe(cv::Mat &image, double clipLimit = 50.0,
-                           int tileSize = 8);
-  static void stretchAsinh(cv::Mat &image, float factor = 100);
-  static void scaleChroma(std::vector<cv::Mat> &channels,
-                          const cv::Mat &lightness);
+
+  static cv::Mat stretchClahe(cv::Mat &image, double clipLimit, int tileSize);
+  static cv::Mat stretchAsinh(cv::Mat &image, float factor);
+  static void scaleChroma(std::vector<cv::Mat> &channels, const cv::Mat &lightness);
 };
 
 } // namespace astroutils::image

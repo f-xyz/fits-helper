@@ -23,7 +23,8 @@ public:
     logger.info("Image info: {}", info);
 
     const cv::Size size(1280, 960);
-    cv::resize(image, image, size);
+    cv::Mat resized;
+    cv::resize(image, resized, size);
 
     astroutils::image::ImageStretcher stretcher({
       .types = {stretchTypes},
@@ -34,7 +35,7 @@ public:
       .denoiseH = denoise
     });
 
-    const cv::Mat stretched = stretcher.stretch(image);
+    const cv::Mat stretched = stretcher.stretch(resized);
     astroutils::image::show(stretched);
   }
 };

@@ -17,7 +17,7 @@ public:
   double claheClipLimit = 10;
   int claheTileSize = 8;
   float asinhFactor = 0.2;
-  int denoise = 0;
+  float denoise = 0;
 
   void bindSubcommands(CLI::App &app,
                        const std::function<void(Subcommand)> &callback);

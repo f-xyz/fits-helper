@@ -1,8 +1,12 @@
+////////////////////////////////////////
+// GENERATED ///////////////////////////
+////////////////////////////////////////
+
 #pragma once
 
-#include <vector>
-#include <optional>
 #include <opencv2/core.hpp>
+#include <optional>
+#include <vector>
 
 namespace astroutils::stars {
 
@@ -22,10 +26,10 @@ struct Star {
 
 struct StarFinderOptions {
   double thresholdSigma = 3.0; // Detection threshold in stddev above background
-  int minArea = 3;            // Minimum connected component size in pixels
-  int maxArea = 1000;         // Maximum connected component size in pixels
-  int maxStars = 0;           // Maximum number of stars to return (0 = unlimited)
-  int starMargin = 5;         // Margin from image border
+  int minArea = 3;             // Minimum connected component size in pixels
+  int maxArea = 1000;          // Maximum connected component size in pixels
+  int maxStars = 0;            // Maximum number of stars to return (0 = unlimited)
+  int starMargin = 5;          // Margin from image border
 };
 
 class StarFinder {

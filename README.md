@@ -44,6 +44,9 @@ sudo apt install libcfitsio-dev # CFITSIO
 
 ## Building
 
+`fits-helper.sh` configures and builds the project, then runs the requested
+command. For example:
+
 ```sh
-./build.sh
+./fits-helper.sh --help
 ```
