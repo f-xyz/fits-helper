@@ -73,6 +73,7 @@ void ImageStretcher::stretchAsinh(cv::Mat &image, float factor) {
   });
 
   cv::normalize(image, image, 0, 255, cv::NORM_MINMAX, CV_32F);
+  image.convertTo(image, CV_8U);
 }
 
 void ImageStretcher::scaleChroma(std::vector<cv::Mat> &channels,

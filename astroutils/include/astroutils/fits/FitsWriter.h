@@ -2,6 +2,7 @@
 
 #include <fitsio.h>
 #include <opencv2/core.hpp>
+#include <vector>
 
 namespace astroutils::fits {
 
@@ -14,6 +15,13 @@ public:
 private:
   int getBitsPerPixel(int cvType) const;
   int getDataType(int cvType) const;
+  void createFitsImage(fitsfile *file, const cv::Mat &image, int bitsPerPixel,
+                       int &status) const;
+  void writePixels(fitsfile *file, const cv::Mat &image, int fitsDataType,
+                   int &status) const;
+  void writeBayerPattern(fitsfile *file, std::string_view bayerPattern,
+                         int &status) const;
+  std::vector<std::byte> packPixels(const cv::Mat &image) const;
 };
 
 } // namespace astroutils::fits

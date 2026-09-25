@@ -55,6 +55,23 @@ TEST(FitsReader, ReadsUShortImageFromMemoryBuffer) {
   EXPECT_EQ(image.at<unsigned short>(1, 1), 4);
 }
 
+TEST(FitsReader, ReadsSignedByteImage) {
+  const auto path = astroutils::fs::tmpFile();
+  createFitsFileTyped<signed char>(path, SBYTE_IMG, TSBYTE, cv::Size(2, 2),
+                                   {-128, -1, 0, 127});
+
+  astroutils::fits::FitsReader reader;
+  const auto image = reader.read(path);
+
+  EXPECT_EQ(image.type(), CV_8SC1);
+  EXPECT_EQ(image.at<signed char>(0, 0), -128);
+  EXPECT_EQ(image.at<signed char>(0, 1), -1);
+  EXPECT_EQ(image.at<signed char>(1, 0), 0);
+  EXPECT_EQ(image.at<signed char>(1, 1), 127);
+
+  std::filesystem::remove(path);
+}
+
 ////////////////////////////////////////
 // Error paths /////////////////////////
 ////////////////////////////////////////

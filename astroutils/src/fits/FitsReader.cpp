@@ -115,6 +115,7 @@ cv::Mat FitsReader::readImage(fitsfile *fptr, const FitsImageParams &params) {
 FitsDataType FitsReader::getDataType(int bitsPerPixel) const {
   switch (bitsPerPixel) {
     case BYTE_IMG:   return {CV_8UC1, TBYTE};
+    case SBYTE_IMG:  return {CV_8SC1, TSBYTE};
     case SHORT_IMG:  return {CV_16SC1, TSHORT};
     case USHORT_IMG: return {CV_16UC1, TUSHORT};
     case LONG_IMG:   return {CV_32SC1, TLONG};

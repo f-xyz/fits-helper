@@ -1,12 +1,13 @@
 #pragma once
 
+#include <cstdint>
 #include <opencv2/core.hpp>
 #include <vector>
 
 namespace astroutils::image {
 
 struct ImageStretcherOptions {
-  enum class Type { CLAHE, Asinh, Histogram };
+  enum class Type: std::uint8_t { CLAHE, Asinh, Histogram };
 
   std::vector<Type> types = {Type::CLAHE};
   double claheClipLimit = 10;
@@ -14,7 +15,7 @@ struct ImageStretcherOptions {
   float asinhFactor = 10;
   int histogramTopBins = 10;
   bool scaleChroma = true;
-  int denoiseH = 0;
+  float denoiseH = 0;
 };
 
 class ImageStretcher {
