@@ -10,10 +10,11 @@
 namespace astroutils::math {
 
 template <typename Range, typename Proj>
-using KeyOf = std::indirect_result_t<Proj, std::ranges::iterator_t<Range>>;
+using key_of = std::remove_cvref_t<
+    std::indirect_result_t<Proj, std::ranges::iterator_t<Range>>>;
 
 template <typename Range>
-using ValueOf = std::ranges::range_value_t<Range>;
+using value_of = std::ranges::range_value_t<Range>;
 
 ////////////////////////////////////////
 // Descriptive Statistics //////////////
@@ -128,11 +129,11 @@ auto rescale(const Range &range) {
 ////////////////////////////////////////
 
 template <std::ranges::input_range Range, typename Proj = std::identity>
-auto countBy(const Range& range, Proj proj = {}) {
-  using Key = KeyOf<Range, Proj>;
+auto count_by(const Range& range, Proj proj = {}) {
+  using Key = key_of<Range, Proj>;
   std::map<Key, int> histogram;
 
-  for (const auto &x : range) {
+  for (auto &&x : range) {
     const auto key = std::invoke(proj, x);
     ++histogram[key];
   }
@@ -141,12 +142,12 @@ auto countBy(const Range& range, Proj proj = {}) {
 }
 
 template <std::ranges::input_range Range, typename Proj = std::identity>
-auto groupBy(const Range &range, Proj proj = {}) {
-  using Key = KeyOf<Range, Proj>;
-  using Value = ValueOf<Range>;
+auto group_by(const Range &range, Proj proj = {}) {
+  using Key = key_of<Range, Proj>;
+  using Value = value_of<Range>;
   std::map<Key, std::vector<Value>> groups;
 
-  for (const auto &x : range) {
+  for (auto &&x : range) {
     const auto key = std::invoke(proj, x);
     groups[key].push_back(x);
   }
