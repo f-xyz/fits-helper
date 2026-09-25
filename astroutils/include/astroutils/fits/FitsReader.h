@@ -1,32 +1,23 @@
 #pragma once
 
+#include "common.h"
 #include <fitsio.h>
 #include <opencv2/core.hpp>
-#include <string>
 
-struct DataType {
-  int cvType;
-  int fitsType;
-};
-
-struct ImageParams {
-  int bitsPerPixel = 0;
-  int nDimensions = 0;
-  long dimensions[2] = {0, 0};
-  char bayer[FLEN_VALUE] = {0};
-};
+namespace utils::fits {
 
 class FitsReader {
-  fitsfile* openFile(const std::string &file);
-  bool findFirstImageHdu(fitsfile *fptr);
-  ImageParams getImageParams(fitsfile *fptr);
-  cv::Mat readImage(fitsfile *fptr, const ImageParams &params);
-  DataType getDataTypes(const ImageParams &params);
-  cv::Mat demosaic(const cv::Mat &image, const char *bayer);
-  int getBayerCode(const std::string &pattern);
-  int closeFile(fitsfile *fptr);
-
 public:
-  cv::Mat read(const std::string& file);
+  cv::Mat read(const std::filesystem::path &path);
   cv::Mat read(void *data, size_t size);
+
+private:
+  bool findFirstImageHdu(fitsfile *fptr);
+  FitsImageParams getImageParams(fitsfile *fptr);
+  cv::Mat readImage(fitsfile *fptr, const FitsImageParams &params);
+  FitsDataType getDataType(int bitsPerPixel) const;
+  cv::Mat demosaic(const cv::Mat &image, const char *bayer);
+  int getBayerCode(std::string_view pattern) const;
 };
+
+} // namespace utils::fits

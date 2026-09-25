@@ -8,8 +8,8 @@
 namespace utils::image {
 
 cv::Mat read(const std::string &file) {
-  std::string ext = std::filesystem::path(file).extension().string();
-  return ext == ".fit" || ext == ".fits" ? FitsReader().read(file)
+  const std::string ext = std::filesystem::path(file).extension().string();
+  return ext == ".fit" || ext == ".fits" ? utils::fits::FitsReader().read(file)
                                          : cv::imread(file);
 }
 
@@ -20,10 +20,10 @@ std::pair<double, double> range(const cv::Mat &image) {
 }
 
 cv::Mat normalize(const cv::Mat &image) {
-  auto [min, max] = range(image);
+  const auto [min, max] = range(image);
 
-  double scale = min < max ? 255.0 / (max - min) : 127.0;
-  double shift = -min * scale;
+  const double scale = min < max ? 255.0 / (max - min) : 127.0;
+  const double shift = -min * scale;
 
   cv::Mat result;
   image.convertTo(result, CV_8U, scale, shift);
@@ -37,7 +37,7 @@ std::vector<cv::Mat> split(const cv::Mat &image) {
   return channels;
 }
 
-cv::Mat merge(const std::vector<cv::Mat> channels) {
+cv::Mat merge(const std::vector<cv::Mat> &channels) {
   cv::Mat result;
   cv::merge(channels, result);
   return result;
@@ -84,9 +84,11 @@ cv::Mat clahe(const cv::Mat &image, double limit, int grid) {
 }
 
 std::tuple<int, int> soft_range(const cv::Mat &image, int nTopBins) {
-  auto hist = histogram(image, 256);
+  const auto hist = histogram(image, 256);
 
   std::vector<std::pair<int, int>> pairs;
+  pairs.reserve(hist.size());
+
   for (std::size_t i = 0; i < hist.size(); ++i) {
     pairs.push_back({i, hist[i]});
   }
@@ -98,24 +100,25 @@ std::tuple<int, int> soft_range(const cv::Mat &image, int nTopBins) {
 
   for (int i = 0; i < nTopBins; ++i) {
     int value = pairs[i].first;
-    if (max < value)
-      max = value;
-    if (min > value)
-      min = value;
+    if (max < value) max = value;
+    if (min > value) min = value;
   }
 
   return {min, max};
 }
 
 cv::Mat roi(const cv::Mat &image, int div) {
-  return image({image.cols / 2 - image.cols / (div * 2),
-                image.rows / 2 - image.rows / (div * 2), image.cols / div,
-                image.rows / div});
+  return image({
+    image.cols / 2 - image.cols / (div * 2),
+    image.rows / 2 - image.rows / (div * 2),
+    image.cols / div,
+    image.rows / div
+  });
 }
 
 std::string info(const cv::Mat &image) {
-  auto type = cv::typeToString(image.type());
-  auto minmax = range(image);
+  const auto type = cv::typeToString(image.type());
+  const auto minmax = range(image);
 
   return std::format("{} {}x{} [{}-{}]", type, image.cols, image.rows,
                      minmax.first, minmax.second);

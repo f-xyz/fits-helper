@@ -16,7 +16,7 @@ cv::Mat normalize(const cv::Mat &image);
 
 std::vector<cv::Mat> split(const cv::Mat &image);
 
-cv::Mat merge(const std::vector<cv::Mat> channels);
+cv::Mat merge(const std::vector<cv::Mat> &channels);
 
 cv::Mat lightness(const cv::Mat &image);
 

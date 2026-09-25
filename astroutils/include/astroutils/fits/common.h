@@ -1,0 +1,34 @@
+#pragma once
+
+namespace utils::fits {
+
+struct FitsFilePtr {
+  fitsfile *ptr = nullptr;
+
+  explicit FitsFilePtr(fitsfile *fptr = nullptr) : ptr(fptr) {}
+  FitsFilePtr(const FitsFilePtr &) = delete;
+  FitsFilePtr(FitsFilePtr &&) = delete;
+  FitsFilePtr &operator=(const FitsFilePtr &) = delete;
+  FitsFilePtr &operator=(FitsFilePtr &&) = delete;
+
+  ~FitsFilePtr() {
+    if (ptr) {
+      int status = 0;
+      fits_close_file(ptr, &status);
+    }
+  }
+};
+
+struct FitsImageParams {
+  int bitsPerPixel = 0;
+  int nDimensions = 0;
+  long dimensions[2] = {0, 0};
+  char bayerPattern[FLEN_VALUE] = {0};
+};
+
+struct FitsDataType {
+  int cvType;
+  int fitsType;
+};
+
+} // namespace utils::fits

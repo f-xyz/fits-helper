@@ -1,6 +1,6 @@
 # Astro Utils Library
 
-Astro Utils is a C++23 utility library for astronomy and scientific applications. It provides helpers for filesystem access, command execution, logging, CLI presentation, asynchronous tasks, image processing, and FITS file reading (tested with ZWO cameras!).
+Astro Utils is a C++23 utility library for astronomy and scientific applications. It provides helpers for filesystem access, command execution, logging, CLI presentation, asynchronous tasks, image processing, and FITS file reading / writing (tested with ZWO cameras!).
 
 ## Prerequisites
 

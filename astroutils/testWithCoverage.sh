@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
+shopt -s globstar
 
 ########################################
 # Building (Debug) #####################
 ########################################
+
+# Removing previous GCDA files,
+# needed only for llvm-cov-18
+rm -f -- build/**/*.gcda
 
 mkdir -p build/
 cmake -S . -B build -G Ninja \
@@ -22,7 +27,6 @@ cmake --build build -j4
 # Coverage #############################
 ########################################
 
-rm -fv build/**/*.gcda # for llvm-cov-18 only
 rm -rf coverage
 mkdir -p coverage
 cd coverage

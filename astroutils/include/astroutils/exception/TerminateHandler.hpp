@@ -8,8 +8,10 @@
 #include <stacktrace>
 #include <string>
 
+namespace utils::exception {
+
 class TerminateHandler final {
-  inline static std::atomic_flag isHandled;
+  inline static std::atomic_flag isHandled = false;
 
 public:
   static void install() {
@@ -58,3 +60,5 @@ private:
     }
   }
 };
+
+} // namespace utils::exception

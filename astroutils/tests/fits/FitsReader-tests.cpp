@@ -2,14 +2,13 @@
 #include <astroutils/fs.hpp>
 #include "helpers.hpp"
 
-TEST(FitsReader, InvalidMemoryReturnsEmptyMat) {
+TEST(FitsReader, InvalidMemoryThrows) {
   // arrange
-  FitsReader reader;
+  utils::fits::FitsReader reader;
   std::array<unsigned char, 4> invalid = {0, 1, 2, 3};
   // act
-  const auto result = reader.read(invalid.data(), invalid.size());
   // assert
-  EXPECT_TRUE(result.empty());
+  EXPECT_THROW(reader.read(invalid.data(), invalid.size()), std::runtime_error);
 }
 
 TEST(FitsReader, ReadsUShortImageFromFile) {
@@ -18,7 +17,7 @@ TEST(FitsReader, ReadsUShortImageFromFile) {
   createFitsFile(path);
 
   // act
-  FitsReader reader;
+  utils::fits::FitsReader reader;
   const auto image = reader.read(path);
 
   // assert
@@ -42,7 +41,7 @@ TEST(FitsReader, ReadsUShortImageFromMemoryBuffer) {
   std::filesystem::remove(path);
 
   // act
-  FitsReader reader;
+  utils::fits::FitsReader reader;
   const auto image = reader.read(bytes.data(), bytes.size());
 
   // assert
@@ -60,31 +59,26 @@ TEST(FitsReader, ReadsUShortImageFromMemoryBuffer) {
 // Error paths /////////////////////////
 ////////////////////////////////////////
 
-TEST(FitsReader, InvalidFilePathReturnsEmptyMat) {
-  FitsReader reader;
-  const auto result = reader.read("/nonexistent/path/to/file.fits");
-  EXPECT_TRUE(result.empty());
+TEST(FitsReader, InvalidFilePathThrows) {
+  utils::fits::FitsReader reader;
+  EXPECT_THROW(reader.read("/nonexistent/path/to/file.fits"), std::runtime_error);
 }
 
-TEST(FitsReader, FileWithNoImageHduReturnsEmptyMat) {
+TEST(FitsReader, FileWithNoImageHduThrows) {
   const auto path = utils::fs::tmpFile();
   createTableOnlyFitsFile(path);
 
-  FitsReader reader;
-  const auto result = reader.read(path);
-
-  EXPECT_TRUE(result.empty());
+  utils::fits::FitsReader reader;
+  EXPECT_THROW(reader.read(path), std::runtime_error);
   std::filesystem::remove(path);
 }
 
-TEST(FitsReader, MemoryWithNoImageHduReturnsEmptyMat) {
+TEST(FitsReader, MemoryWithNoImageHduThrows) {
   const auto path = utils::fs::tmpFile();
   createTableOnlyFitsFile(path);
   auto bytes = utils::fs::readFile(path);
   std::filesystem::remove(path);
 
-  FitsReader reader;
-  const auto result = reader.read(bytes.data(), bytes.size());
-
-  EXPECT_TRUE(result.empty());
+  utils::fits::FitsReader reader;
+  EXPECT_THROW(reader.read(bytes.data(), bytes.size()), std::runtime_error);
 }
