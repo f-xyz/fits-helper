@@ -1,6 +1,6 @@
-#include "astroutils/fits/common.h"
-#include "astroutils/fits/FitsWriter.h"
-#include "astroutils/exception/fail.hpp"
+#include <astroutils/fits/common.h>
+#include <astroutils/fits/FitsWriter.h>
+#include <astroutils/exception/fail.hpp>
 #include <cstdlib>
 #include <filesystem>
 

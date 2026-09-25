@@ -1,5 +1,5 @@
-#include "astroutils/fits/FitsReader.h"
-#include "astroutils/exception/fail.hpp"
+#include <astroutils/fits/FitsReader.h>
+#include <astroutils/exception/fail.hpp>
 #include <opencv2/imgproc.hpp>
 
 namespace utils::fits {
