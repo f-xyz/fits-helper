@@ -1,6 +1,6 @@
 #include <astroutils/process.hpp>
 
-namespace utils::process {
+namespace astroutils::process {
 
 ExecResult exec(const std::string &command, ExecCallback callback) {
   std::string output;
@@ -25,4 +25,4 @@ ExecResult exec(const std::string &command, ExecCallback callback) {
   return {output, exitCode};
 }
 
-} // namespace utils::process
+} // namespace astroutils::process

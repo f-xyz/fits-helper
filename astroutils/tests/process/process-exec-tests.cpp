@@ -6,7 +6,7 @@ TEST(Exec, CapturesCommandOutputAndExitCode) {
   // arrange
   const auto command = "printf hello";
   // act
-  const auto result = utils::process::exec(command);
+  const auto result = astroutils::process::exec(command);
   // assert
   EXPECT_THAT(result.output, Eq("hello"));
   EXPECT_EQ(result.code, 0);
@@ -16,7 +16,7 @@ TEST(Exec, PreservesMultilineOutput) {
   // arrange
   const auto command = "printf '%b' 'a\\nb\\n'";
   // act
-  const auto result = utils::process::exec(command);
+  const auto result = astroutils::process::exec(command);
   // assert
   EXPECT_THAT(result.output, Eq("a\nb\n"));
   EXPECT_EQ(result.code, 0);
@@ -28,7 +28,7 @@ TEST(Exec, CallbackReceivesEachLine) {
   auto callback = [&lines](const char *data) { lines.emplace_back(data); };
   const auto command = "printf '%b' 'line1\\nline2\\n'";
   // act
-  const auto result = utils::process::exec(command, callback);
+  const auto result = astroutils::process::exec(command, callback);
   // assert result
   EXPECT_EQ(result.output, "line1\nline2\n");
   EXPECT_EQ(result.code, 0);

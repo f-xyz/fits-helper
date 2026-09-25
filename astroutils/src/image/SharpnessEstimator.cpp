@@ -1,7 +1,7 @@
 #include <astroutils/image/SharpnessEstimator.hpp>
 #include <opencv2/imgproc.hpp>
 
-namespace utils::image {
+namespace astroutils::image {
 
 cv::Mat SharpnessEstimator::getGrayscaleImage(const cv::Mat &image) {
   cv::Mat gray, result;
@@ -58,4 +58,4 @@ double SharpnessEstimatorLaplacian::getSharpness(const cv::Mat &image) const {
   return getStdDev(laplacian);
 }
 
-} // namespace utils::image
+} // namespace astroutils::image

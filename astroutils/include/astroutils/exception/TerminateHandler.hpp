@@ -8,7 +8,7 @@
 #include <stacktrace>
 #include <string>
 
-namespace utils::exception {
+namespace astroutils::exception {
 
 class TerminateHandler final {
   inline static std::atomic_flag isHandled = false;
@@ -61,4 +61,4 @@ private:
   }
 };
 
-} // namespace utils::exception
+} // namespace astroutils::exception

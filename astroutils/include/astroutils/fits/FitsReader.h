@@ -4,7 +4,7 @@
 #include <fitsio.h>
 #include <opencv2/core.hpp>
 
-namespace utils::fits {
+namespace astroutils::fits {
 
 class FitsReader {
 public:
@@ -20,4 +20,4 @@ private:
   int getBayerCode(std::string_view pattern) const;
 };
 
-} // namespace utils::fits
+} // namespace astroutils::fits

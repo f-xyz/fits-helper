@@ -3,7 +3,7 @@
 #include <opencv2/core.hpp>
 #include <vector>
 
-namespace utils::image {
+namespace astroutils::image {
 
 struct ImageStretcherOptions {
   enum class Type { CLAHE, Asinh, Histogram };
@@ -34,4 +34,4 @@ private:
                           const cv::Mat &lightness);
 };
 
-} // namespace utils::image
+} // namespace astroutils::image

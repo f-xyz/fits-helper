@@ -11,11 +11,11 @@ TEST(FitsWriterTest, WriteAndReadBackFile) {
 
   // act
   std::string filename = "test_writer_output.fits";
-  utils::fits::FitsWriter writer;
+  astroutils::fits::FitsWriter writer;
   EXPECT_TRUE(writer.write(filename, original, "RGGB"));
 
   // assert
-  utils::fits::FitsReader reader;
+  astroutils::fits::FitsReader reader;
   cv::Mat loaded = reader.read(filename);
 
   EXPECT_FALSE(loaded.empty());

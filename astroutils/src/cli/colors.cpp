@@ -1,7 +1,7 @@
 #include <astroutils/cli/colors.hpp>
 #include <regex>
 
-namespace utils::cli {
+namespace astroutils::cli {
 
 std::string rgb(const std::string &s, byte r, byte g, byte b) {
   const auto red = std::to_string(r);
@@ -29,4 +29,4 @@ std::string removeColors(const std::string &s) {
   return std::regex_replace(s, regex, "");
 }
 
-} // namespace utils::cli
+} // namespace astroutils::cli

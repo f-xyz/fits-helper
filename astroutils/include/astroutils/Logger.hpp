@@ -8,7 +8,7 @@
 #include <string>
 #include <utility>
 
-namespace utils::logging {
+namespace astroutils::logging {
 
 class Logger {
   std::ofstream file;
@@ -22,7 +22,7 @@ public:
   template <typename... Args>
   void header(const std::format_string<Args...> &fmt, Args &&...args) {
     auto message = std::format(fmt, std::forward<Args>(args)...);
-    printLine(utils::cli::bold(message));
+    printLine(astroutils::cli::bold(message));
     writeLine(message, "INFO");
   }
 
@@ -62,4 +62,4 @@ protected:
                  const std::string &severity = "INFO");
 };
 
-} // namespace utils::logging
+} // namespace astroutils::logging

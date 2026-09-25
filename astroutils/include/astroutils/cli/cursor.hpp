@@ -8,7 +8,7 @@
 \033[2J : Clears the entire screen.
 */
 
-namespace utils::cursor {
+namespace astroutils::cursor {
 
 namespace constants {
 
@@ -20,4 +20,4 @@ inline constexpr const char *CLEAR_SCREEN = "\033[2J";
 
 } // namespace constants
 
-} // namespace utils::cursor
+} // namespace astroutils::cursor

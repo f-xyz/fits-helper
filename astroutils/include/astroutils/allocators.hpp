@@ -2,7 +2,7 @@
 
 #include <memory>
 
-namespace utils::allocators {
+namespace astroutils::allocators {
 
 template <typename T> struct UninitializedAllocator : std::allocator<T> {
   template <typename U, typename... Args> void construct(U *, Args &&...) {
@@ -10,4 +10,4 @@ template <typename T> struct UninitializedAllocator : std::allocator<T> {
   }
 };
 
-} // namespace utils::allocators
+} // namespace astroutils::allocators

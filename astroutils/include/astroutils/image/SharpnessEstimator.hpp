@@ -2,7 +2,7 @@
 
 #include <opencv2/core.hpp>
 
-namespace utils::image {
+namespace astroutils::image {
 
 class SharpnessEstimator {
 public:
@@ -35,4 +35,4 @@ public:
   double getSharpness(const cv::Mat &image) const override;
 };
 
-} // namespace utils::image
+} // namespace astroutils::image

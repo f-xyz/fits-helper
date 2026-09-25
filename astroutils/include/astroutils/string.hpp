@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace utils::string {
+namespace astroutils::string {
 
 ////////////////////////////////////////
 // Splitting and Joining ///////////////
@@ -76,4 +76,4 @@ std::string quote(const std::string &string, const std::string &wrapper = "\"");
 
 std::string formatNumber(double number, int precision = 2);
 
-} // namespace utils::string
+} // namespace astroutils::string

@@ -7,7 +7,7 @@ TEST(Image, RangeReturnsMinAndMax) {
   // arrange
   cv::Mat image = (cv::Mat_<uchar>(2, 2) << 10, 20, 30, 40);
   // act
-  const auto result = utils::image::range(image);
+  const auto result = astroutils::image::range(image);
   // assert
   EXPECT_THAT(result, Eq(std::make_pair(10.0, 40.0)));
 }
@@ -16,7 +16,7 @@ TEST(Image, NormalizeScalesTo8BitRange) {
   // arrange
   cv::Mat image = (cv::Mat_<float>(1, 3) << 10.0f, 20.0f, 30.0f);
   // act
-  const auto result = utils::image::normalize(image);
+  const auto result = astroutils::image::normalize(image);
   // assert
   EXPECT_EQ(result.type(), CV_8UC1);
   ASSERT_EQ(result.total(), 3u);
@@ -33,8 +33,8 @@ TEST(Image, SplitAndMergeRoundTrip) {
       (cv::Mat_<uchar>(1, 2) << 5, 6),
   };
   // act
-  const auto merged = utils::image::merge(channels);
-  const auto split = utils::image::split(merged);
+  const auto merged = astroutils::image::merge(channels);
+  const auto split = astroutils::image::split(merged);
   // assert
   EXPECT_EQ(split.size(), 3u);
   for (std::size_t i = 0; i < channels.size(); ++i) {
@@ -49,7 +49,7 @@ TEST(Image, LightnessReturnsLChannelForColorImage) {
   // arrange
   cv::Mat image(1, 1, CV_8UC3, cv::Scalar(0, 0, 255));
   // act
-  const auto result = utils::image::lightness(image);
+  const auto result = astroutils::image::lightness(image);
   // assert
   EXPECT_EQ(result.type(), CV_8UC1);
   EXPECT_EQ(result.rows, 1);
@@ -61,7 +61,7 @@ TEST(Image, RoiReturnsCenteredCrop) {
   cv::Mat image = (cv::Mat_<uchar>(4, 4) << 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
                    12, 13, 14, 15, 16);
   // act
-  const auto result = utils::image::roi(image, 2);
+  const auto result = astroutils::image::roi(image, 2);
   // assert
   EXPECT_EQ(result.rows, 2);
   EXPECT_EQ(result.cols, 2);
@@ -75,7 +75,7 @@ TEST(Image, InfoIncludesTypeDimensionsAndRange) {
   // arrange
   cv::Mat image = (cv::Mat_<uchar>(2, 2) << 1, 2, 3, 4);
   // act
-  const auto result = utils::image::info(image);
+  const auto result = astroutils::image::info(image);
   // assert
   EXPECT_THAT(result, HasSubstr("CV_8UC1 2x2 [1-4]"));
 }
@@ -84,7 +84,7 @@ TEST(Image, HistogramCountsPixelsInBins) {
   // arrange
   cv::Mat image = (cv::Mat_<uchar>(2, 2) << 0, 0, 255, 255);
   // act
-  const auto hist = utils::image::histogram(image, 256);
+  const auto hist = astroutils::image::histogram(image, 256);
   // assert
   EXPECT_EQ(hist.size(), 256u);
   EXPECT_EQ(hist[0], 2);
@@ -95,7 +95,7 @@ TEST(Image, ClampRestrictsRangeAndNormalizes) {
   // arrange
   cv::Mat image = (cv::Mat_<uchar>(1, 5) << 0, 5, 10, 15, 20);
   // act
-  const auto result = utils::image::clamp(image, 5, 15);
+  const auto result = astroutils::image::clamp(image, 5, 15);
   // assert
   EXPECT_EQ(result.type(), CV_8UC1);
   ASSERT_EQ(result.total(), 5u);
@@ -111,7 +111,7 @@ TEST(Image, ClahePreservesShapeAndType) {
   cv::Mat image = (cv::Mat_<uchar>(4, 4) << 0, 0, 0, 0, 0, 64, 64, 0, 0, 64, 64,
                    0, 0, 0, 0, 0);
   // act
-  const auto result = utils::image::clahe(image, 2.0, 2);
+  const auto result = astroutils::image::clahe(image, 2.0, 2);
   // assert
   EXPECT_EQ(result.type(), image.type());
   EXPECT_EQ(result.rows, image.rows);
@@ -123,7 +123,7 @@ TEST(Image, SoftRangeFindsMostPopulatedValues) {
   cv::Mat image =
       (cv::Mat_<uchar>(2, 5) << 10, 10, 10, 20, 20, 30, 30, 40, 40, 40);
   // act
-  const auto [min, max] = utils::image::soft_range(image, 2);
+  const auto [min, max] = astroutils::image::soft_range(image, 2);
   // assert
   EXPECT_EQ(min, 10);
   EXPECT_EQ(max, 40);

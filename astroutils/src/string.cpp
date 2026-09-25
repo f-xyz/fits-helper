@@ -3,7 +3,7 @@
 #include <codecvt>
 #include <ranges>
 
-namespace utils::string {
+namespace astroutils::string {
 
 ////////////////////////////////////////
 // Splitting and Joining ///////////////
@@ -39,7 +39,7 @@ std::optional<std::string> regex(const std::regex &regex,
 std::optional<std::string> regex(const std::string &regex,
                                  const std::string &string,
                                  const std::size_t nMatch) {
-  return utils::string::regex(std::regex(regex), string, nMatch);
+  return astroutils::string::regex(std::regex(regex), string, nMatch);
 }
 
 std::string regex_replace(const std::regex &regex, const std::string &string,
@@ -148,7 +148,7 @@ std::string formatNumber(double number, int precision) {
          : x < 0 ? 0x800000  // Red
                  : 0x888888; // Gray
   };
-  return std::format("{}", utils::cli::rgb(string, getColor(number)));
+  return std::format("{}", astroutils::cli::rgb(string, getColor(number)));
 }
 
-}; // namespace utils::string
+}; // namespace astroutils::string

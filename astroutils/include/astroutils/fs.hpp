@@ -7,7 +7,7 @@
 #include <system_error>
 #include <vector>
 
-namespace utils::fs {
+namespace astroutils::fs {
 
 namespace internal {
 
@@ -100,4 +100,4 @@ inline std::string tmpFile() {
   return tmpFile(dir);
 }
 
-} // namespace utils::fs
+} // namespace astroutils::fs

@@ -3,7 +3,7 @@
 #include <fitsio.h>
 #include <opencv2/core.hpp>
 
-namespace utils::fits {
+namespace astroutils::fits {
 
 class FitsWriter {
 public:
@@ -16,4 +16,4 @@ private:
   int getDataType(int cvType) const;
 };
 
-} // namespace utils::fits
+} // namespace astroutils::fits

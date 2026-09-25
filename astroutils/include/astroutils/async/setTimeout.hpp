@@ -6,7 +6,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace utils::async {
+namespace astroutils::async {
 
 template <typename F>
 auto setTimeout(F&& callback, std::chrono::milliseconds delay) {
@@ -31,4 +31,4 @@ auto setTimeout(F&& callback, std::chrono::milliseconds delay) {
   return future;
 }
 
-}; // namespace utils::async
+}; // namespace astroutils::async

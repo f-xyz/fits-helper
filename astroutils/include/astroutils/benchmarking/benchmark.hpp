@@ -5,7 +5,7 @@
 #include <functional>
 #include <utility>
 
-namespace utils::benchmarking {
+namespace astroutils::benchmarking {
 
 template <concepts::Duration Units = std::chrono::milliseconds, typename F,
           typename... Args>
@@ -16,4 +16,4 @@ Units benchmark(F &&fn, Args &&...args) {
   return timer.measure();
 }
 
-} // namespace utils::benchmarking
+} // namespace astroutils::benchmarking

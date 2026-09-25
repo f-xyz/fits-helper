@@ -6,7 +6,7 @@
 #include <ranges>
 #include <type_traits>
 
-namespace utils::concepts {
+namespace astroutils::concepts {
 
 template <typename T>
 concept ArithmeticRange = std::ranges::input_range<T> &&
@@ -31,4 +31,4 @@ concept Duration =
     } &&
     std::same_as<T, std::chrono::duration<typename T::rep, typename T::period>>;
 
-} // namespace utils::concepts
+} // namespace astroutils::concepts

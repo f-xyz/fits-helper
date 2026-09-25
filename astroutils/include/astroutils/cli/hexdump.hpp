@@ -4,7 +4,7 @@
 #include <span>
 #include <string>
 
-namespace utils::cli {
+namespace astroutils::cli {
 
 std::string hexdump(std::span<const std::byte> data);
 
@@ -15,4 +15,4 @@ std::string hexdump(const T *data, const std::size_t size) {
   return hexdump(span);
 }
 
-} // namespace utils::cli
+} // namespace astroutils::cli

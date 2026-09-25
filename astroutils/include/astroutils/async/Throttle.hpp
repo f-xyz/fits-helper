@@ -5,7 +5,7 @@
 #include <mutex>
 #include <thread>
 
-namespace utils::async {
+namespace astroutils::async {
 
 class Throttle final {
   bool isWaiting = false;
@@ -40,4 +40,4 @@ public:
   }
 };
 
-}; // namespace utils::async
+}; // namespace astroutils::async

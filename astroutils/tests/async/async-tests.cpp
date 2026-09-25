@@ -6,7 +6,7 @@ using namespace std::chrono_literals;
 TEST(AsyncThrottle, CallInvokesCallbackAtMostOncePerWindow) {
   // arrange
   std::atomic<int> calls{0};
-  utils::async::Throttle throttle(20ms, [&] { ++calls; });
+  astroutils::async::Throttle throttle(20ms, [&] { ++calls; });
 
   // act
   throttle.call();
@@ -21,7 +21,7 @@ TEST(AsyncThrottle, CallInvokesCallbackAtMostOncePerWindow) {
 TEST(AsyncThrottle, SetTimeoutResolvesAfterDelay) {
   // arrange
   std::atomic<int> calls {0};
-  auto future = utils::async::setTimeout(
+  auto future = astroutils::async::setTimeout(
       [&] {
         ++calls;
         return 7;

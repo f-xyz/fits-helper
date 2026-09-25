@@ -2,9 +2,9 @@
 #include <astroutils/exception/fail.hpp>
 #include <opencv2/imgproc.hpp>
 
-namespace utils::fits {
+namespace astroutils::fits {
 
-using utils::exception::fail;
+using astroutils::exception::fail;
 
 cv::Mat FitsReader::read(const std::filesystem::path &path) {
   FitsFilePtr file;
@@ -144,4 +144,4 @@ int FitsReader::getBayerCode(std::string_view pattern) const {
   fail("Unsupported Bayer pattern: {}.", pattern);
 }
 
-} // namespace utils::fits
+} // namespace astroutils::fits

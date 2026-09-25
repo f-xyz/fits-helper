@@ -1,6 +1,6 @@
 #pragma once
 
-namespace utils::exception {
+namespace astroutils::exception {
 
 template <typename... Args>
 [[noreturn]] void fail(std::string_view message, Args &&...args) {
@@ -9,4 +9,4 @@ template <typename... Args>
   throw std::runtime_error(error);
 }
 
-} // namespace utils::exception
+} // namespace astroutils::exception

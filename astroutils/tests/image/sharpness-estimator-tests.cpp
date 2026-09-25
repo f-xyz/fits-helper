@@ -4,9 +4,9 @@
 using ::testing::DoubleNear;
 using ::testing::Gt;
 using ::testing::Lt;
-using utils::image::SharpnessEstimator;
-using utils::image::SharpnessEstimatorGaussian;
-using utils::image::SharpnessEstimatorLaplacian;
+using astroutils::image::SharpnessEstimator;
+using astroutils::image::SharpnessEstimatorGaussian;
+using astroutils::image::SharpnessEstimatorLaplacian;
 
 ////////////////////////////////////////
 // Static Helpers //////////////////////

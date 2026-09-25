@@ -19,10 +19,10 @@ void createFitsFile(const std::string &path) {
 }
 
 std::vector<std::byte> createMemoryFitsFile() {
-  const auto path = utils::fs::tmpFile();
+  const auto path = astroutils::fs::tmpFile();
   createFitsFile(path);
 
-  auto bytes = utils::fs::readFile(path);
+  auto bytes = astroutils::fs::readFile(path);
   std::filesystem::remove(path);
 
   return bytes;

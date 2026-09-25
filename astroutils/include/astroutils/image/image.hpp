@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 
-namespace utils::image {
+namespace astroutils::image {
 
 cv::Mat read(const std::string &file);
 
@@ -35,4 +35,4 @@ std::string info(const cv::Mat &image);
 void show(const cv::Mat &image, const int delay = 0,
           const cv::Size size = cv::Size(1280, 960));
 
-} // namespace utils::image
+} // namespace astroutils::image

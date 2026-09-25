@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace utils::cli {
+namespace astroutils::cli {
 
 template <concepts::ArithmeticRange R>
 std::string spark(const R &seq) {
@@ -31,7 +31,7 @@ std::string spark(const R &seq) {
   std::string result = "[";
 
   for (const auto &x : seq) {
-    const auto norm = utils::math::normalize(x, range);
+    const auto norm = astroutils::math::normalize(x, range);
     const auto bin = std::floor(norm * (nBins - 1));
 
     const int r = 255;
@@ -48,4 +48,4 @@ std::string spark(std::initializer_list<T> seq) {
   return spark(std::span<const T> {seq});
 }
 
-}; // namespace utils::cli
+}; // namespace astroutils::cli

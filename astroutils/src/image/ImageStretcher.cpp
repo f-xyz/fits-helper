@@ -2,11 +2,11 @@
 #include <astroutils/image/image.hpp>
 #include <opencv2/photo.hpp>
 
-namespace utils::image {
+namespace astroutils::image {
 
 cv::Mat ImageStretcher::stretch(const cv::Mat &image) {
   cv::Mat norm = getNormalizedLab(image);
-  std::vector<cv::Mat> channels = utils::image::split(norm);
+  std::vector<cv::Mat> channels = astroutils::image::split(norm);
   cv::Mat lightness = getLightness(channels[0]);
 
   for (const auto &type : options.types) {
@@ -18,7 +18,7 @@ cv::Mat ImageStretcher::stretch(const cv::Mat &image) {
       stretchAsinh(channels[0], options.asinhFactor);
       break;
     case ImageStretcherOptions::Type::Histogram:
-      using namespace utils::image;
+      using namespace astroutils::image;
       cv::Mat norm = normalize(channels[0]);
       auto [min, max] = soft_range(norm, options.histogramTopBins);
       channels[0] = clamp(norm, min, max);
@@ -97,4 +97,4 @@ void ImageStretcher::scaleChroma(std::vector<cv::Mat> &channels,
   }
 }
 
-} // namespace utils::image
+} // namespace astroutils::image

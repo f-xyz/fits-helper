@@ -7,7 +7,7 @@
 #include <random>
 #include <ranges>
 
-namespace utils::math {
+namespace astroutils::math {
 
 template <typename Range, typename Proj>
 using KeyOf = std::indirect_result_t<Proj, std::ranges::iterator_t<Range>>;
@@ -178,4 +178,4 @@ inline T random(T min = 0, T max = std::numeric_limits<T>::max()) {
   return numbers(gen);
 }
 
-} // namespace utils::math
+} // namespace astroutils::math

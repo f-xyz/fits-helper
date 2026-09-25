@@ -3,7 +3,7 @@
 TEST(BenchmarkingBenchmark, benchmark) {
   // arrange
   // act
-  auto result = utils::benchmarking::benchmark([]() { 
+  auto result = astroutils::benchmarking::benchmark([]() { 
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
   });
   // assert

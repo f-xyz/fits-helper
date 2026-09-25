@@ -4,7 +4,7 @@
 #include <optional>
 #include <string>
 
-namespace utils::process {
+namespace astroutils::process {
 
 struct ExecResult {
   std::string output;
@@ -16,4 +16,4 @@ using ExecCallback = std::optional<std::function<void(const char *)>>;
 ExecResult exec(const std::string &command,
                 ExecCallback callback = std::nullopt);
 
-}; // namespace utils::process
+}; // namespace astroutils::process

@@ -17,7 +17,7 @@ Advanced Colors (256-Color & True Color RGB):
 */
 
 
-namespace utils::cli {
+namespace astroutils::cli {
 
 namespace constants {
 
@@ -49,4 +49,4 @@ std::string rgb(const std::string &s, const unsigned int color);
 std::string bold(const std::string &s);
 std::string removeColors(const std::string &s);
 
-} // namespace utils::cli
+} // namespace astroutils::cli

@@ -4,7 +4,7 @@
 
 TEST(FitsReader, InvalidMemoryThrows) {
   // arrange
-  utils::fits::FitsReader reader;
+  astroutils::fits::FitsReader reader;
   std::array<unsigned char, 4> invalid = {0, 1, 2, 3};
   // act
   // assert
@@ -13,11 +13,11 @@ TEST(FitsReader, InvalidMemoryThrows) {
 
 TEST(FitsReader, ReadsUShortImageFromFile) {
   // arrange
-  const auto path = utils::fs::tmpFile();
+  const auto path = astroutils::fs::tmpFile();
   createFitsFile(path);
 
   // act
-  utils::fits::FitsReader reader;
+  astroutils::fits::FitsReader reader;
   const auto image = reader.read(path);
 
   // assert
@@ -35,13 +35,13 @@ TEST(FitsReader, ReadsUShortImageFromFile) {
 
 TEST(FitsReader, ReadsUShortImageFromMemoryBuffer) {
   // arrange
-  const auto path = utils::fs::tmpFile();
+  const auto path = astroutils::fs::tmpFile();
   createFitsFile(path);
-  auto bytes = utils::fs::readFile(path);
+  auto bytes = astroutils::fs::readFile(path);
   std::filesystem::remove(path);
 
   // act
-  utils::fits::FitsReader reader;
+  astroutils::fits::FitsReader reader;
   const auto image = reader.read(bytes.data(), bytes.size());
 
   // assert
@@ -60,25 +60,25 @@ TEST(FitsReader, ReadsUShortImageFromMemoryBuffer) {
 ////////////////////////////////////////
 
 TEST(FitsReader, InvalidFilePathThrows) {
-  utils::fits::FitsReader reader;
+  astroutils::fits::FitsReader reader;
   EXPECT_THROW(reader.read("/nonexistent/path/to/file.fits"), std::runtime_error);
 }
 
 TEST(FitsReader, FileWithNoImageHduThrows) {
-  const auto path = utils::fs::tmpFile();
+  const auto path = astroutils::fs::tmpFile();
   createTableOnlyFitsFile(path);
 
-  utils::fits::FitsReader reader;
+  astroutils::fits::FitsReader reader;
   EXPECT_THROW(reader.read(path), std::runtime_error);
   std::filesystem::remove(path);
 }
 
 TEST(FitsReader, MemoryWithNoImageHduThrows) {
-  const auto path = utils::fs::tmpFile();
+  const auto path = astroutils::fs::tmpFile();
   createTableOnlyFitsFile(path);
-  auto bytes = utils::fs::readFile(path);
+  auto bytes = astroutils::fs::readFile(path);
   std::filesystem::remove(path);
 
-  utils::fits::FitsReader reader;
+  astroutils::fits::FitsReader reader;
   EXPECT_THROW(reader.read(bytes.data(), bytes.size()), std::runtime_error);
 }

@@ -1,7 +1,7 @@
 #include <astroutils/cli/hexdump.hpp>
 #include <format>
 
-namespace utils::cli {
+namespace astroutils::cli {
 
 std::string hexdump(std::span<const std::byte> data) {
   std::string result;
@@ -51,4 +51,4 @@ std::string hexdump(std::span<const std::byte> data) {
   return result;
 }
 
-} // namespace utils::cli
+} // namespace astroutils::cli

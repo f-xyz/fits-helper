@@ -5,11 +5,11 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
 
-namespace utils::image {
+namespace astroutils::image {
 
 cv::Mat read(const std::string &file) {
   const std::string ext = std::filesystem::path(file).extension().string();
-  return ext == ".fit" || ext == ".fits" ? utils::fits::FitsReader().read(file)
+  return ext == ".fit" || ext == ".fits" ? astroutils::fits::FitsReader().read(file)
                                          : cv::imread(file);
 }
 
@@ -131,4 +131,4 @@ void show(const cv::Mat &image, const int delay, const cv::Size size) {
   cv::waitKey(delay);
 }
 
-} // namespace utils::image
+} // namespace astroutils::image

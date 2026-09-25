@@ -4,9 +4,9 @@
 #include <cstdlib>
 #include <filesystem>
 
-namespace utils::fits {
+namespace astroutils::fits {
 
-using utils::exception::fail;
+using astroutils::exception::fail;
 
 bool FitsWriter::write(const std::filesystem::path &path,
                        const cv::Mat &image) {
@@ -78,4 +78,4 @@ int FitsWriter::getDataType(int cvType) const {
   }
 }
 
-} // namespace utils::fits
+} // namespace astroutils::fits

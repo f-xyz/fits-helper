@@ -1,6 +1,6 @@
 #pragma once
 
-namespace utils::fits {
+namespace astroutils::fits {
 
 struct FitsFilePtr {
   fitsfile *ptr = nullptr;
@@ -31,4 +31,4 @@ struct FitsDataType {
   int fitsType;
 };
 
-} // namespace utils::fits
+} // namespace astroutils::fits
