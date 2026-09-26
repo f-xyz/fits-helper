@@ -1,9 +1,13 @@
 #pragma once
 
+#include <astroutils/cli/colors.hpp>
 #include <astroutils/concepts.hpp>
 #include <astroutils/math.hpp>
-#include <astroutils/cli/colors.hpp>
+#include <cmath>
+#include <initializer_list>
+#include <span>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 namespace astroutils::cli {

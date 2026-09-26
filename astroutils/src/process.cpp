@@ -1,4 +1,7 @@
 #include <astroutils/process.hpp>
+#include <array>
+#include <cstdio>
+#include <sys/wait.h>
 
 namespace astroutils::process {
 

@@ -2,10 +2,13 @@
 
 #include <astroutils/concepts.hpp>
 #include <cmath>
-#include <concepts>
+#include <functional>
 #include <limits>
+#include <map>
 #include <random>
 #include <ranges>
+#include <utility>
+#include <vector>
 
 namespace astroutils::math {
 

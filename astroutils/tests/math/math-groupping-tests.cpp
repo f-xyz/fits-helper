@@ -1,6 +1,6 @@
 #include <astroutils/math.hpp>
 
-TEST(MathGroupping, countBy) {
+TEST(MathGroupping, count_by) {
   // arrange
   std::vector<int> range = {1, 2, 3, 4, 5};
   // act
@@ -11,7 +11,7 @@ TEST(MathGroupping, countBy) {
   EXPECT_EQ(result, expected);
 };
 
-TEST(MathGroupping, groupBy) {
+TEST(MathGroupping, group_by) {
   // arrange
   const std::vector<int> range = {1, 2, 3, 4, 5};
   // act

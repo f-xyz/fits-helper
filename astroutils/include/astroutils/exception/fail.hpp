@@ -1,5 +1,9 @@
 #pragma once
 
+#include <format>
+#include <stdexcept>
+#include <string_view>
+
 namespace astroutils::exception {
 
 template <typename... Args>

@@ -1,6 +1,8 @@
 #include <astroutils/fits/FitsReader.h>
 #include <astroutils/exception/fail.hpp>
 #include <opencv2/imgproc.hpp>
+#include <string_view>
+#include <vector>
 
 namespace astroutils::fits {
 

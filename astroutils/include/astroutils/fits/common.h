@@ -1,5 +1,6 @@
 #pragma once
 
+#include <fitsio.h>
 #include <utility>
 
 namespace astroutils::fits {

@@ -55,8 +55,7 @@ public:
 
 protected:
   static void printLine(const std::string &line);
-
-  static void printLine(const std::string &line, uint r, uint g, uint b);
+  static void printLine(const std::string &line, unsigned int r, unsigned int g, unsigned int b);
 
   void writeLine(const std::string &message,
                  const std::string &severity = "INFO");

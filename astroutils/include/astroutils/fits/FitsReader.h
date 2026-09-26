@@ -1,8 +1,11 @@
 #pragma once
 
-#include "common.h"
+#include <astroutils/fits/common.h>
+#include <cstddef>
+#include <filesystem>
 #include <fitsio.h>
 #include <opencv2/core.hpp>
+#include <string_view>
 
 namespace astroutils::fits {
 

@@ -1,4 +1,6 @@
+#include <algorithm>
 #include <astroutils/cli/hexdump.hpp>
+#include <cctype>
 #include <format>
 
 namespace astroutils::cli {

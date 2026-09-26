@@ -2,8 +2,11 @@
 
 #include <atomic>
 #include <csignal>
+#include <cstdlib>
+#include <cstring>
 #include <exception>
 #include <format>
+#include <mutex>
 #include <print>
 #include <stacktrace>
 #include <string>

@@ -8,7 +8,7 @@ namespace astroutils::logging {
 
 void Logger::printLine(const std::string &line) { std::println("{}", line); }
 
-void Logger::printLine(const std::string &line, uint r, uint g, uint b) {
+void Logger::printLine(const std::string &line, unsigned int r, unsigned int g, unsigned int b) {
   std::println("{}", astroutils::cli::rgb(line, r, g, b));
 }
 

@@ -1,9 +1,12 @@
-#include <astroutils/image/image.hpp>
 #include <astroutils/fits/FitsReader.h>
+#include <astroutils/image/image.hpp>
 #include <filesystem>
+#include <format>
+#include <functional>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
+#include <ranges>
 
 namespace astroutils::image {
 

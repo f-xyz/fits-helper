@@ -74,6 +74,12 @@ std::string quote(const std::string &string, const std::string &wrapper = "\"");
 // Formatting //////////////////////////
 ////////////////////////////////////////
 
-std::string formatNumber(double number, int precision = 2);
+std::string format_number(double number, int precision = 2);
+
+////////////////////////////////////////
+// Parsing /////////////////////////////
+////////////////////////////////////////
+
+std::optional<std::chrono::sys_seconds> parse_date(const std::string &date_str);
 
 } // namespace astroutils::string
