@@ -153,6 +153,13 @@ std::string format_number(double number, int precision) {
   return std::format("{}", astroutils::cli::rgb(string, getColor(number)));
 }
 
+std::string format_date(const std::chrono::sys_seconds &date,
+                        const std::string &format) {
+  const auto formatter = std::format("{{:{}}}", format);
+  const auto args = std::make_format_args(date);
+  return std::vformat(formatter, args);
+}
+
 ////////////////////////////////////////
 // Parsing /////////////////////////////
 ////////////////////////////////////////

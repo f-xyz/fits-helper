@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <optional>
 #include <regex>
 #include <string>
@@ -75,6 +76,8 @@ std::string quote(const std::string &string, const std::string &wrapper = "\"");
 ////////////////////////////////////////
 
 std::string format_number(double number, int precision = 2);
+std::string format_date(const std::chrono::sys_seconds &date,
+                        const std::string &format = "%Y-%m-%dT%H:%M:%SZ");
 
 ////////////////////////////////////////
 // Parsing /////////////////////////////
