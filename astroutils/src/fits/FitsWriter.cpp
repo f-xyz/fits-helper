@@ -1,6 +1,6 @@
 #include <astroutils/exception/fail.hpp>
 #include <astroutils/fits/FitsWriter.h>
-#include <astroutils/fits/common.h>
+#include <astroutils/fits/fits-common.hpp>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>

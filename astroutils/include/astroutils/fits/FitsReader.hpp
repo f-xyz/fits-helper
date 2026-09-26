@@ -1,6 +1,6 @@
 #pragma once
 
-#include <astroutils/fits/common.h>
+#include <astroutils/fits/fits-common.hpp>
 #include <cstddef>
 #include <filesystem>
 #include <fitsio.h>

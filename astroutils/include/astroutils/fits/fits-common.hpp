@@ -5,6 +5,18 @@
 
 namespace astroutils::fits {
 
+struct FitsImageParams {
+  int bitsPerPixel = 0;
+  int nDimensions = 0;
+  long dimensions[2] = {0, 0};
+  char bayerPattern[FLEN_VALUE] = {0};
+};
+
+struct FitsDataType {
+  int cvType;
+  int fitsType;
+};
+
 class FitsFilePtr {
 public:
   fitsfile *ptr = nullptr;
@@ -34,18 +46,6 @@ private:
       fits_close_file(ptr, &status);
     }
   }
-};
-
-struct FitsImageParams {
-  int bitsPerPixel = 0;
-  int nDimensions = 0;
-  long dimensions[2] = {0, 0};
-  char bayerPattern[FLEN_VALUE] = {0};
-};
-
-struct FitsDataType {
-  int cvType;
-  int fitsType;
 };
 
 } // namespace astroutils::fits
