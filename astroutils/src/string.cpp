@@ -79,14 +79,26 @@ std::string replace_all(std::string string, const std::string &find,
 ////////////////////////////////////////
 
 std::string slice(const std::string &string, int start) {
-  start = start >= 0 ? start : string.size() + start;
-  return {string.begin() + start, string.end()};
+  const auto len = static_cast<int>(string.size());
+
+  start = start >= 0 ? start : len + start;
+
+  return {
+    string.begin() + start,
+    string.end()
+  };
 }
 
 std::string slice(const std::string &string, int start, int end) {
-  start = start >= 0 ? start : string.size() + start;
-  end = end >= 0 ? end : string.size() + end;
-  return {string.begin() + start, string.begin() + end};
+  const auto len = static_cast<int>(string.size());
+
+  start = start >= 0 ? start : len + start;
+  end = end >= 0 ? end : len + end;
+
+  return {
+    string.begin() + start,
+    string.begin() + end
+  };
 }
 
 ////////////////////////////////////////

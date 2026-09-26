@@ -1,8 +1,10 @@
+#pragma once
+
 #include "allocators.hpp"
 #include "concepts.hpp"
 #include "fs.hpp"
 #include "math.hpp"
-#include "string.h"
+#include "string.hpp"
 #include "process.hpp"
 
 #include "benchmarking/benchmark.hpp"
