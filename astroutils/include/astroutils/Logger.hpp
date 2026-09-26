@@ -6,6 +6,7 @@
 #include <fstream>
 #include <mutex>
 #include <string>
+#include <string_view>
 #include <utility>
 
 namespace astroutils::logging {
@@ -54,11 +55,11 @@ public:
   }
 
 protected:
-  static void printLine(const std::string &line);
-  static void printLine(const std::string &line, unsigned int r, unsigned int g, unsigned int b);
+  static void printLine(std::string_view line);
+  static void printLine(std::string_view line, unsigned int r, unsigned int g, unsigned int b);
 
-  void writeLine(const std::string &message,
-                 const std::string &severity = "INFO");
+  void writeLine(std::string_view message,
+                 std::string_view severity = "INFO");
 };
 
 } // namespace astroutils::logging

@@ -13,10 +13,11 @@ namespace astroutils::image {
 // Utilities ///////////////////////////
 ////////////////////////////////////////
 
-cv::Mat read(const std::string &file) {
-  const std::string ext = std::filesystem::path(file).extension().string();
-  return ext == ".fit" || ext == ".fits" ? astroutils::fits::FitsReader().read(file)
-                                         : cv::imread(file);
+cv::Mat read(std::string_view file) {
+  const std::string ownedFile(file);
+  const std::string ext = std::filesystem::path(ownedFile).extension().string();
+  return ext == ".fit" || ext == ".fits" ? astroutils::fits::FitsReader().read(ownedFile)
+                                         : cv::imread(ownedFile);
 }
 
 cv::Mat normalize(const cv::Mat &image) {

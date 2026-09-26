@@ -5,11 +5,12 @@
 
 namespace astroutils::process {
 
-ExecResult exec(const std::string &command, ExecCallback callback) {
+ExecResult exec(std::string_view command, ExecCallback callback) {
   std::string output;
+  const std::string ownedCommand(command);
   std::array<char, 128> buffer;
 
-  FILE *pipe = popen(command.c_str(), "r");
+  FILE *pipe = popen(ownedCommand.c_str(), "r");
   if (!pipe) {
     return {"", -1};
   }

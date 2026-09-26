@@ -9,6 +9,7 @@
 #include <regex>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <system_error>
 #include <vector>
 
@@ -79,14 +80,14 @@ inline std::string readText(const std::filesystem::path &path) {
   return oss.str();
 }
 
-inline std::string tmpFile(const std::string &dir) {
+inline std::string tmpFile(std::string_view dir) {
   std::vector<std::filesystem::path> existing = readDir(dir);
   std::vector<int> indexes;
 
   std::ranges::transform(
-      existing, std::back_inserter(indexes), [](const std::string &file) {
+      existing, std::back_inserter(indexes), [](const std::filesystem::path &file) {
         std::smatch matches;
-        std::string name = std::filesystem::path(file).filename().string();
+        std::string name = file.filename().string();
         std::regex regex = std::regex(R"((\d+).*?$)");
         std::regex_search(name, matches, regex);
         int index = !matches.empty() ? std::stoi(matches[0].str()) : 0;
@@ -96,7 +97,10 @@ inline std::string tmpFile(const std::string &dir) {
   int maxIndex = indexes.empty() ? 0 : *std::ranges::max_element(indexes);
   int newIndex = maxIndex + 1;
 
-  std::string out = dir.ends_with('/') ? dir : dir + '/';
+  std::string out(dir);
+  if (!out.ends_with('/')) {
+    out += '/';
+  }
   return std::format("{}{}", out, newIndex);
 }
 

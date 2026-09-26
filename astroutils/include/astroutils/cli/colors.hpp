@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 
 /*
 ANSI Escape Codes:
@@ -44,9 +45,9 @@ inline constexpr const char *BOLD_WHITE = "\033[1m\033[37m";
 
 using byte = unsigned char;
 
-std::string rgb(const std::string &s, byte r, byte g, byte b);
-std::string rgb(const std::string &s, const unsigned int color);
-std::string bold(const std::string &s);
-std::string removeColors(const std::string &s);
+std::string rgb(std::string_view s, byte r, byte g, byte b);
+std::string rgb(std::string_view s, const unsigned int color);
+std::string bold(std::string_view s);
+std::string removeColors(std::string_view s);
 
 } // namespace astroutils::cli

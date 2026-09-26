@@ -6,14 +6,14 @@
 
 namespace astroutils::logging {
 
-void Logger::printLine(const std::string &line) { std::println("{}", line); }
+void Logger::printLine(std::string_view line) { std::println("{}", line); }
 
-void Logger::printLine(const std::string &line, unsigned int r, unsigned int g, unsigned int b) {
+void Logger::printLine(std::string_view line, unsigned int r, unsigned int g, unsigned int b) {
   std::println("{}", astroutils::cli::rgb(line, r, g, b));
 }
 
-void Logger::writeLine(const std::string &message,
-                       const std::string &severity) {
+void Logger::writeLine(std::string_view message,
+                       std::string_view severity) {
   auto now = std::chrono::system_clock::now();
   auto time = std::format("{:%Y-%m-%d %H:%M:%S}", now);
   auto clean = astroutils::string::trim(astroutils::cli::removeColors(message));
