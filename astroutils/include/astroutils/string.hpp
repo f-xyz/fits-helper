@@ -83,6 +83,11 @@ std::string format_date(const std::chrono::sys_seconds &date,
 // Parsing /////////////////////////////
 ////////////////////////////////////////
 
-std::optional<std::chrono::sys_seconds> parse_date(const std::string &date_str);
+using OptionalSeconds = std::optional<std::chrono::sys_seconds>;
+
+OptionalSeconds parse_date(const std::string &string,
+                           const std::string &format = "%Y-%m-%dT%H:%M:%SZ");
+
+OptionalSeconds parse_date_auto(const std::string &string);
 
 } // namespace astroutils::string

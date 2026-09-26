@@ -3,6 +3,7 @@
 #include <codecvt>
 #include <format>
 #include <locale>
+#include <optional>
 #include <ranges>
 
 namespace astroutils::string {
@@ -176,24 +177,34 @@ std::string format_date(const std::chrono::sys_seconds &date,
 // Parsing /////////////////////////////
 ////////////////////////////////////////
 
-std::optional<std::chrono::sys_seconds> parse_date(const std::string &date_str) {
+OptionalSeconds parse_date(const std::string &string,
+                           const std::string &format) {
+  std::istringstream stream(string);
+  std::chrono::sys_seconds time;
+
+  stream >> std::chrono::parse(format, time);
+
+  if (!stream.fail()) {
+    return time;
+  }
+
+  return std::nullopt;
+}
+
+OptionalSeconds parse_date_auto(const std::string &string) {
   thread_local const std::vector<std::string> formats = {
     "%Y-%m-%dT%H:%M:%S%Z",   // ISO 8601 UTC (2026-09-26T14:30:00Z)
     "%Y-%m-%dT%H:%M:%S",     // ISO 8601 Local (2026-09-26T14:30:00)
     "%Y-%m-%d %H:%M:%S",     // Standard SQL (2026-09-26 14:30:00)
     "%Y-%m-%d",              // Date only (2026-09-26)
-    "%a, %d %b %Y %H:%M:%S", // RFC 2822 style (Sat, 26 Sep 2026 // 14:30:00)
+    "%a, %d %b %Y %H:%M:%S", // RFC 2822 style (Sat, 26 Sep 2026 14:30:00)
     "%b %d, %Y"              // Loose format (Sep 26, 2026)
   };
 
   for (const auto &format : formats) {
-    std::istringstream stream(date_str);
-    std::chrono::sys_seconds time;
-
-    stream >> std::chrono::parse(format, time);
-
-    if (!stream.fail()) {
-      return time;
+    const auto date = parse_date(string, format);
+    if (date) {
+      return date;
     }
   }
 
