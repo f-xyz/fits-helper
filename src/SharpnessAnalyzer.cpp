@@ -49,7 +49,7 @@ SharpnessAnalyzer::analyzeFiles(const std::vector<std::filesystem::path> &files,
 
 double SharpnessAnalyzer::getSharpness(const std::filesystem::path &file,
                                        int divider) const {
-  const auto image = astroutils::image::read(file);
+  const auto image = astroutils::image::read(file.string());
   const auto roi = getRoi(image, divider);
   const auto sharpness = estimator.getSharpness(roi);
 

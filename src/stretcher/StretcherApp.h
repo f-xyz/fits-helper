@@ -18,7 +18,7 @@ public:
       : StretcherConfig(config), logger(logger) {}
 
   void stretch() {
-    const cv::Mat image = astroutils::image::read(file);
+    const cv::Mat image = astroutils::image::read(file.string());
     const std::string info = astroutils::image::info(image);
     logger.info("Image info: {}", info);
 

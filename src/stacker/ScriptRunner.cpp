@@ -51,5 +51,5 @@ void ScriptRunner::cleanup() {
 }
 
 std::string ScriptRunner::getCommand() {
-  return "bash " + quote(directory / "stack.sh");
+  return "bash " + quote((directory / "stack.sh").string());
 }

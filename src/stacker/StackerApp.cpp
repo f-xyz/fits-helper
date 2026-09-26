@@ -16,10 +16,10 @@ void StackerApp::flatten() {
   logger.header("Flattenning {}\n", directory.string());
 
   for (const auto &dir : workspace.getDirs()) {
-    logger.info("Moving files from: {}", bold(dir));
+    logger.info("Moving files from: {}", bold(dir.string()));
     workspace.moveFilesToParent(dir);
 
-    logger.info("Removing directory: {}", bold(dir));
+    logger.info("Removing directory: {}", bold(dir.string()));
     std::filesystem::remove_all(dir);
 
     logger.info("");
@@ -48,7 +48,7 @@ void StackerApp::chop() {
     const auto baseDir = files.front().parent_path();
     const auto chunkDir = baseDir / std::to_string(index);
 
-    logger.info("Creating directory: {}", bold(chunkDir));
+    logger.info("Creating directory: {}", bold(chunkDir.string()));
     std::filesystem::create_directory(chunkDir);
 
     logger.info("  Moving {} files", files.size());
@@ -73,7 +73,7 @@ void StackerApp::stack() {
 
   for (const auto &chunkDir : chunkDirs) {
     logger.info("Stacking images in: {} ({} of {})",
-       bold(chunkDir), index, chunkDirs.size());
+       bold(chunkDir.string()), index, chunkDirs.size());
 
     ScriptRunner runner(chunkDir);
     const auto integrationPath = workspace.getOutputFileName(index);
