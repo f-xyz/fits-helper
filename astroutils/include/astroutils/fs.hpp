@@ -1,6 +1,7 @@
 #pragma once
 
 #include <astroutils/concepts.hpp>
+#include <algorithm>
 #include <filesystem>
 #include <format>
 #include <fstream>
