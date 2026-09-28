@@ -47,7 +47,7 @@ using byte = unsigned char;
 using uint = unsigned int;
 
 std::string rgb(std::string_view s, byte r, byte g, byte b);
-std::string rgb(std::string_view s, const unsigned int color);
+std::string rgb(std::string_view s, uint color);
 std::string bold(std::string_view s);
 std::string removeColors(std::string_view s);
 

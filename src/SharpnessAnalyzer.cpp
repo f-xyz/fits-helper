@@ -1,12 +1,14 @@
 #include "SharpnessAnalyzer.h"
 #include <algorithm>
+#include <astroutils/image/image.hpp>
 #include <atomic>
-#include <cmath>
 #include <cstddef>
 #include <execution>
 #include <filesystem>
-#include <astroutils/image/image.hpp>
 #include <mutex>
+#include <opencv2/core/mat.hpp>
+#include <opencv2/core/types.hpp>
+#include <vector>
 
 std::vector<FileSharpness>
 SharpnessAnalyzer::analyzeFiles(const std::vector<std::filesystem::path> &files,

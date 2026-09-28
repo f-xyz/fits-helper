@@ -1,8 +1,10 @@
 #include "ScriptRunner.h"
-#include <astroutils/string.hpp>
-#include <astroutils/benchmarking/Timer.hpp>
+#include "astroutils/benchmarking/Timer.hpp"
+#include "astroutils/process.hpp"
+#include "astroutils/string.hpp"
+#include <chrono>
 #include <filesystem>
-#include <astroutils/process.hpp>
+#include <string>
 
 using std::chrono::seconds;
 using std::filesystem::path;
@@ -51,5 +53,6 @@ void ScriptRunner::cleanup() {
 }
 
 std::string ScriptRunner::getCommand() {
-  return "bash " + quote(directory / "stack.sh");
+  const auto path = directory / "stack.sh";
+  return "bash " + quote(path.string());
 }
