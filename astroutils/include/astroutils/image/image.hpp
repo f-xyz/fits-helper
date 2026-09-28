@@ -1,7 +1,9 @@
 #pragma once
 
-#include <opencv2/core.hpp>
+#include <opencv2/core/mat.hpp>
+#include <opencv2/core/types.hpp>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -11,7 +13,7 @@ namespace astroutils::image {
 // Utilities ///////////////////////////
 ////////////////////////////////////////
 
-cv::Mat read(const std::string &file);
+cv::Mat read(std::string_view file);
 cv::Mat normalize(const cv::Mat &image);
 cv::Mat debayer(const cv::Mat &image);
 cv::Mat clamp(const cv::Mat &image, double min, double max);

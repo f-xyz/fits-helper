@@ -1,10 +1,19 @@
+#include <algorithm>
 #include <astroutils/cli/colors.hpp>
 #include <astroutils/string.hpp>
+#include <chrono>
 #include <codecvt>
+#include <cstddef>
 #include <format>
+#include <iterator>
 #include <locale>
 #include <optional>
 #include <ranges>
+#include <regex>
+#include <sstream>
+#include <string>
+#include <string_view>
+#include <vector>
 
 namespace astroutils::string {
 
@@ -12,14 +21,14 @@ namespace astroutils::string {
 // Splitting and Joining ///////////////
 ////////////////////////////////////////
 
-std::vector<std::string> split(const std::string &string,
-                               const std::string &delimiter) {
+std::vector<std::string> split(std::string_view string,
+                               std::string_view delimiter) {
   auto parts = std::views::split(string, delimiter);
   return std::ranges::to<std::vector<std::string>>(parts);
 }
 
 std::string join(const std::vector<std::string> &array,
-                 const std::string &delimiter) {
+                 std::string_view delimiter) {
   auto joined = std::views::join_with(array, delimiter);
   return std::ranges::to<std::string>(joined);
 }
@@ -29,39 +38,43 @@ std::string join(const std::vector<std::string> &array,
 ////////////////////////////////////////
 
 std::optional<std::string> regex(const std::regex &regex,
-                                 const std::string &string,
+                                 std::string_view string,
                                  const std::size_t nMatch) {
-  std::smatch matches;
-  std::regex_search(string, matches, regex);
+  std::match_results<std::string_view::const_iterator> matches;
+  std::regex_search(string.begin(), string.end(), matches, regex);
 
   return matches.size() > nMatch
-             ? std::optional<std::string>(matches[nMatch].str())
-             : std::nullopt;
+           ? std::optional<std::string>(matches[nMatch].str())
+           : std::nullopt;
 }
 
-std::optional<std::string> regex(const std::string &regex,
-                                 const std::string &string,
+std::optional<std::string> regex(std::string_view regex,
+                                 std::string_view string,
                                  const std::size_t nMatch) {
-  return astroutils::string::regex(std::regex(regex), string, nMatch);
+  return astroutils::string::regex(std::regex(regex.begin(), regex.end()),
+                                   string, nMatch);
 }
 
-std::string regex_replace(const std::regex &regex, const std::string &string,
-                          const std::string &replacement) {
-  return std::regex_replace(string, regex, replacement);
+std::string regex_replace(const std::regex &regex, std::string_view string,
+                          std::string_view replacement) {
+  std::string result;
+  std::regex_replace(std::back_inserter(result), string.begin(), string.end(),
+                     regex, std::string(replacement));
+  return result;
 }
 
-std::string regex_replace(const std::string &regex, const std::string &string,
-                          const std::string &replacement) {
-  std::regex rx(regex);
-  return std::regex_replace(string, rx, replacement);
+std::string regex_replace(std::string_view regex, std::string_view string,
+                          std::string_view replacement) {
+  std::regex rx(regex.begin(), regex.end());
+  return regex_replace(rx, string, replacement);
 }
 
 ////////////////////////////////////////
 // Replacing ///////////////////////////
 ////////////////////////////////////////
 
-std::string replace_all(std::string string, const std::string &find,
-                        const std::string &replacement) {
+std::string replace_all(std::string string, std::string_view find,
+                        std::string_view replacement) {
   if (find.empty()) {
     return string;
   }
@@ -79,53 +92,54 @@ std::string replace_all(std::string string, const std::string &find,
 // Slicing /////////////////////////////
 ////////////////////////////////////////
 
-std::string slice(const std::string &string, int start) {
+std::string slice(std::string_view string, int start) {
   const auto len = static_cast<int>(string.size());
 
   start = start >= 0 ? start : len + start;
 
-  return {
-    string.begin() + start,
-    string.end()
-  };
+  return {string.begin() + start, string.end()};
 }
 
-std::string slice(const std::string &string, int start, int end) {
+std::string slice(std::string_view string, int start, int end) {
   const auto len = static_cast<int>(string.size());
 
   start = start >= 0 ? start : len + start;
   end = end >= 0 ? end : len + end;
 
-  return {
-    string.begin() + start,
-    string.begin() + end
-  };
+  return {string.begin() + start, string.begin() + end};
 }
 
 ////////////////////////////////////////
 // Trimmming ///////////////////////////
 ////////////////////////////////////////
 
-std::string ltrim(const std::string &string) {
+std::string ltrim(std::string_view string) {
   const auto pos = string.find_first_not_of(" \t\r\n");
-  return string.substr(std::min(pos, string.size()));
+  return std::string(string.substr(std::min(pos, string.size())));
 }
 
-std::string rtrim(const std::string &string) {
+std::string rtrim(std::string_view string) {
   const auto pos = string.find_last_not_of(" \t\r\n");
-  return string.substr(0, pos + 1);
+  return std::string(string.substr(0, pos + 1));
 }
 
-std::string trim(const std::string &string) { return ltrim(rtrim(string)); }
+std::string trim(std::string_view string) {
+  return ltrim(rtrim(string));
+}
 
 ////////////////////////////////////////
 // Case Conversion /////////////////////
 ////////////////////////////////////////
 
-std::string uppercase(const std::string &string) {
+std::string uppercase(std::string_view string) {
+  if (string.empty()) {
+    return {};
+  }
+
   std::locale locale("C.UTF-8");
   std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-  std::wstring ws = converter.from_bytes(string);
+  std::wstring ws =
+    converter.from_bytes(string.data(), string.data() + string.size());
 
   const auto &facet = std::use_facet<std::ctype<wchar_t>>(locale);
   facet.toupper(&ws[0], &ws[0] + ws.size());
@@ -133,10 +147,15 @@ std::string uppercase(const std::string &string) {
   return converter.to_bytes(ws);
 }
 
-std::string lowercase(const std::string &string) {
+std::string lowercase(std::string_view string) {
+  if (string.empty()) {
+    return {};
+  }
+
   std::locale locale("C.UTF-8");
   std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-  std::wstring ws = converter.from_bytes(string);
+  std::wstring ws =
+    converter.from_bytes(string.data(), string.data() + string.size());
 
   const auto &facet = std::use_facet<std::ctype<wchar_t>>(locale);
   facet.tolower(&ws[0], &ws[0] + ws.size());
@@ -148,8 +167,14 @@ std::string lowercase(const std::string &string) {
 // Miscellaneous ///////////////////////
 ////////////////////////////////////////
 
-std::string quote(const std::string &string, const std::string &wrapper) {
-  return wrapper + string + wrapper;
+std::string quote(std::string_view string, std::string_view wrapper) {
+  std::string result;
+  result.reserve(wrapper.size() * 2 + string.size());
+  result.append(wrapper);
+  result.append(string);
+  result.append(wrapper);
+
+  return result;
 }
 
 ////////////////////////////////////////
@@ -163,11 +188,12 @@ std::string format_number(double number, int precision) {
          : x < 0 ? 0x800000  // Red
                  : 0x888888; // Gray
   };
+
   return std::format("{}", astroutils::cli::rgb(string, getColor(number)));
 }
 
 std::string format_date(const std::chrono::sys_seconds &date,
-                        const std::string &format) {
+                        std::string_view format) {
   const auto formatter = std::format("{{:{}}}", format);
   const auto args = std::make_format_args(date);
   return std::vformat(formatter, args);
@@ -177,12 +203,11 @@ std::string format_date(const std::chrono::sys_seconds &date,
 // Parsing /////////////////////////////
 ////////////////////////////////////////
 
-OptionalSeconds parse_date(const std::string &string,
-                           const std::string &format) {
-  std::istringstream stream(string);
+OptionalSeconds parse_date(std::string_view string, std::string_view format) {
+  std::istringstream stream {std::string(string)};
   std::chrono::sys_seconds time;
 
-  stream >> std::chrono::parse(format, time);
+  stream >> std::chrono::parse(std::string(format), time);
 
   if (!stream.fail()) {
     return time;
@@ -191,7 +216,7 @@ OptionalSeconds parse_date(const std::string &string,
   return std::nullopt;
 }
 
-OptionalSeconds parse_date_auto(const std::string &string) {
+OptionalSeconds parse_date_auto(std::string_view string) {
   thread_local const std::vector<std::string> formats = {
     "%Y-%m-%dT%H:%M:%S%Z",   // ISO 8601 UTC (2026-09-26T14:30:00Z)
     "%Y-%m-%dT%H:%M:%S",     // ISO 8601 Local (2026-09-26T14:30:00)

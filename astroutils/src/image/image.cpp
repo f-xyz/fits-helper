@@ -1,11 +1,23 @@
+#include <algorithm>
 #include <astroutils/fits/FitsReader.h>
 #include <astroutils/image/image.hpp>
+#include <cstddef>
 #include <filesystem>
 #include <format>
 #include <functional>
+#include <opencv2/core.hpp>
+#include <opencv2/core/base.hpp>
+#include <opencv2/core/check.hpp>
+#include <opencv2/core/hal/interface.h>
+#include <opencv2/core/mat.hpp>
+#include <opencv2/core/types.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
+#include <string>
+#include <string_view>
+#include <utility>
+#include <vector>
 
 namespace astroutils::image {
 
@@ -13,10 +25,12 @@ namespace astroutils::image {
 // Utilities ///////////////////////////
 ////////////////////////////////////////
 
-cv::Mat read(const std::string &file) {
-  const std::string ext = std::filesystem::path(file).extension().string();
-  return ext == ".fit" || ext == ".fits" ? astroutils::fits::FitsReader().read(file)
-                                         : cv::imread(file);
+cv::Mat read(std::string_view file) {
+  const std::string ownedFile(file);
+  const std::string ext = std::filesystem::path(ownedFile).extension().string();
+  return ext == ".fit" || ext == ".fits"
+           ? astroutils::fits::FitsReader().read(ownedFile)
+           : cv::imread(ownedFile);
 }
 
 cv::Mat normalize(const cv::Mat &image) {
