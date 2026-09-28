@@ -34,6 +34,13 @@ if(MOLD_PROGRAM)
   add_link_options(-fuse-ld=mold)
 endif()
 
+find_program(IWYU_PROGRAM NAMES include-what-you-use iwyu REQUIRED)
+if(IWYU_PROGRAM)
+  set(IWYU_FLAGS "-Xiwyu;--mapping_file=${CMAKE_SOURCE_DIR}/iwyu.imp")
+  set(CMAKE_C_INCLUDE_WHAT_YOU_USE "${IWYU_PROGRAM};${IWYU_FLAGS}")
+  set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_PROGRAM};${IWYU_FLAGS}")
+endif()
+
 ########################################
 # Library ##############################
 ########################################

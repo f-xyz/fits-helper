@@ -15,3 +15,7 @@ CompileFlags:
     -fdeps-format=*,
     -fmodule-mapper=*
   ]
+
+Diagnostics:
+  UnusedIncludes: Strict
+  MissingIncludes: Strict
