@@ -15,7 +15,6 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
 #include <string>
-#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -25,12 +24,11 @@ namespace astroutils::image {
 // Utilities ///////////////////////////
 ////////////////////////////////////////
 
-cv::Mat read(std::string_view file) {
-  const std::string ownedFile(file);
-  const std::string ext = std::filesystem::path(ownedFile).extension().string();
+cv::Mat read(const std::filesystem::path &path) {
+  const std::string ext = path.extension().string();
   return ext == ".fit" || ext == ".fits"
-           ? astroutils::fits::FitsReader().read(ownedFile)
-           : cv::imread(ownedFile);
+           ? astroutils::fits::FitsReader().read(path)
+           : cv::imread(path);
 }
 
 cv::Mat normalize(const cv::Mat &image) {
